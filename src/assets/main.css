@@ -36,6 +36,7 @@ label {
 
 .btn--primary {
   width: fit-content;
+  display: block;
 
   background-color: var(--color-btn-bg);
   color: var(--color-btn-text);
@@ -44,6 +45,7 @@ label {
   font-weight: 500;
   letter-spacing: 0.05em;
   font-size: 2.5rem;
+  text-decoration: none;
 
   padding: 0.3em 1em;
   border-radius: 9px;
@@ -68,6 +70,7 @@ label {
   letter-spacing: 0.05em;
   font-size: 2.5rem;
   text-align: center;
+  text-decoration: none;
 
   width: 8em;
   padding: 0.3em 0;
