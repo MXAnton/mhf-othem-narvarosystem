@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --c-yellow: #f4e12f;
+  --c-blue: #0c2748;
+  --c-white: #f9f9f9;
+  --c-black: #202020;
+  --c-grey: #5c5c5c;
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-bg: var(--c-white);
+
+  --color-border: var(--c-black);
+  --color-border-hover: var(--c-grey);
+
+  --color-text: var(--c-black);
+
+  --color-btn-text: var(--c-white);
+  --color-btn-bg: var(--c-black);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-text);
+  background: var(--color-bg);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+
+  letter-spacing: 0.03em;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 16px;
+}
