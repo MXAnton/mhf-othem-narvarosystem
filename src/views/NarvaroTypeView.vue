@@ -26,11 +26,11 @@ export default {
 
   methods: {
     goBack() {
-      this.$router.go(-1)
+      this.$router.push({ name: 'narvaroMembership' })
     },
     onSubmit(_event) {
       this.addNarvaroStore.type = this.type
-      this.$router.push({ name: 'narvaroLicenseView' })
+      this.$router.push({ name: 'narvaroLicense' })
     }
   },
 
