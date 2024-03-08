@@ -26,6 +26,11 @@ const router = createRouter({
       name: 'narvaroMembership',
       component: () => import('../views/NarvaroMembershipView.vue')
     },
+    {
+      path: '/narvaro/type',
+      name: 'narvaroType',
+      component: () => import('../views/NarvaroTypeView.vue')
+    },
 
     {
       path: '/gdpr',

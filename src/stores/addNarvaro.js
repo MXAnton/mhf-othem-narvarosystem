@@ -8,7 +8,13 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       lastName: null,
       isMember: false,
       type: null,
-      hasLicense: false
+      hasLicense: false,
+
+      types: [
+        { name: 'Träning', noMembers: false },
+        { name: 'Prova på', noMembers: true },
+        { name: 'Ledare', noMembers: false }
+      ]
     }
   }
   // actions: {

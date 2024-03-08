@@ -17,7 +17,7 @@ export default {
     },
     onSubmit(_event) {
       this.addNarvaroStore.isMember = this.isMember
-      // this.$router.push({ name: 'isMember' })
+      this.$router.push({ name: 'narvaroType' })
     }
   },
 
