@@ -1,13 +1,10 @@
 <script>
-import { RouterLink } from 'vue-router'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   data() {
     return {
-      addNarvaroStore: null,
-
-      isMember: false
+      addNarvaroStore: null
     }
   },
 
@@ -16,14 +13,12 @@ export default {
       this.$router.push({ name: 'narvaroName' })
     },
     onSubmit(_event) {
-      this.addNarvaroStore.isMember = this.isMember
       this.$router.push({ name: 'narvaroType' })
     }
   },
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
-    this.isMember = this.addNarvaroStore.isMember || false
   }
 }
 </script>
@@ -45,7 +40,7 @@ export default {
               title="Jag är medlem"
               autofocus
               :value="true"
-              v-model="isMember"
+              v-model="addNarvaroStore.isMember"
             />
             <label for="yes-input">Ja</label>
           </div>
@@ -58,7 +53,7 @@ export default {
               required
               title="Jag är inte medlem"
               :value="false"
-              v-model="isMember"
+              v-model="addNarvaroStore.isMember"
             />
             <label for="no-input">Nej</label>
           </div>

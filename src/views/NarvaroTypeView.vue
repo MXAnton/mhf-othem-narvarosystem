@@ -1,5 +1,4 @@
 <script>
-import { RouterLink } from 'vue-router'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
@@ -7,8 +6,7 @@ export default {
     return {
       addNarvaroStore: null,
 
-      types: null,
-      type: null
+      types: null
     }
   },
 
@@ -29,7 +27,6 @@ export default {
       this.$router.push({ name: 'narvaroMembership' })
     },
     onSubmit(_event) {
-      this.addNarvaroStore.type = this.type
       this.$router.push({ name: 'narvaroLicense' })
     }
   },
@@ -44,7 +41,6 @@ export default {
     ) {
       this.addNarvaroStore.type = this.types[0].name
     }
-    this.type = this.addNarvaroStore.type
   }
 }
 </script>
@@ -66,7 +62,7 @@ export default {
               :title="_type.name"
               autofocus
               :value="_type.name"
-              v-model="type"
+              v-model="addNarvaroStore.type"
             />
             <label :for="_i + '-input'">{{ _type.name }}</label>
           </div>

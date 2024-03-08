@@ -1,14 +1,10 @@
 <script>
-import { RouterLink } from 'vue-router'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   data() {
     return {
-      addNarvaroStore: null,
-
-      firstName: null,
-      lastName: null
+      addNarvaroStore: null
     }
   },
 
@@ -17,16 +13,12 @@ export default {
       this.$router.push({ name: 'addNarvaro' })
     },
     onSubmit(_event) {
-      this.addNarvaroStore.firstName = this.firstName
-      this.addNarvaroStore.lastName = this.lastName
       this.$router.push({ name: 'narvaroMembership' })
     }
   },
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
-    this.firstName = this.addNarvaroStore.firstName
-    this.lastName = this.addNarvaroStore.lastName
   }
 }
 </script>
@@ -50,7 +42,7 @@ export default {
             title="Skriv ditt förnamn..."
             placeholder="Förnamn..."
             autofocus
-            v-model="firstName"
+            v-model="addNarvaroStore.firstName"
           />
         </div>
 
@@ -67,7 +59,7 @@ export default {
             title="Skriv ditt efternamn..."
             placeholder="Efternamn..."
             autofocus
-            v-model="lastName"
+            v-model="addNarvaroStore.lastName"
           />
         </div>
 

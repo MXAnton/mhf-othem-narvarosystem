@@ -5,22 +5,18 @@ import { useAddNarvaroStore } from '@/stores/addNarvaro'
 export default {
   data() {
     return {
-      addNarvaroStore: null,
-
-      personNum: null
+      addNarvaroStore: null
     }
   },
 
   methods: {
     onSubmit(_event) {
-      this.addNarvaroStore.personNum = this.personNum
       this.$router.push({ name: 'narvaroName' })
     }
   },
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
-    this.personNum = this.addNarvaroStore.personNum
   }
 }
 </script>
@@ -47,7 +43,7 @@ export default {
             title="12 siffror, ÅÅÅÅMMDDXXXX"
             placeholder="ÅÅÅÅMMDDXXXX"
             autofocus
-            v-model="personNum"
+            v-model="addNarvaroStore.personNum"
           />
         </div>
 

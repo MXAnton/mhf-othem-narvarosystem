@@ -1,13 +1,10 @@
 <script>
-import { RouterLink } from 'vue-router'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   data() {
     return {
-      addNarvaroStore: null,
-
-      hasLicense: false
+      addNarvaroStore: null
     }
   },
 
@@ -16,14 +13,12 @@ export default {
       this.$router.push({ name: 'narvaroType' })
     },
     onSubmit(_event) {
-      this.addNarvaroStore.hasLicense = this.hasLicense
       this.$router.push({ name: 'narvaroConfirm' })
     }
   },
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
-    this.hasLicense = this.addNarvaroStore.hasLicense || false
   }
 }
 </script>
@@ -48,7 +43,7 @@ export default {
             name="is-member-input"
             title="Jag har licens"
             autofocus
-            v-model="hasLicense"
+            v-model="addNarvaroStore.hasLicense"
           />
           <label for="has-license-input">Jag har licens</label>
         </div>
