@@ -41,3 +41,10 @@ body {
   font-family: 'Work Sans', sans-serif;
   font-size: 16px;
 }
+
+#app {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
