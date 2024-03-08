@@ -13,6 +13,7 @@ export default {
       this.$router.push({ name: 'narvaroLicense' })
     },
     onSubmit(_event) {
+      // Add narvaro to database
       // this.$router.push({ name: 'narvaroType' })
     }
   },

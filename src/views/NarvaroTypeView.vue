@@ -37,7 +37,14 @@ export default {
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
     this.types = this.getTypes
-    this.type = Math.min(this.addNarvaroStore.type || 0, this.types.length - 1)
+
+    if (
+      this.addNarvaroStore.type == null ||
+      this.types.find((_type) => _type.name === this.addNarvaroStore.type) == null
+    ) {
+      this.addNarvaroStore.type = this.types[0].name
+    }
+    this.type = this.addNarvaroStore.type
   }
 }
 </script>
@@ -58,7 +65,7 @@ export default {
               required
               :title="_type.name"
               autofocus
-              :value="_i"
+              :value="_type.name"
               v-model="type"
             />
             <label :for="_i + '-input'">{{ _type.name }}</label>
