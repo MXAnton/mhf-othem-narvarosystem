@@ -20,7 +20,7 @@
 <style scoped>
 footer {
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 3rem 1rem 2rem;
 
   font-size: 1rem;
   font-weight: 300;

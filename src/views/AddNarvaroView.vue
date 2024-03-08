@@ -6,6 +6,12 @@ export default {
     return {
       personNum: null
     }
+  },
+
+  methods: {
+    onSubmit(_event) {
+      this.$router.push({ name: 'narvaroName' })
+    }
   }
 }
 </script>
@@ -16,7 +22,7 @@ export default {
     <h2 class="mb--big">Anmäl dig nedan</h2>
 
     <div class="content__wrapper">
-      <form @submit.prevent="onSubmit()">
+      <form @submit.prevent="onSubmit">
         <div class="input--primary__wrapper">
           <label for="personnummer-input">Personnummer:</label>
           <input
@@ -54,20 +60,9 @@ h2 {
   font-size: 5rem;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-form > p {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  text-wrap: balance;
-  text-align: center;
-}
-
 #personnummer-input {
   font-size: 4rem;
+  text-align: center;
+  width: 8em;
 }
 </style>

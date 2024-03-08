@@ -2,7 +2,10 @@
 
 button,
 a,
-input[type='submit'] {
+input[type='submit'],
+input[type='reset'],
+input[type='button'],
+label {
   cursor: pointer;
 }
 
@@ -65,15 +68,15 @@ label {
   background: none;
   color: var(--color-text);
   border: 4px solid var(--color-border);
+  outline: none;
 
   font-weight: 500;
   letter-spacing: 0.05em;
   font-size: 2.5rem;
-  text-align: center;
   text-decoration: none;
 
-  width: 8em;
-  padding: 0.3em 0;
+  width: 100%;
+  padding: 0.3em;
   border-radius: 9px;
 
   transition: border-color 0.2s ease-in-out;
@@ -89,6 +92,9 @@ label {
 .input--primary:hover {
   border-color: var(--color-border-hover);
 }
+.input--primary:focus {
+  border-color: var(--c-yellow);
+}
 
 main {
   padding: 3rem 0.5rem 0;
@@ -101,6 +107,29 @@ main {
 
 .content__wrapper {
   max-width: 38rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+form > p {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-wrap: balance;
+  text-align: center;
+}
+
+form > nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  margin-top: 2rem;
 }
 
 /* MARGINS */
