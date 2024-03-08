@@ -19,7 +19,7 @@ export default {
     onSubmit(_event) {
       this.addNarvaroStore.firstName = this.firstName
       this.addNarvaroStore.lastName = this.lastName
-      // this.$router.push({ name: 'isMember' })
+      this.$router.push({ name: 'narvaroMembership' })
     }
   },
 

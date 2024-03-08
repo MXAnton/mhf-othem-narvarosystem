@@ -6,7 +6,11 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      redirect: '/narvaro'
+    },
+    {
+      path: '/narvaro',
+      name: 'addNarvaro',
       component: AddNarvaroView
     },
     {
@@ -17,13 +21,15 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/NarvaroNameView.vue')
     },
+    {
+      path: '/narvaro/membership',
+      name: 'narvaroMembership',
+      component: () => import('../views/NarvaroMembershipView.vue')
+    },
 
     {
       path: '/gdpr',
       name: 'gdpr',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/GDPRView.vue')
     }
   ]
