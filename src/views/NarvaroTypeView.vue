@@ -30,7 +30,7 @@ export default {
     },
     onSubmit(_event) {
       this.addNarvaroStore.type = this.type
-      // this.$router.push({ name: 'isMember' })
+      this.$router.push({ name: 'narvaroLicenseView' })
     }
   },
 

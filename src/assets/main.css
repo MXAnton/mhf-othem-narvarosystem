@@ -1,5 +1,6 @@
 @import './base.css';
 
+/* #region GENERAL ELEMENTS */
 button,
 a,
 input[type='submit'],
@@ -29,7 +30,9 @@ label {
   font-size: 1.5rem;
   font-weight: 600;
 }
+/* #endregion GENERAL ELEMENTS */
 
+/* #region INPUTS */
 .link--primary {
   text-decoration: underline;
   color: var(--color-text);
@@ -162,6 +165,100 @@ label {
   background-color: var(--color-border);
 }
 
+/* CHECKBOX PRIMARY */
+.checkbox--primary__wrapper {
+  font-size: 2.25rem;
+
+  --size: 1.8em;
+  --dot-size: 0.7; /* Decimal percentage of --size */
+  height: var(--size);
+
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+
+  --color-border: var(--c-red);
+}
+.checkbox--primary {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.checkbox--primary__wrapper label {
+  position: relative;
+
+  font-size: 1em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  margin-left: calc(var(--size) * 1.2);
+}
+.checkbox--primary__wrapper label::before {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  right: calc(100% + var(--size) * 0.2);
+  transform: translateY(-50%);
+
+  width: var(--size);
+  aspect-ratio: 1/1;
+
+  border: 6px solid var(--color-border);
+  border-radius: 0.1em;
+
+  transition:
+    border-color 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+
+  animation: box-shadow-pulse 0.5s infinite ease-out alternate-reverse;
+}
+@keyframes box-shadow-pulse {
+  from {
+    box-shadow: 0 0 0em 0 var(--color-border);
+  }
+  to {
+    box-shadow: 0 0 0.3em 0 var(--color-border);
+  }
+}
+.checkbox--primary__wrapper label::after {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  right: calc(100% + var(--size) * var(--dot-size) / 2);
+  transform: translateY(-50%);
+
+  width: calc(var(--size) * var(--dot-size));
+  aspect-ratio: 1/1;
+
+  border-radius: 0.1em;
+
+  background-color: transparent;
+  transition:
+    background-color 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+}
+/* HOVER */
+.checkbox--primary__wrapper:has(.checkbox--primary:hover) label::before,
+.checkbox--primary__wrapper:has(.checkbox--primary:hover) label::after {
+  opacity: 0.7;
+}
+/* CHECKED */
+.checkbox--primary__wrapper:has(.checkbox--primary:checked) {
+  --color-border: var(--c-green);
+}
+.checkbox--primary__wrapper:has(.checkbox--primary:checked) label::before {
+  border-width: 4px;
+  animation: none;
+}
+.checkbox--primary__wrapper:has(.checkbox--primary:checked) label::after {
+  background-color: var(--color-border);
+}
+/* #endregion INPUTS */
+
+/* #region GENERAL LAYOUT */
 main {
   padding: 3rem 0.5rem 0;
 
@@ -174,7 +271,9 @@ main {
 .content__wrapper {
   max-width: 38rem;
 }
+/* #endregion GENERAL LAYOUT */
 
+/* #region FORMS */
 form {
   display: flex;
   flex-direction: column;
@@ -197,8 +296,9 @@ form > nav {
 
   margin-top: 2rem;
 }
+/* #endregion FORMS */
 
-/* MARGINS */
+/* #region MARGINS */
 .mb--small {
   margin-bottom: 1rem;
 }
@@ -212,3 +312,4 @@ form > nav {
 .mt--bigger {
   margin-top: 4rem;
 }
+/* #endregion MARGINS */
