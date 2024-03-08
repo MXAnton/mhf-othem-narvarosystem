@@ -46,6 +46,16 @@ const router = createRouter({
       name: 'narvaroConfirm',
       component: () => import('../views/NarvaroConfirmView.vue')
     },
+    {
+      path: '/narvaro/pay',
+      name: 'narvaroPay',
+      component: () => import('../views/NarvaroPayView.vue')
+    },
+    {
+      path: '/narvaro/thanks',
+      name: 'narvaroThanks',
+      component: () => import('../views/NarvaroThanksView.vue')
+    },
 
     {
       path: '/gdpr',

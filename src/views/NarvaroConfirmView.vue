@@ -14,7 +14,8 @@ export default {
     },
     onSubmit(_event) {
       // Add narvaro to database
-      // this.$router.push({ name: 'narvaroType' })
+      alert('Du är nu anmäld')
+      this.$router.push({ name: 'narvaroPay' })
     }
   },
 

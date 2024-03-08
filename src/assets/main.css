@@ -316,6 +316,9 @@ form > nav {
   margin-bottom: 3rem;
 }
 
+.mt--big {
+  margin-top: 3rem;
+}
 .mt--bigger {
   margin-top: 4rem;
 }
