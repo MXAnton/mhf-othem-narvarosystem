@@ -17,6 +17,7 @@ export default {
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
+    this.addNarvaroStore.clearInputs()
   }
 }
 </script>
