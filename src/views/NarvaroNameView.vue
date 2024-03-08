@@ -1,9 +1,12 @@
 <script>
 import { RouterLink } from 'vue-router'
+import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   data() {
     return {
+      addNarvaroStore: null,
+
       firstName: null,
       lastName: null
     }
@@ -14,8 +17,16 @@ export default {
       this.$router.go(-1)
     },
     onSubmit(_event) {
-      // this.$router.push({ name: 'narvaroName' })
+      this.addNarvaroStore.firstName = this.firstName
+      this.addNarvaroStore.lastName = this.lastName
+      // this.$router.push({ name: 'isMember' })
     }
+  },
+
+  created() {
+    this.addNarvaroStore = useAddNarvaroStore()
+    this.firstName = this.addNarvaroStore.firstName
+    this.lastName = this.addNarvaroStore.lastName
   }
 }
 </script>

@@ -1,17 +1,26 @@
 <script>
 import { RouterLink } from 'vue-router'
+import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   data() {
     return {
+      addNarvaroStore: null,
+
       personNum: null
     }
   },
 
   methods: {
     onSubmit(_event) {
+      this.addNarvaroStore.personNum = this.personNum
       this.$router.push({ name: 'narvaroName' })
     }
+  },
+
+  created() {
+    this.addNarvaroStore = useAddNarvaroStore()
+    this.personNum = this.addNarvaroStore.personNum
   }
 }
 </script>
