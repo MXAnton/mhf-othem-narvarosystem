@@ -14,6 +14,11 @@ const router = createRouter({
       component: AddNarvaroView
     },
     {
+      path: '/narvaro/personnum',
+      name: 'narvaroPersonNum',
+      component: () => import('../views/NarvaroPersonNumView.vue')
+    },
+    {
       path: '/narvaro/name',
       name: 'narvaroName',
       // route level code-splitting

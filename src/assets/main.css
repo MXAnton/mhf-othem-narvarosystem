@@ -14,12 +14,14 @@ label {
   font-weight: 500;
   font-size: 2.25rem;
   color: var(--c-grey);
+  margin-bottom: 0.4em;
 }
 h1,
 h2 {
   font-weight: 600;
   font-size: 4rem;
   text-align: center;
+  line-height: 1;
 }
 
 p {
@@ -59,6 +61,11 @@ label {
 }
 .btn--primary:hover {
   border-color: var(--color-border-hover);
+}
+
+.btn--danger {
+  --color-btn-bg: var(--c-red);
+  --color-border: var(--c-red);
 }
 
 .input--primary__wrapper {
@@ -294,7 +301,7 @@ form > nav {
   justify-content: center;
   gap: 1rem;
 
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 /* #endregion FORMS */
 

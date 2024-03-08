@@ -3,7 +3,7 @@
     <p>© Norra Gotlands MHF-Ungdom {{ new Date().getFullYear() }}</p>
     <p>
       <i
-        >Utvecklat av
+        >Utvecklad av
         <a
           class="link--primary"
           href="https://antonlehrberg.netlify.app/"

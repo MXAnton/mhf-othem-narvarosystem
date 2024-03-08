@@ -10,7 +10,7 @@ export default {
 
   methods: {
     goBack() {
-      this.$router.push({ name: 'addNarvaro' })
+      this.$router.push({ name: 'narvaroPersonNum' })
     },
     onSubmit(_event) {
       this.$router.push({ name: 'narvaroMembership' })

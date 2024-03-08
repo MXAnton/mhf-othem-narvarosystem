@@ -16,10 +16,15 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
         { name: 'Ledare', noMembers: false }
       ]
     }
+  },
+  actions: {
+    clearInputs() {
+      this.personNum = null
+      this.firstName = null
+      this.lastName = null
+      this.isMember = false
+      this.type = null
+      this.hasLicense = false
+    }
   }
-  // actions: {
-  //   increment() {
-  //     this.count++
-  //   },
-  // },
 })
