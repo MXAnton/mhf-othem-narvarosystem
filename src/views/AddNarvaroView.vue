@@ -66,4 +66,8 @@ form > p {
   text-wrap: balance;
   text-align: center;
 }
+
+#personnummer-input {
+  font-size: 4rem;
+}
 </style>
