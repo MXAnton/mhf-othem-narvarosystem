@@ -36,6 +36,11 @@ const router = createRouter({
       name: 'narvaroLicenseView',
       component: () => import('../views/NarvaroLicenseView.vue')
     },
+    {
+      path: '/narvaro/confirm',
+      name: 'narvaroConfirmView',
+      component: () => import('../views/NarvaroConfirmView.vue')
+    },
 
     {
       path: '/gdpr',

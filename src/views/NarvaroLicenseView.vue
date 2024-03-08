@@ -17,7 +17,7 @@ export default {
     },
     onSubmit(_event) {
       this.addNarvaroStore.hasLicense = this.hasLicense
-      // this.$router.push({ name: 'narvaroType' })
+      this.$router.push({ name: 'narvaroConfirmView' })
     }
   },
 
