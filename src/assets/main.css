@@ -139,8 +139,8 @@ label {
   gap: 0.45em;
 }
 .radio--primary {
-  display: none;
-  visibility: hidden;
+  width: 0;
+  height: 0;
   opacity: 0;
 }
 
@@ -184,9 +184,15 @@ label {
   background-color: transparent;
   transition: background-color 0.2s ease-in-out;
 }
+/* HOVER*/
 .radio--primary__wrapper:has(.radio--primary:hover) {
   --color-border: var(--color-border-hover);
 }
+/* FOCUS */
+.radio--primary__wrapper:has(.radio--primary:focus-visible) {
+  --color-border: var(--c-yellow);
+}
+/* CHECKED */
 .radio--primary__wrapper:has(.radio--primary:checked) label::after {
   background-color: var(--color-border);
 }
