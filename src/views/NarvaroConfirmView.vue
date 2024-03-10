@@ -26,6 +26,10 @@ export default {
     onSubmit(_event) {
       // Add narvaro to database
       alert('Du är nu anmäld')
+      if (this.addNarvaroStore.type === 'Ledare') {
+        this.$router.push({ name: 'narvaroThanks' })
+        return
+      }
       this.$router.push({ name: 'narvaroPay' })
     }
   },

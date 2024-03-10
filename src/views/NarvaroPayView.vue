@@ -30,6 +30,10 @@ export default {
     this.addNarvaroStore = useAddNarvaroStore()
 
     this.weekDayIndex = new Date().getDay()
+
+    if (this.addNarvaroStore.type === 'Ledare') {
+      this.$router.push({ name: 'narvaroThanks' })
+    }
   }
 }
 </script>
