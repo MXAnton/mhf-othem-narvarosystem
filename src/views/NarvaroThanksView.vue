@@ -14,15 +14,17 @@ export default {
   <main>
     <h1 class="mb--big">Kör försiktigt!</h1>
 
-    <nav>
-      <RouterLink class="btn--primary" :to="{ name: 'addNarvaro' }">Ny anmälan</RouterLink>
-    </nav>
+    <RouterLink class="btn--primary mb--bigger" :to="{ name: 'addNarvaro' }">Ny anmälan</RouterLink>
 
-    <img clas="mt--big" src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
+    <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
   </main>
 </template>
 
 <style scoped>
+main {
+  min-height: 90svh;
+  justify-content: end;
+}
 h1 {
   font-size: 6rem;
 }
