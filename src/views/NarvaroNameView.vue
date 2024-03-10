@@ -32,6 +32,10 @@ export default {
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
+
+    if (this.addNarvaroStore.isPersonNumValid() !== true) {
+      this.$router.push({ name: 'addNarvaro' })
+    }
   }
 }
 </script>
