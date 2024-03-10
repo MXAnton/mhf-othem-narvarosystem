@@ -59,7 +59,9 @@ label {
   padding: 0.3em 1em;
   border-radius: 9px;
 
-  transition: border-color 0.2s ease-in-out;
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 .btn--primary:disabled,
 .btn--secondary:disabled {
@@ -67,17 +69,17 @@ label {
 }
 .btn--primary:hover,
 .btn--secondary:hover {
-  border-color: var(--color-border-hover);
+  --color-border: var(--color-border-hover);
+  box-shadow: 0 0 0.2em 0 var(--color-border);
 }
 .btn--primary:focus-visible,
 .btn--secondary:focus-visible {
-  border-color: var(--c-yellow);
+  --color-border: var(--c-yellow);
 }
 
 .btn--secondary {
   background-color: transparent;
   color: var(--color-btn-bg);
-  border-color: var(--color-btn-bg);
 }
 
 .btn--danger {
