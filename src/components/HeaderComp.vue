@@ -24,7 +24,7 @@ export default {
 <style scoped>
 header {
   width: 100%;
-  padding: 3rem 1rem 2rem;
+  padding: 1rem 1rem 2rem;
 
   display: grid;
   grid-template-columns: 1fr calc(min(100%, 610px)) 1fr;
