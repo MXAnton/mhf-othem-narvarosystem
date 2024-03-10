@@ -11,6 +11,14 @@ export default {
 
   methods: {
     onSubmit(_event) {
+      const personNumRes = this.addNarvaroStore.isPersonNumValid()
+      if (personNumRes !== true) {
+        // Error
+        console.warn(personNumRes)
+        alert(personNumRes)
+        return
+      }
+
       this.$router.push({ name: 'narvaroName' })
     }
   },
@@ -28,7 +36,7 @@ export default {
     <h2 class="mb--big">Anmäl dig nedan</h2>
 
     <div class="content__wrapper">
-      <form @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit" novalidate>
         <div class="input--primary__wrapper">
           <label for="personnummer-input">Personnummer:</label>
           <input
