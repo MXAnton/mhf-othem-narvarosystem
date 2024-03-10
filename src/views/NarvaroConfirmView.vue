@@ -17,6 +17,10 @@ export default {
 
   methods: {
     goBack() {
+      if (this.addNarvaroStore.type === 'Ledare') {
+        this.$router.push({ name: 'narvaroType' })
+        return
+      }
       this.$router.push({ name: 'narvaroLicense' })
     },
     onSubmit(_event) {
@@ -68,7 +72,7 @@ export default {
             <h3>Typ:</h3>
             <p>{{ addNarvaroStore.type }}</p>
           </li>
-          <li>
+          <li v-if="addNarvaroStore.type !== 'Ledare'">
             <h3>Har licens:</h3>
             <p>{{ addNarvaroStore.hasLicense ? 'Ja' : 'Nej' }}</p>
           </li>

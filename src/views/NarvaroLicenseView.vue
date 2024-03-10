@@ -36,6 +36,10 @@ export default {
     if (this.addNarvaroStore.type == null) {
       this.$router.push({ name: 'narvaroType' })
     }
+
+    if (this.addNarvaroStore.type === 'Ledare') {
+      this.$router.push({ name: 'narvaroConfirm' })
+    }
   }
 }
 </script>
