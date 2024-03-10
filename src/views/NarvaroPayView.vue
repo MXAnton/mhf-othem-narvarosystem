@@ -1,11 +1,13 @@
 <script>
 import HeaderComp from '@/components/HeaderComp.vue'
+import TimeOutComp from '@/components/TimeOutComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 import { RouterLink } from 'vue-router'
 
 export default {
   components: {
-    HeaderComp
+    HeaderComp,
+    TimeOutComp
   },
 
   data() {
@@ -51,6 +53,8 @@ export default {
 
     <RouterLink class="btn--primary mt--big" :to="{ name: 'narvaroThanks' }">Färdig</RouterLink>
   </main>
+
+  <TimeOutComp />
 </template>
 
 <style scoped>

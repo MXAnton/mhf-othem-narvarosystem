@@ -1,12 +1,11 @@
 <script>
+import TimeOutComp from '@/components/TimeOutComp.vue'
 import { RouterLink } from 'vue-router'
 
 export default {
-  data() {
-    return {}
-  },
-
-  created() {}
+  components: {
+    TimeOutComp
+  }
 }
 </script>
 
@@ -18,6 +17,8 @@ export default {
 
     <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
   </main>
+
+  <TimeOutComp />
 </template>
 
 <style scoped>

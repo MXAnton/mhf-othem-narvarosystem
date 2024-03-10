@@ -1,10 +1,12 @@
 <script>
 import HeaderComp from '@/components/HeaderComp.vue'
+import TimeOutComp from '@/components/TimeOutComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   components: {
-    HeaderComp
+    HeaderComp,
+    TimeOutComp
   },
 
   data() {
@@ -95,6 +97,8 @@ export default {
       </form>
     </div>
   </main>
+
+  <TimeOutComp />
 </template>
 
 <style scoped></style>
