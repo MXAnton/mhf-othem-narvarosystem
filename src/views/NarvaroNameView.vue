@@ -18,6 +18,14 @@ export default {
       this.$router.push({ name: 'narvaroPersonNum' })
     },
     onSubmit(_event) {
+      const nameRes = this.addNarvaroStore.isNameValid()
+      if (nameRes !== true) {
+        // Error
+        console.warn(nameRes)
+        alert(nameRes)
+        return
+      }
+
       this.$router.push({ name: 'narvaroMembership' })
     }
   },
@@ -35,7 +43,7 @@ export default {
     <h1 class="mb--big">Skriv ditt namn</h1>
 
     <div class="content__wrapper">
-      <form @submit.prevent="onSubmit()">
+      <form @submit.prevent="onSubmit()" novalidate>
         <div class="input--primary__wrapper">
           <label for="first-name-input">Förnamn:</label>
           <input

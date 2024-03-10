@@ -75,6 +75,20 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       return true
     },
 
+    isNameValid() {
+      if (this.firstName == null || this.firstName.trim().length === 0) {
+        return 'Skriv in ditt förnamn.'
+      }
+      if (this.lastName == null || this.lastName.trim().length === 0) {
+        return 'Skriv in ditt efternamn.'
+      }
+
+      this.firstName = this.firstName.trim()
+      this.lastName = this.lastName.trim()
+
+      return true
+    },
+
     clearInputs() {
       this.personNum = null
       this.firstName = null
