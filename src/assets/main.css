@@ -60,6 +60,10 @@ label {
 
   transition: border-color 0.2s ease-in-out;
 }
+.btn--primary:disabled,
+.btn--secondary:disabled {
+  opacity: 0.8;
+}
 .btn--primary:hover,
 .btn--secondary:hover {
   border-color: var(--color-border-hover);

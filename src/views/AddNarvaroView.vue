@@ -61,7 +61,12 @@ export default {
           <RouterLink to="/gdpr" class="link--primary">här</RouterLink>.
         </p>
 
-        <input type="submit" value="Anmäl" class="btn--primary" />
+        <input
+          :disabled="addNarvaroStore.personNum == null || addNarvaroStore.personNum.length < 12"
+          type="submit"
+          value="Anmäl"
+          class="btn--primary"
+        />
       </form>
     </div>
 

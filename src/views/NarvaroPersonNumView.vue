@@ -33,6 +33,10 @@ export default {
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
+
+    if (this.addNarvaroStore.isPersonNumValid() !== true) {
+      this.$router.push({ name: 'addNarvaro' })
+    }
   }
 }
 </script>
@@ -66,7 +70,12 @@ export default {
 
         <nav>
           <!-- <input type="button" value="Avbryt" class="btn--primary btn--danger" @click="cancel" /> -->
-          <input type="submit" value="Fortsätt" class="btn--primary" />
+          <input
+            :disabled="addNarvaroStore.personNum == null || addNarvaroStore.personNum.length < 12"
+            type="submit"
+            value="Fortsätt"
+            class="btn--primary"
+          />
         </nav>
       </form>
     </div>

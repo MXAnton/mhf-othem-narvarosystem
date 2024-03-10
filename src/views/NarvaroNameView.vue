@@ -84,7 +84,17 @@ export default {
 
         <nav>
           <input type="button" value="Tillbaka" class="btn--secondary" @click="goBack" />
-          <input type="submit" value="Fortsätt" class="btn--primary" />
+          <input
+            :disabled="
+              addNarvaroStore.firstName == null ||
+              addNarvaroStore.firstName.length == 0 ||
+              addNarvaroStore.lastName == null ||
+              addNarvaroStore.lastName.length == 0
+            "
+            type="submit"
+            value="Fortsätt"
+            class="btn--primary"
+          />
         </nav>
       </form>
     </div>
