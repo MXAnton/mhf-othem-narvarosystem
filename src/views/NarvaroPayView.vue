@@ -1,8 +1,13 @@
 <script>
+import HeaderComp from '@/components/HeaderComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 import { RouterLink } from 'vue-router'
 
 export default {
+  components: {
+    HeaderComp
+  },
+
   data() {
     return {
       addNarvaroStore: null,
@@ -26,6 +31,8 @@ export default {
 </script>
 
 <template>
+  <HeaderComp :progress="1" />
+
   <main>
     <h1 class="sub-header">En sista grej...</h1>
     <h2 class="mb--big">Betala</h2>

@@ -1,7 +1,12 @@
 <script>
+import HeaderComp from '@/components/HeaderComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
+  components: {
+    HeaderComp
+  },
+
   data() {
     return {
       addNarvaroStore: null
@@ -24,6 +29,8 @@ export default {
 </script>
 
 <template>
+  <HeaderComp :progress="0.3" />
+
   <main>
     <h1 class="mb--big">Skriv ditt namn</h1>
 

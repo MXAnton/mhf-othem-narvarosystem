@@ -1,7 +1,12 @@
 <script>
+import HeaderComp from '@/components/HeaderComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
+  components: {
+    HeaderComp
+  },
+
   data() {
     return {
       addNarvaroStore: null
@@ -24,6 +29,8 @@ export default {
 </script>
 
 <template>
+  <HeaderComp :progress="0.5" />
+
   <main>
     <h1 class="mb--big">Medlem?</h1>
 
