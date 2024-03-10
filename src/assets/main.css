@@ -36,6 +36,7 @@ label {
 
 /* #region INPUTS */
 .link--primary {
+  width: fit-content;
   text-decoration: underline;
   color: var(--color-text);
   font-weight: 700;
