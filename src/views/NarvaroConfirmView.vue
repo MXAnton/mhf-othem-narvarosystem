@@ -73,7 +73,7 @@ export default {
         </ul>
 
         <nav>
-          <input type="button" value="Tillbaka" class="btn--primary" @click="goBack" />
+          <input type="button" value="Tillbaka" class="btn--secondary" @click="goBack" />
           <input type="submit" value="Stämmer" class="btn--primary" />
         </nav>
       </form>

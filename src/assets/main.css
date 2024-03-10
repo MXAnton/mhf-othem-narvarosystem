@@ -41,7 +41,8 @@ label {
   font-weight: 700;
 }
 
-.btn--primary {
+.btn--primary,
+.btn--secondary {
   width: fit-content;
   display: block;
 
@@ -59,8 +60,15 @@ label {
 
   transition: border-color 0.2s ease-in-out;
 }
-.btn--primary:hover {
+.btn--primary:hover,
+.btn--secondary:hover {
   border-color: var(--color-border-hover);
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-btn-bg);
+  border-color: var(--color-btn-bg);
 }
 
 .btn--danger {

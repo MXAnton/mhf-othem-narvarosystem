@@ -89,7 +89,7 @@ export default {
         </div>
 
         <nav>
-          <input type="button" value="Tillbaka" class="btn--primary" @click="goBack" />
+          <input type="button" value="Tillbaka" class="btn--secondary" @click="goBack" />
           <input type="submit" value="Fortsätt" class="btn--primary" />
         </nav>
       </form>
