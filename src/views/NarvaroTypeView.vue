@@ -32,6 +32,11 @@ export default {
       this.$router.push({ name: 'narvaroMembership' })
     },
     onSubmit(_event) {
+      if (this.addNarvaroStore.type == null) {
+        console.warn('Välj typ av anmälan.')
+        return
+      }
+
       this.$router.push({ name: 'narvaroLicense' })
     }
   },
