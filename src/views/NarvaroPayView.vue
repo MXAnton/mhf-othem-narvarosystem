@@ -11,21 +11,23 @@ export default {
   data() {
     return {
       addNarvaroStore: null,
-      weekDayIndex: new Date().getDay() - 1,
+      weekDayIndex: null,
       weekDays: [
+        'söndagar',
         'måndagar',
         'tisdagar',
         'onsdagar',
         'torsdagar',
         'fredagar',
-        'lördagar',
-        'söndagar'
+        'lördagar'
       ]
     }
   },
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
+
+    this.weekDayIndex = new Date().getDay()
   }
 }
 </script>
@@ -37,11 +39,13 @@ export default {
     <h1 class="sub-header">En sista grej...</h1>
     <h2 class="mb--big">Betala</h2>
 
-    <div class="price-text" v-if="weekDayIndex === 0">
+    <div class="price-text" v-if="weekDayIndex === 1">
       <p>På måndagar gäller 50 kr träningsavgift.</p>
       <p><i>TIPS: MHF-medlemmar tränar gratis på måndagar ;)</i></p>
     </div>
-    <p class="price-text" v-else>På {{ weekDays[weekDayIndex] }} gäller 50 kr träningsavgift.</p>
+    <p class="price-text" v-else-if="weekDayIndex != null">
+      På {{ weekDays[weekDayIndex] }} gäller 50 kr träningsavgift.
+    </p>
 
     <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
 
