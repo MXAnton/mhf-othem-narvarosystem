@@ -26,7 +26,7 @@ export default {
         return
       }
 
-      this.$router.push({ name: 'narvaroMembership' })
+      this.$router.push({ name: 'narvaroType' })
     }
   },
 

@@ -6,7 +6,6 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       personNum: null,
       firstName: null,
       lastName: null,
-      isMember: false,
       type: null,
       hasLicense: false,
 
@@ -93,7 +92,6 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       this.personNum = null
       this.firstName = null
       this.lastName = null
-      this.isMember = false
       this.type = null
       this.hasLicense = false
     }

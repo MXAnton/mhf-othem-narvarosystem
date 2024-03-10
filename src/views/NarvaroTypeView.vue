@@ -29,7 +29,7 @@ export default {
 
   methods: {
     goBack() {
-      this.$router.push({ name: 'narvaroMembership' })
+      this.$router.push({ name: 'narvaroName' })
     },
     onSubmit(_event) {
       if (this.addNarvaroStore.type == null) {
