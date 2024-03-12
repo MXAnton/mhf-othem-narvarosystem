@@ -17,56 +17,41 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
     }
   },
   getters: {
-    needLicense(state) {
-      if (state.isPersonNumValid() !== true) {
-        return true
-      }
-
-      const birthYear = parseInt(state.personNum.substring(0, 4))
-      const currentYear = new Date().getFullYear()
-      if (state.type === 'Ledare' || birthYear > currentYear - 13) {
-        return false
-      }
-
-      return true
-    }
-  },
-  actions: {
-    isPersonNumValid() {
-      if (this.personNum == null) {
+    isPersonNumValid(state) {
+      if (state.personNum == null) {
         return 'Måste ange personnummer.'
       }
 
-      if (/\D/.test(this.personNum) === true) {
+      if (/\D/.test(state.personNum) === true) {
         return 'Personnumret får bara innehålla siffror.'
       }
 
-      if (this.personNum.length != 12) {
+      if (state.personNum.length != 12) {
         return 'Personnummret måste vara 12 siffror.'
       }
 
       const currentYear = new Date().getFullYear()
-      if (this.personNum < (currentYear - 200) * Math.pow(10, 8)) {
+      if (state.personNum < (currentYear - 200) * Math.pow(10, 8)) {
         // Person too old to exist, birthdate more than 200 years from now
         return 'Du kan inte vara född för mer än 200 år sen.'
       }
-      if (this.personNum > currentYear * Math.pow(10, 8)) {
+      if (state.personNum > currentYear * Math.pow(10, 8)) {
         // Person too young to exist, birthdate after currentYear
         return 'Du kan inte vara född i framtiden.'
       }
 
-      const month = parseInt(this.personNum.substring(4, 6))
+      const month = parseInt(state.personNum.substring(4, 6))
       if (month < 1 || month > 12) {
         return 'Skriv in en giltig månad.'
       }
 
-      const day = parseInt(this.personNum.substring(6, 8))
+      const day = parseInt(state.personNum.substring(6, 8))
       if (day < 1 || day > 31) {
         return 'Skriv in en giltig dag.'
       }
 
       // Check with mathematical function if personNum could be legit
-      const smallPersonNumArray = this.personNum.substring(2).split('')
+      const smallPersonNumArray = state.personNum.substring(2).split('')
       let checkSum = 0
       for (let _i = 0; _i < smallPersonNumArray.length; _i++) {
         let num = parseInt(smallPersonNumArray[_i])
@@ -89,20 +74,35 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       return true
     },
 
-    isNameValid() {
-      if (this.firstName == null || this.firstName.trim().length === 0) {
+    isNameValid(state) {
+      if (state.firstName == null || state.firstName.trim().length === 0) {
         return 'Skriv in ditt förnamn.'
       }
-      if (this.lastName == null || this.lastName.trim().length === 0) {
+      if (state.lastName == null || state.lastName.trim().length === 0) {
         return 'Skriv in ditt efternamn.'
       }
 
-      this.firstName = this.firstName.trim()
-      this.lastName = this.lastName.trim()
+      state.firstName = state.firstName.trim()
+      state.lastName = state.lastName.trim()
 
       return true
     },
 
+    needLicense(state) {
+      if (state.isPersonNumValid !== true) {
+        return true
+      }
+
+      const birthYear = parseInt(state.personNum.substring(0, 4))
+      const currentYear = new Date().getFullYear()
+      if (state.type === 'Ledare' || birthYear > currentYear - 13) {
+        return false
+      }
+
+      return true
+    }
+  },
+  actions: {
     clearInputs() {
       this.personNum = null
       this.firstName = null

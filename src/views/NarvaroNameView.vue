@@ -20,7 +20,7 @@ export default {
       this.$router.push({ name: 'narvaroPersonNum' })
     },
     onSubmit(_event) {
-      const nameRes = this.addNarvaroStore.isNameValid()
+      const nameRes = this.addNarvaroStore.isNameValid
       if (nameRes !== true) {
         // Error
         console.warn(nameRes)
@@ -35,7 +35,7 @@ export default {
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
 
-    if (this.addNarvaroStore.isPersonNumValid() !== true) {
+    if (this.addNarvaroStore.isPersonNumValid !== true) {
       this.$router.push({ name: 'addNarvaro' })
     }
   }
