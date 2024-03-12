@@ -327,7 +327,6 @@ form {
 }
 
 form > p {
-  margin-top: 2rem;
   margin-bottom: 1rem;
   text-wrap: balance;
   text-align: center;
