@@ -1,10 +1,10 @@
 <script>
-import TimeOutComp from '@/components/TimeOutComp.vue'
+import InactivityComp from '@/components/InactivityComp.vue'
 import { RouterLink } from 'vue-router'
 
 export default {
   components: {
-    TimeOutComp
+    InactivityComp
   }
 }
 </script>
@@ -16,7 +16,7 @@ export default {
     <RouterLink class="btn--primary mb--bigger" :to="{ name: 'addNarvaro' }">Ny anmälan</RouterLink>
   </main>
 
-  <TimeOutComp />
+  <InactivityComp />
 </template>
 
 <style scoped>

@@ -1,13 +1,13 @@
 <script>
 import HeaderComp from '@/components/HeaderComp.vue'
-import TimeOutComp from '@/components/TimeOutComp.vue'
+import InactivityComp from '@/components/InactivityComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 import { RouterLink } from 'vue-router'
 
 export default {
   components: {
     HeaderComp,
-    TimeOutComp
+    InactivityComp
   },
 
   data() {
@@ -59,7 +59,7 @@ export default {
     <RouterLink class="btn--primary mt--big" :to="{ name: 'narvaroThanks' }">Färdig</RouterLink>
   </main>
 
-  <TimeOutComp />
+  <InactivityComp />
 </template>
 
 <style scoped>

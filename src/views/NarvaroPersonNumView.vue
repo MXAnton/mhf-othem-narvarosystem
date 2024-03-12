@@ -1,12 +1,12 @@
 <script>
 import HeaderComp from '@/components/HeaderComp.vue'
-import TimeOutComp from '@/components/TimeOutComp.vue'
+import InactivityComp from '@/components/InactivityComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   components: {
     HeaderComp,
-    TimeOutComp
+    InactivityComp
   },
 
   data() {
@@ -92,7 +92,7 @@ export default {
     </div>
   </main>
 
-  <TimeOutComp />
+  <InactivityComp />
 </template>
 
 <style scoped>
