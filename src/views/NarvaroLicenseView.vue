@@ -55,8 +55,16 @@ export default {
       <form @submit.prevent="onSubmit()">
         <p>
           Du som i år fyller 13 år eller mer MÅSTE ha SVEMO-licens för att få köra annat än
-          begränsad prova på körning på däckbanorna. Läs mer här eller fråga en ledare om du känner
-          dig osäker.
+          begränsad prova på körning på däckbanorna. Läs mer på
+          <a
+            class="link--primary"
+            href="https://www.svemo.se/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="https://www.svemo.se/"
+            >svemo.se</a
+          >
+          eller fråga en ledare om du känner dig osäker.
         </p>
 
         <div class="checkbox--primary__wrapper mb--small">
