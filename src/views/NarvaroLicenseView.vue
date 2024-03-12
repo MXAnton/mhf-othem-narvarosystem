@@ -37,8 +37,9 @@ export default {
       this.$router.push({ name: 'narvaroType' })
     }
 
-    if (this.addNarvaroStore.type === 'Ledare') {
+    if (this.addNarvaroStore.needLicense === false) {
       this.$router.push({ name: 'narvaroConfirm' })
+      return
     }
   }
 }

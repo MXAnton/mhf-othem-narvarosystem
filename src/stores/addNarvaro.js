@@ -16,6 +16,21 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       ]
     }
   },
+  getters: {
+    needLicense(state) {
+      if (state.isPersonNumValid() !== true) {
+        return true
+      }
+
+      const birthYear = parseInt(state.personNum.substring(0, 4))
+      const currentYear = new Date().getFullYear()
+      if (state.type === 'Ledare' || birthYear > currentYear - 13) {
+        return false
+      }
+
+      return true
+    }
+  },
   actions: {
     isPersonNumValid() {
       if (this.personNum == null) {

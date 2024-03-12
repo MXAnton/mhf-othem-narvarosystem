@@ -17,11 +17,11 @@ export default {
 
   methods: {
     goBack() {
-      if (this.addNarvaroStore.type === 'Ledare') {
-        this.$router.push({ name: 'narvaroType' })
+      if (this.addNarvaroStore.needLicense) {
+        this.$router.push({ name: 'narvaroLicense' })
         return
       }
-      this.$router.push({ name: 'narvaroLicense' })
+      this.$router.push({ name: 'narvaroType' })
     },
     onSubmit(_event) {
       // Add narvaro to database
