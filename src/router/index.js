@@ -14,12 +14,12 @@ const router = createRouter({
       component: AddNarvaroView
     },
     {
-      path: '/narvaro/personnum',
+      path: '/narvaro/personnummer',
       name: 'narvaroPersonNum',
       component: () => import('../views/NarvaroPersonNumView.vue')
     },
     {
-      path: '/narvaro/name',
+      path: '/narvaro/namn',
       name: 'narvaroName',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -27,27 +27,27 @@ const router = createRouter({
       component: () => import('../views/NarvaroNameView.vue')
     },
     {
-      path: '/narvaro/type',
+      path: '/narvaro/typ',
       name: 'narvaroType',
       component: () => import('../views/NarvaroTypeView.vue')
     },
     {
-      path: '/narvaro/license',
+      path: '/narvaro/licens',
       name: 'narvaroLicense',
       component: () => import('../views/NarvaroLicenseView.vue')
     },
     {
-      path: '/narvaro/confirm',
+      path: '/narvaro/bekrafta',
       name: 'narvaroConfirm',
       component: () => import('../views/NarvaroConfirmView.vue')
     },
     {
-      path: '/narvaro/pay',
+      path: '/narvaro/betala',
       name: 'narvaroPay',
       component: () => import('../views/NarvaroPayView.vue')
     },
     {
-      path: '/narvaro/thanks',
+      path: '/narvaro/tack',
       name: 'narvaroThanks',
       component: () => import('../views/NarvaroThanksView.vue')
     },
