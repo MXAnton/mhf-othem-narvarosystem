@@ -133,7 +133,6 @@ exports.getAllNarvaroDate = (req, res, next) => {
   );
 };
 
-/*
 exports.getNarvaroDate = (req, res, next) => {
   if (!req.params.personnummer) {
     return next(new AppError("No personnummer found", 404));
@@ -160,7 +159,6 @@ exports.getNarvaroDate = (req, res, next) => {
     }
   );
 };
-*/
 
 exports.createNarvaro = (req, res, next) => {
   if (!req.body) return next(new AppError("No form data found", 404));
