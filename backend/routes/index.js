@@ -2,10 +2,14 @@ const express = require("express");
 const controllers = require("../controllers");
 const router = express.Router();
 
-router.route("/").get(controllers.getAllTodos).post(controllers.createTodo);
 router
-  .route("/:id")
-  .get(controllers.getTodo)
-  .put(controllers.updateTodo)
-  .delete(controllers.deleteTodo);
+  .route("/member")
+  .get(controllers.getAllMembers)
+  .post(controllers.createMember);
+router
+  .route("/member/:id")
+  .get(controllers.getMember)
+  .put(controllers.updateMember)
+  .delete(controllers.deleteMember);
+
 module.exports = router;

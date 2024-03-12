@@ -5,18 +5,20 @@ const AppError = require("./utils/appError");
 const errorHandler = require("./utils/errorHandler");
 
 const app = express();
-const port = 3000;
 
 app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
-app.get("/", (req, res) => {
-  res.json({ message: "ok" });
+app.use(express.urlencoded({ extended: true }));
+
+app.use(router);
+
+app.all("*", (req, res, next) => {
+  next(new AppError(`The URL ${req.originalUrl} does not exists`, 404));
+});
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+module.exports = app;
