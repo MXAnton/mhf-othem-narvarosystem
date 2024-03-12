@@ -68,7 +68,7 @@ export default {
         </p>
 
         <input
-          :disabled="addNarvaroStore.personNum == null || addNarvaroStore.personNum.length < 12"
+          :disabled="addNarvaroStore.personNum == null || addNarvaroStore.personNum.length < 1"
           type="submit"
           value="Anmäl"
           class="btn--primary"

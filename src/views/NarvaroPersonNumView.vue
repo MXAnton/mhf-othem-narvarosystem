@@ -79,7 +79,7 @@ export default {
         <nav>
           <!-- <input type="button" value="Avbryt" class="btn--primary btn--danger" @click="cancel" /> -->
           <input
-            :disabled="addNarvaroStore.personNum == null || addNarvaroStore.personNum.length < 12"
+            :disabled="addNarvaroStore.personNum == null || addNarvaroStore.personNum.length < 1"
             type="submit"
             value="Fortsätt"
             class="btn--primary"
