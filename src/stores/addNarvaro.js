@@ -31,9 +31,9 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       }
 
       const currentYear = new Date().getFullYear()
-      if (state.personNum < (currentYear - 200) * Math.pow(10, 8)) {
-        // Person too old to exist, birthdate more than 200 years from now
-        return 'Du kan inte vara född för mer än 200 år sen.'
+      if (state.personNum < (currentYear - 150) * Math.pow(10, 8)) {
+        // Person too old to exist, birthdate more than 150 years from now
+        return `Du kan inte vara född för ${currentYear - state.personNum.substring(0, 4)} år sen.`
       }
       if (state.personNum > currentYear * Math.pow(10, 8)) {
         // Person too young to exist, birthdate after currentYear
