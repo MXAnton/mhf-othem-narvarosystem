@@ -66,8 +66,8 @@ export default {
             id="has-license-input"
             name="is-member-input"
             title="Jag har licens"
-            autofocus
             v-model="addNarvaroStore.hasLicense"
+            autofocus
           />
           <label for="has-license-input">Jag har licens</label>
         </div>

@@ -26,6 +26,11 @@ export default {
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
     this.addNarvaroStore.clearInputs()
+  },
+
+  mounted() {
+    this.$refs.autofocus.focus()
+    this.$refs.autofocus.select()
   }
 }
 </script>
@@ -52,6 +57,7 @@ export default {
             title="12 siffror, ÅÅÅÅMMDDXXXX"
             placeholder="ÅÅÅÅMMDDXXXX"
             autofocus
+            ref="autofocus"
             v-model="addNarvaroStore.personNum"
           />
         </div>

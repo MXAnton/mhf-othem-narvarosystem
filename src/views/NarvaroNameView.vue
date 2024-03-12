@@ -38,6 +38,11 @@ export default {
     if (this.addNarvaroStore.isPersonNumValid !== true) {
       this.$router.push({ name: 'addNarvaro' })
     }
+  },
+
+  mounted() {
+    this.$refs.autofocus.focus()
+    this.$refs.autofocus.select()
   }
 }
 </script>
@@ -63,6 +68,7 @@ export default {
             title="Skriv ditt förnamn..."
             placeholder="Förnamn..."
             autofocus
+            ref="autofocus"
             v-model="addNarvaroStore.firstName"
           />
         </div>
@@ -79,7 +85,6 @@ export default {
             required
             title="Skriv ditt efternamn..."
             placeholder="Efternamn..."
-            autofocus
             v-model="addNarvaroStore.lastName"
           />
         </div>
