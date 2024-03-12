@@ -5,10 +5,6 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      redirect: '/narvaro'
-    },
-    {
       path: '/narvaro',
       name: 'addNarvaro',
       component: AddNarvaroView
@@ -56,6 +52,11 @@ const router = createRouter({
       path: '/gdpr',
       name: 'gdpr',
       component: () => import('../views/GDPRView.vue')
+    },
+
+    {
+      path: '/:catchAll(.*)*',
+      redirect: '/narvaro'
     }
   ]
 })
