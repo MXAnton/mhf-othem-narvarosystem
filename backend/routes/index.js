@@ -12,10 +12,8 @@ router
   .put(controllers.updateMember)
   .delete(controllers.deleteMember);
 
-router
-  .route("/narvaro/year/:year")
-  .get(controllers.getAllNarvaroYear)
-  .post(controllers.createNarvaroYear);
+router.route("/narvaro").post(controllers.createNarvaro);
+router.route("/narvaro/year/:year").get(controllers.getAllNarvaroYear);
 router.route("/narvaro/date/:date").get(controllers.getAllNarvaroDate);
 
 module.exports = router;

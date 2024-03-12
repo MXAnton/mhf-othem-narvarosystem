@@ -162,6 +162,30 @@ exports.getNarvaroDate = (req, res, next) => {
 };
 */
 
+exports.createNarvaro = (req, res, next) => {
+  if (!req.body) return next(new AppError("No form data found", 404));
+
+  const currentYear = new Date().getFullYear();
+
+  conn.query(
+    `INSERT INTO narvaro_${currentYear} (personnummer, first_name, last_name, type, has_license) VALUES(?, ?, ?, ?, ?)`,
+    [
+      req.body.personnummer,
+      req.body.first_name,
+      req.body.last_name,
+      req.body.type,
+      req.body.has_license || 0,
+    ],
+    function (err, data, fields) {
+      if (err) return next(new AppError(err, 500));
+      res.status(201).json({
+        status: "success",
+        message: "narvaro created/added!",
+      });
+    }
+  );
+};
+/*
 exports.createNarvaroYear = (req, res, next) => {
   if (!req.params.year) {
     return next(new AppError("No narvaro year found", 404));
@@ -186,3 +210,4 @@ exports.createNarvaroYear = (req, res, next) => {
     }
   );
 };
+*/
