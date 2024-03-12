@@ -29,6 +29,20 @@ export async function getAllNarvaroDate(_date) {
   return response
 }
 
+export async function getNarvaroDate(_date, _personnummer) {
+  let response = await axios
+    .get(`date/${_date}/${_personnummer}`)
+    .then((res) => {
+      return res
+    })
+    .catch((err) => {
+      console.warn(err)
+      return err
+    })
+
+  return response
+}
+
 export async function createNarvaro(_personnummer, _firstName, _lastName, _type, _hasLicense) {
   let response = await axios
     .post('', {

@@ -3,6 +3,8 @@ import HeaderComp from '@/components/HeaderComp.vue'
 import InactivityComp from '@/components/InactivityComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
+import { getNarvaroDate } from '@/services/narvaroService'
+
 export default {
   components: {
     HeaderComp,
@@ -12,24 +14,36 @@ export default {
   data() {
     return {
       addNarvaroStore: null,
-      errorText: null
+      errorText: null,
+      newPersonNum: null
     }
   },
 
   methods: {
-    cancel() {
-      this.addNarvaroStore.clearInputs()
-      this.$router.push({ name: 'narvaroNew' })
-    },
-    onSubmit(_event) {
-      const personNumRes = this.addNarvaroStore.isPersonNumValid
+    async onSubmit(_event) {
+      const personNumRes = this.addNarvaroStore.isPersonNumValid(this.newPersonNum)
       if (personNumRes !== true) {
         // Error
-        console.warn(personNumRes)
         this.errorText = personNumRes
         return
       }
 
+      // Get current date
+      const currentDate = new Date()
+      // Get current year, month, and day
+      const year = currentDate.getFullYear()
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0') // Adding 1 because months are zero-indexed
+      const day = currentDate.getDate().toString().padStart(2, '0')
+      // Construct the date string in the desired format
+      const formattedDate = `${year}-${month}-${day}`
+
+      const res = await getNarvaroDate(formattedDate, this.newPersonNum)
+      if (res.data.length > 0) {
+        this.errorText = 'Personnummret är redan anmält idag.'
+        return
+      }
+
+      this.addNarvaroStore.personNum = this.newPersonNum
       this.$router.push({ name: 'narvaroName' })
     }
   },
@@ -37,9 +51,11 @@ export default {
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
 
-    if (this.addNarvaroStore.isPersonNumValid !== true) {
+    if (this.addNarvaroStore.isPersonNumValid() !== true) {
       this.$router.push({ name: 'narvaroNew' })
     }
+
+    this.newPersonNum = this.addNarvaroStore.personNum
   },
 
   mounted() {
@@ -73,16 +89,15 @@ export default {
             placeholder="ÅÅÅÅMMDDXXXX"
             autofocus
             ref="autofocus"
-            v-model="addNarvaroStore.personNum"
+            v-model="newPersonNum"
             @input="errorText = null"
           />
           <label for="personnummer-input" class="error-text">{{ errorText }}</label>
         </div>
 
         <nav>
-          <!-- <input type="button" value="Avbryt" class="btn--primary btn--danger" @click="cancel" /> -->
           <input
-            :disabled="addNarvaroStore.personNum == null || addNarvaroStore.personNum.length < 1"
+            :disabled="newPersonNum == null || newPersonNum.length < 1"
             type="submit"
             value="Fortsätt"
             class="btn--primary"
