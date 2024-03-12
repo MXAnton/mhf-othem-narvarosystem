@@ -11,7 +11,8 @@ export default {
 
   data() {
     return {
-      addNarvaroStore: null
+      addNarvaroStore: null,
+      errorText: null
     }
   },
 
@@ -25,7 +26,7 @@ export default {
       if (personNumRes !== true) {
         // Error
         console.warn(personNumRes)
-        alert(personNumRes)
+        this.errorText = personNumRes
         return
       }
 
@@ -56,7 +57,7 @@ export default {
 
     <div class="content__wrapper">
       <form @submit.prevent="onSubmit" novalidate>
-        <div class="input--primary__wrapper">
+        <div class="input--primary__wrapper" :class="{ error: errorText != null }">
           <label for="personnummer-input">Personnummer:</label>
           <input
             class="input--primary"
@@ -73,7 +74,9 @@ export default {
             autofocus
             ref="autofocus"
             v-model="addNarvaroStore.personNum"
+            @input="errorText = null"
           />
+          <label for="personnummer-input" class="error-text">{{ errorText }}</label>
         </div>
 
         <nav>

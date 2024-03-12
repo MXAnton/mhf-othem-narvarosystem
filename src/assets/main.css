@@ -127,6 +127,9 @@ label {
 .input--primary:focus {
   border-color: var(--c-yellow);
 }
+.input--primary__wrapper.error .input--primary {
+  border-color: var(--c-red);
+}
 
 .radio--primary__wrapper {
   font-size: 2.25rem;
@@ -288,6 +291,15 @@ label {
 }
 .checkbox--primary__wrapper:has(.checkbox--primary:checked) label::after {
   background-color: var(--color-border);
+}
+
+/* ERROR TEXT */
+.error-text {
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 0.2em;
+  min-height: 1.2em;
+  color: var(--c-red);
 }
 /* #endregion INPUTS */
 

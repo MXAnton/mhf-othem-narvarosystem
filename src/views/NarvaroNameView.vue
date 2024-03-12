@@ -11,7 +11,8 @@ export default {
 
   data() {
     return {
-      addNarvaroStore: null
+      addNarvaroStore: null,
+      errorText: null
     }
   },
 
@@ -24,7 +25,7 @@ export default {
       if (nameRes !== true) {
         // Error
         console.warn(nameRes)
-        alert(nameRes)
+        this.errorText = nameRes
         return
       }
 
@@ -55,7 +56,10 @@ export default {
 
     <div class="content__wrapper">
       <form @submit.prevent="onSubmit()" novalidate>
-        <div class="input--primary__wrapper">
+        <div
+          class="input--primary__wrapper"
+          :class="{ error: errorText != null && errorText.includes('förnamn') }"
+        >
           <label for="first-name-input">Förnamn:</label>
           <input
             class="input--primary"
@@ -70,10 +74,17 @@ export default {
             autofocus
             ref="autofocus"
             v-model="addNarvaroStore.firstName"
+            @input="errorText = null"
           />
+          <label for="first-name-input" class="error-text">{{
+            errorText != null && errorText.includes('förnamn') ? errorText : ''
+          }}</label>
         </div>
 
-        <div class="input--primary__wrapper">
+        <div
+          class="input--primary__wrapper"
+          :class="{ error: errorText != null && errorText.includes('efternamn') }"
+        >
           <label for="last-name-input">Efternamn:</label>
           <input
             class="input--primary"
@@ -86,7 +97,11 @@ export default {
             title="Skriv ditt efternamn..."
             placeholder="Efternamn..."
             v-model="addNarvaroStore.lastName"
+            @input="errorText = null"
           />
+          <label for="first-name-input" class="error-text">{{
+            errorText != null && errorText.includes('efternamn') ? errorText : ''
+          }}</label>
         </div>
 
         <nav>
@@ -111,6 +126,9 @@ export default {
 </template>
 
 <style scoped>
+form {
+  gap: 0.5rem;
+}
 form > * {
   width: 100%;
 }
