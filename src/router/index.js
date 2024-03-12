@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AddNarvaroView from '../views/AddNarvaroView.vue'
+import NarvaroNewView from '../views/NarvaroNewView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/narvaro',
-      name: 'addNarvaro',
-      component: AddNarvaroView
+      name: 'narvaroNew',
+      component: NarvaroNewView
     },
     {
       path: '/narvaro/personnummer',

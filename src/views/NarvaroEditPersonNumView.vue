@@ -19,7 +19,7 @@ export default {
   methods: {
     cancel() {
       this.addNarvaroStore.clearInputs()
-      this.$router.push({ name: 'addNarvaro' })
+      this.$router.push({ name: 'narvaroNew' })
     },
     onSubmit(_event) {
       const personNumRes = this.addNarvaroStore.isPersonNumValid
@@ -38,7 +38,7 @@ export default {
     this.addNarvaroStore = useAddNarvaroStore()
 
     if (this.addNarvaroStore.isPersonNumValid !== true) {
-      this.$router.push({ name: 'addNarvaro' })
+      this.$router.push({ name: 'narvaroNew' })
     }
   },
 

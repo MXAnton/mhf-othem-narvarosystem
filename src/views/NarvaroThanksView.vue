@@ -13,7 +13,7 @@ export default {
   <main>
     <h1 class="mb--big">Kör försiktigt!</h1>
 
-    <RouterLink class="btn--primary mb--bigger" :to="{ name: 'addNarvaro' }">Ny anmälan</RouterLink>
+    <RouterLink class="btn--primary mb--bigger" :to="{ name: 'narvaroNew' }">Ny anmälan</RouterLink>
   </main>
 
   <InactivityComp />
