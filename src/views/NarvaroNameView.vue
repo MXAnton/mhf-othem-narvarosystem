@@ -18,7 +18,7 @@ export default {
 
   methods: {
     goBack() {
-      this.$router.push({ name: 'narvaroPersonNum' })
+      this.$router.push({ name: 'narvaroEditPersonNum' })
     },
     onSubmit(_event) {
       const nameRes = this.addNarvaroStore.isNameValid

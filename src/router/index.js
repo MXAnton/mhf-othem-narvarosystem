@@ -11,8 +11,8 @@ const router = createRouter({
     },
     {
       path: '/narvaro/personnummer',
-      name: 'narvaroPersonNum',
-      component: () => import('../views/NarvaroPersonNumView.vue')
+      name: 'narvaroEditPersonNum',
+      component: () => import('../views/NarvaroEditPersonNumView.vue')
     },
     {
       path: '/narvaro/namn',
