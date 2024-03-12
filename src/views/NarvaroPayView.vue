@@ -31,8 +31,9 @@ export default {
 
     this.weekDayIndex = new Date().getDay()
 
-    if (this.addNarvaroStore.type === 'Ledare') {
+    if (this.addNarvaroStore.needLicense === false) {
       this.$router.push({ name: 'narvaroThanks' })
+      return
     }
   }
 }

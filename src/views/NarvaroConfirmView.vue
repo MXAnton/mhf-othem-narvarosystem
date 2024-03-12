@@ -26,7 +26,8 @@ export default {
     onSubmit(_event) {
       // Add narvaro to database
       alert('Du är nu anmäld')
-      if (this.addNarvaroStore.type === 'Ledare') {
+
+      if (this.addNarvaroStore.needLicense === false) {
         this.$router.push({ name: 'narvaroThanks' })
         return
       }
