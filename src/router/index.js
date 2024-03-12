@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import NarvaroNewView from '../views/NarvaroNewView.vue'
+import NarvaroNewView from '../views/narvaro/NarvaroNewView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/narvaro/personnummer',
       name: 'narvaroEditPersonNum',
-      component: () => import('../views/NarvaroEditPersonNumView.vue')
+      component: () => import('../views/narvaro/NarvaroEditPersonNumView.vue')
     },
     {
       path: '/narvaro/namn',
@@ -20,32 +20,32 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/NarvaroNameView.vue')
+      component: () => import('../views/narvaro/NarvaroNameView.vue')
     },
     {
       path: '/narvaro/typ',
       name: 'narvaroType',
-      component: () => import('../views/NarvaroTypeView.vue')
+      component: () => import('../views/narvaro/NarvaroTypeView.vue')
     },
     {
       path: '/narvaro/licens',
       name: 'narvaroLicense',
-      component: () => import('../views/NarvaroLicenseView.vue')
+      component: () => import('../views/narvaro/NarvaroLicenseView.vue')
     },
     {
       path: '/narvaro/bekrafta',
       name: 'narvaroConfirm',
-      component: () => import('../views/NarvaroConfirmView.vue')
+      component: () => import('../views/narvaro/NarvaroConfirmView.vue')
     },
     {
       path: '/narvaro/betala',
       name: 'narvaroPay',
-      component: () => import('../views/NarvaroPayView.vue')
+      component: () => import('../views/narvaro/NarvaroPayView.vue')
     },
     {
       path: '/narvaro/tack',
       name: 'narvaroThanks',
-      component: () => import('../views/NarvaroThanksView.vue')
+      component: () => import('../views/narvaro/NarvaroThanksView.vue')
     },
 
     {
