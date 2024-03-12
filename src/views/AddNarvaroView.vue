@@ -90,4 +90,8 @@ h2 {
   text-align: center;
   width: 8em;
 }
+
+.btn--primary {
+  font-size: 2.5rem;
+}
 </style>
