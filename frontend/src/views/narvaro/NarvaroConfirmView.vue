@@ -1,7 +1,10 @@
 <script>
 import HeaderComp from '@/components/HeaderComp.vue'
 import InactivityComp from '@/components/InactivityComp.vue'
+
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
+
+import { createNarvaro } from '@/services/narvaroService'
 
 export default {
   components: {
@@ -23,9 +26,25 @@ export default {
       }
       this.$router.push({ name: 'narvaroType' })
     },
-    onSubmit(_event) {
+    async onSubmit(_event) {
       // Add narvaro to database
-      alert('Du är nu anmäld')
+      // alert('Du är nu anmäld')
+      const res = await createNarvaro(
+        this.addNarvaroStore.personNum,
+        this.addNarvaroStore.firstName,
+        this.addNarvaroStore.lastName,
+        this.addNarvaroStore.type,
+        this.addNarvaroStore.hasLicense
+      )
+      if (res.name == 'AxiosError') {
+        if (res.response.data.message.includes('Error: Duplicate entry')) {
+          alert('Du är redan anmäld idag.')
+          this.$router.push({ name: 'narvaroThanks' })
+          return
+        }
+        alert(res.response.data.message)
+        return
+      }
 
       if (this.addNarvaroStore.needLicense === false) {
         this.$router.push({ name: 'narvaroThanks' })

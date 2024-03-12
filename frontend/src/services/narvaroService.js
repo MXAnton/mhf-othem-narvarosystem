@@ -43,7 +43,7 @@ export async function createNarvaro(_personnummer, _firstName, _lastName, _type,
     })
     .catch((err) => {
       console.warn(err)
-      return null
+      return err
     })
 
   return response
