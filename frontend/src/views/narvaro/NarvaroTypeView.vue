@@ -31,7 +31,11 @@ export default {
 
   methods: {
     goBack() {
-      this.$router.push({ name: 'narvaroName' })
+      if (this.addNarvaroStore.isMember) {
+        this.$router.push({ name: 'narvaroEditPersonNum' })
+      } else {
+        this.$router.push({ name: 'narvaroName' })
+      }
     },
     onSubmit(_event) {
       if (this.addNarvaroStore.type == null) {

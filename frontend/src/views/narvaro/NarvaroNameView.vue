@@ -3,6 +3,8 @@ import HeaderComp from '@/components/HeaderComp.vue'
 import InactivityComp from '@/components/InactivityComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
+import { getMember } from '@/services/memberService'
+
 export default {
   components: {
     HeaderComp,
@@ -33,11 +35,24 @@ export default {
     }
   },
 
-  created() {
+  async created() {
     this.addNarvaroStore = useAddNarvaroStore()
 
     if (this.addNarvaroStore.isPersonNumValid() !== true) {
       this.$router.push({ name: 'narvaroNew' })
+    }
+
+    const memberRes = await getMember(this.addNarvaroStore.personNum)
+    if (memberRes.data.status === 'success' && memberRes.data.length > 0) {
+      if (memberRes.data.data[0].first_name?.length === 0) {
+        this.addNarvaroStore.firstName = memberRes.data.data[0].first_name
+      }
+      if (memberRes.data.data[0].last_name?.length === 0) {
+        this.addNarvaroStore.lastName = memberRes.data.data[0].last_name
+      }
+      this.addNarvaroStore.isMember = true
+    } else {
+      this.addNarvaroStore.isMember = false
     }
   },
 

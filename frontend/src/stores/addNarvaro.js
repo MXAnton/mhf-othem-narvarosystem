@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 
+import { getMember } from '@/services/memberService'
+import { getNarvaroDate } from '@/services/narvaroService'
+
 export const useAddNarvaroStore = defineStore('addNarvaro', {
   state: () => {
     return {
@@ -8,6 +11,8 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       lastName: null,
       type: null,
       hasLicense: false,
+
+      isMember: false,
 
       types: [
         { name: 'Träning', noMembers: false },
@@ -32,7 +37,7 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
     },
 
     needLicense(state) {
-      if (state.isPersonNumValid !== true) {
+      if (state.isPersonNumValid() !== true) {
         return true
       }
 
@@ -46,8 +51,43 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
     }
   },
   actions: {
-    isPersonNumValid(personNum) {
-      const personNumToCheck = personNum || this.personNum
+    async submitPersonNum(_personNum) {
+      const personNumToSubmit = _personNum || this.personNum
+
+      const personNumRes = this.isPersonNumValid(personNumToSubmit)
+      if (personNumRes !== true) {
+        // Error
+        return personNumRes
+      }
+
+      // Get current date
+      const currentDate = new Date()
+      const year = currentDate.getFullYear()
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0') // Adding 1 because months are zero-indexed
+      const day = currentDate.getDate().toString().padStart(2, '0')
+      // Construct the date string in the desired format
+      const formattedDate = `${year}-${month}-${day}`
+
+      const narvaroDateRes = await getNarvaroDate(formattedDate, personNumToSubmit)
+      if (narvaroDateRes.data?.length > 0) {
+        return 'Personnummret är redan anmält idag.'
+      }
+
+      const memberRes = await getMember(personNumToSubmit)
+      if (memberRes.data.status === 'success' && memberRes.data.length > 0) {
+        this.firstName = memberRes.data.data[0].first_name
+        this.lastName = memberRes.data.data[0].last_name
+        this.isMember = true
+      } else {
+        this.isMember = false
+      }
+
+      this.personNum = personNumToSubmit
+      return true
+    },
+
+    isPersonNumValid(_personNum) {
+      const personNumToCheck = _personNum || this.personNum
 
       if (personNumToCheck == null) {
         return 'Måste ange personnummer.'
@@ -111,6 +151,7 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       this.lastName = null
       this.type = null
       this.hasLicense = false
+      this.isMember = false
     }
   }
 })

@@ -13,12 +13,12 @@ exports.getAllMembers = (req, res, next) => {
 };
 
 exports.getMember = (req, res, next) => {
-  if (!req.params.id) {
-    return next(new AppError("No member id found", 404));
+  if (!req.params.personnummer) {
+    return next(new AppError("No member personnummer found", 404));
   }
   conn.query(
-    "SELECT * FROM member WHERE id = ?",
-    [req.params.id],
+    "SELECT * FROM member WHERE personnummer = ?",
+    [req.params.personnummer],
     function (err, data, fields) {
       if (err) return next(new AppError(err, 500));
       res.status(200).json({

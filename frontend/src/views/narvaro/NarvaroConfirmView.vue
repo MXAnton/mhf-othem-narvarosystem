@@ -96,7 +96,7 @@ export default {
             <h3>Typ:</h3>
             <p>{{ addNarvaroStore.type }}</p>
           </li>
-          <li v-if="addNarvaroStore.type !== 'Ledare'">
+          <li v-if="addNarvaroStore.needLicense">
             <h3>Har licens:</h3>
             <p>{{ addNarvaroStore.hasLicense ? 'Ja' : 'Nej' }}</p>
           </li>

@@ -1,9 +1,9 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://localhost:3000/member/'
+axios.defaults.baseURL = 'http://localhost:3000/'
 
 export async function getAllMembers() {
   let response = await axios
-    .get('')
+    .get('member')
     .then((res) => {
       return res
     })
@@ -15,9 +15,9 @@ export async function getAllMembers() {
   return response
 }
 
-export async function getMember(_id) {
+export async function getMember(_personnummer) {
   let response = await axios
-    .get('' + _id)
+    .get('member/' + _personnummer)
     .then((res) => {
       return res
     })
@@ -31,7 +31,7 @@ export async function getMember(_id) {
 
 export async function createMember(_personnummer, _firstName, _lastName, _endDate) {
   let response = await axios
-    .post('', {
+    .post('member', {
       personnummer: _personnummer,
       first_name: _firstName,
       last_name: _lastName,
@@ -50,7 +50,7 @@ export async function createMember(_personnummer, _firstName, _lastName, _endDat
 
 export async function updateMember(_id, _personnummer, _firstName, _lastName, _endDate) {
   let response = await axios
-    .put('' + _id, {
+    .put('member/' + _id, {
       personnummer: _personnummer,
       first_name: _firstName,
       last_name: _lastName,
@@ -69,7 +69,7 @@ export async function updateMember(_id, _personnummer, _firstName, _lastName, _e
 
 export async function deleteMember(_id) {
   let response = await axios
-    .delete('' + _id)
+    .delete('member/' + _id)
     .then((res) => {
       return res
     })

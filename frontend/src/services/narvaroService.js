@@ -1,9 +1,9 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://localhost:3000/narvaro/'
+axios.defaults.baseURL = 'http://localhost:3000/'
 
 export async function getAllNarvaroYear(_year) {
   let response = await axios
-    .get('year/' + _year)
+    .get('narvaro/year/' + _year)
     .then((res) => {
       return res
     })
@@ -17,7 +17,7 @@ export async function getAllNarvaroYear(_year) {
 
 export async function getAllNarvaroDate(_date) {
   let response = await axios
-    .get('date/' + _date)
+    .get('narvaro/date/' + _date)
     .then((res) => {
       return res
     })
@@ -31,7 +31,7 @@ export async function getAllNarvaroDate(_date) {
 
 export async function getNarvaroDate(_date, _personnummer) {
   let response = await axios
-    .get(`date/${_date}/${_personnummer}`)
+    .get(`narvaro/date/${_date}/${_personnummer}`)
     .then((res) => {
       return res
     })
@@ -45,7 +45,7 @@ export async function getNarvaroDate(_date, _personnummer) {
 
 export async function createNarvaro(_personnummer, _firstName, _lastName, _type, _hasLicense) {
   let response = await axios
-    .post('', {
+    .post('narvaro', {
       personnummer: _personnummer,
       first_name: _firstName,
       last_name: _lastName,

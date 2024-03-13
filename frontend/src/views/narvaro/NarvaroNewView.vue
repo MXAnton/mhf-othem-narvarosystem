@@ -2,8 +2,6 @@
 import { RouterLink } from 'vue-router'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
-import { getNarvaroDate } from '@/services/narvaroService'
-
 export default {
   data() {
     return {
@@ -14,29 +12,18 @@ export default {
 
   methods: {
     async onSubmit(_event) {
-      const personNumRes = this.addNarvaroStore.isPersonNumValid()
-      if (personNumRes !== true) {
+      const submitRes = await this.addNarvaroStore.submitPersonNum()
+      if (submitRes !== true) {
         // Error
-        this.errorText = personNumRes
+        this.errorText = submitRes
         return
       }
 
-      // Get current date
-      const currentDate = new Date()
-      // Get current year, month, and day
-      const year = currentDate.getFullYear()
-      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0') // Adding 1 because months are zero-indexed
-      const day = currentDate.getDate().toString().padStart(2, '0')
-      // Construct the date string in the desired format
-      const formattedDate = `${year}-${month}-${day}`
-
-      const res = await getNarvaroDate(formattedDate, this.addNarvaroStore.personNum)
-      if (res.data.length > 0) {
-        this.errorText = 'Personnummret är redan anmält idag.'
-        return
+      if (this.addNarvaroStore.isMember) {
+        this.$router.push({ name: 'narvaroType' })
+      } else {
+        this.$router.push({ name: 'narvaroName' })
       }
-
-      this.$router.push({ name: 'narvaroName' })
     }
   },
 
