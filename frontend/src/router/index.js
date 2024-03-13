@@ -8,6 +8,11 @@ const baseRoutes = [
     name: 'gdpr',
     component: () => import('../views/GDPRView.vue')
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/admin/AdminLoginView.vue')
+  },
 
   {
     path: '/:catchAll(.*)*',

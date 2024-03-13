@@ -1,6 +1,8 @@
 const AppError = require("../utils/appError");
 const conn = require("../services/db");
 
+const bcrypt = require("bcryptjs");
+
 exports.getAllMembers = (req, res, next) => {
   conn.query("SELECT * FROM member", function (err, data, fields) {
     if (err) return next(new AppError(err));
@@ -228,6 +230,57 @@ exports.createNarvaro = (req, res, next) => {
           });
         }
       );
+    }
+  );
+};
+
+exports.createAdmin = async (req, res, next) => {
+  if (!req.body) return next(new AppError("No form data found", 404));
+  if (!req.body.username)
+    return next(new AppError("No form username found", 404));
+  if (!req.body.password)
+    return next(new AppError("No form password found", 404));
+
+  // hash password
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+  conn.query(
+    "INSERT INTO admin (username, password) VALUES(?, ?)",
+    [req.body.username, hashedPassword],
+    function (err, data, fields) {
+      if (err) return next(new AppError(err, 500));
+
+      res.status(201).json({
+        status: "success",
+        message: "admin created!",
+      });
+    }
+  );
+};
+
+exports.login = (req, res, next) => {
+  if (!req.params.username) {
+    return next(new AppError("No admin username found", 404));
+  }
+  if (!req.params.password) {
+    return next(new AppError("No admin password found", 404));
+  }
+
+  conn.query(
+    "SELECT * FROM admin WHERE BINARY username = ?",
+    [req.params.username],
+    async function (err, data, fields) {
+      if (err) return next(new AppError(err, 500));
+
+      const user = data[0];
+      if (!user || !(await bcrypt.compare(req.params.password, user.password)))
+        return next(new AppError("Fel användarnamn eller lösenord", 401));
+
+      res.status(200).json({
+        status: "success",
+        length: data?.length,
+        data: user.id,
+      });
     }
   );
 };
