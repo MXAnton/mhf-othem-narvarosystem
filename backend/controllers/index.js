@@ -189,47 +189,45 @@ exports.createNarvaro = (req, res, next) => {
 
   const currentYear = new Date().getFullYear();
 
+  // Check if the table exists, and if not, create it
   conn.query(
-    `INSERT INTO narvaro_${currentYear} (personnummer, first_name, last_name, type, has_license) VALUES(?, ?, ?, ?, ?)`,
-    [
-      req.body.personnummer,
-      req.body.first_name,
-      req.body.last_name,
-      req.body.type,
-      req.body.has_license || 0,
-    ],
-    function (err, data, fields) {
-      if (err) return next(new AppError(err, 500));
-      res.status(201).json({
-        status: "success",
-        message: "narvaro created/added!",
-      });
-    }
-  );
-};
-/*
-exports.createNarvaroYear = (req, res, next) => {
-  if (!req.params.year) {
-    return next(new AppError("No narvaro year found", 404));
-  }
-  if (!req.body) return next(new AppError("No form data found", 404));
+    `CREATE TABLE IF NOT EXISTS narvaro_${currentYear} (
+        id INT(10) NOT NULL AUTO_INCREMENT,
+        date DATE NULL DEFAULT (curdate()),
+        personnummer VARCHAR(12) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+        first_name VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+        last_name VARCHAR(50) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+        type VARCHAR(10) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+        has_license TINYINT(1) NOT NULL DEFAULT '0',
+        PRIMARY KEY (id) USING BTREE,
+        UNIQUE INDEX unique_person_date (personnummer, date) USING BTREE
+      )
+      COLLATE='utf8mb4_0900_ai_ci'
+      ENGINE=InnoDB
+      ;`,
 
-  conn.query(
-    `INSERT INTO narvaro_${req.params.year} (personnummer, first_name, last_name, type, has_license) VALUES(?, ?, ?, ?, ?)`,
-    [
-      req.body.personnummer,
-      req.body.first_name,
-      req.body.last_name,
-      req.body.type,
-      req.body.has_license || 0,
-    ],
-    function (err, data, fields) {
+    function (err, result) {
       if (err) return next(new AppError(err, 500));
-      res.status(201).json({
-        status: "success",
-        message: "narvaro created/added!",
-      });
+
+      // Once the table is created or confirmed to exist, insert the row
+      conn.query(
+        `INSERT INTO narvaro_${currentYear} (personnummer, first_name, last_name, type, has_license) VALUES(?, ?, ?, ?, ?)`,
+        [
+          req.body.personnummer,
+          req.body.first_name,
+          req.body.last_name,
+          req.body.type,
+          req.body.has_license || 0,
+        ],
+        function (err, data, fields) {
+          if (err) return next(new AppError(err, 500));
+
+          res.status(201).json({
+            status: "success",
+            message: "narvaro created/added!",
+          });
+        }
+      );
     }
   );
 };
-*/
