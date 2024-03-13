@@ -19,8 +19,8 @@ export default {
 
   computed: {
     getTypes() {
-      const isMember = this.addNarvaroStore.isMember || false
-      if (isMember) {
+      const membershipEndDate = this.addNarvaroStore.membershipEndDate || null
+      if (membershipEndDate != null) {
         // Return only types that members can choose
         return this.addNarvaroStore.types.filter((_type) => _type.noMembers === false)
       }
@@ -31,7 +31,7 @@ export default {
 
   methods: {
     goBack() {
-      if (this.addNarvaroStore.isMember) {
+      if (this.addNarvaroStore.membershipEndDate != null) {
         this.$router.push({ name: 'narvaroEditPersonNum' })
       } else {
         this.$router.push({ name: 'narvaroName' })

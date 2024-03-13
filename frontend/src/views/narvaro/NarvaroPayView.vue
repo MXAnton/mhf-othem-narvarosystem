@@ -44,9 +44,13 @@ export default {
 
   <main>
     <h1 class="sub-header">En sista grej...</h1>
-    <h2 class="mb--big">Betala</h2>
+    <h2 v-if="weekDayIndex === 1 && addNarvaroStore.isActiveMember" class="mb--big">Betalning</h2>
+    <h2 v-else class="mb--big">Betala</h2>
 
-    <div class="price-text" v-if="weekDayIndex === 1">
+    <div class="price-text" v-if="weekDayIndex === 1 && addNarvaroStore.isActiveMember">
+      <p>På måndagar är det gratis för dig, eftersom du är medlem :)</p>
+    </div>
+    <div class="price-text" v-else-if="weekDayIndex === 1">
       <p>På måndagar gäller 50 kr träningsavgift.</p>
       <p><i>TIPS: MHF-medlemmar tränar gratis på måndagar ;)</i></p>
     </div>
@@ -54,7 +58,11 @@ export default {
       På {{ weekDays[weekDayIndex] }} gäller 50 kr träningsavgift.
     </p>
 
-    <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
+    <img
+      v-if="weekDayIndex !== 1 || addNarvaroStore.isActiveMember !== true"
+      src="@/assets/images/MHF-Ungdom-logo.png"
+      alt="MHF Ungdom logga."
+    />
 
     <RouterLink class="btn--primary mt--big" :to="{ name: 'narvaroThanks' }">Färdig</RouterLink>
   </main>

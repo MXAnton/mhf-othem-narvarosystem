@@ -26,7 +26,7 @@ export default {
         return
       }
 
-      if (this.addNarvaroStore.isMember) {
+      if (this.addNarvaroStore.membershipEndDate != null) {
         this.$router.push({ name: 'narvaroType' })
       } else {
         this.$router.push({ name: 'narvaroName' })

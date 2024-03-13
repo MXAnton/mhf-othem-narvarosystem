@@ -50,9 +50,9 @@ export default {
       if (memberRes.data.data[0].last_name?.length === 0) {
         this.addNarvaroStore.lastName = memberRes.data.data[0].last_name
       }
-      this.addNarvaroStore.isMember = true
+      this.addNarvaroStore.membershipEndDate = memberRes.data.data[0].end_date
     } else {
-      this.addNarvaroStore.isMember = false
+      this.addNarvaroStore.membershipEndDate = null
     }
   },
 

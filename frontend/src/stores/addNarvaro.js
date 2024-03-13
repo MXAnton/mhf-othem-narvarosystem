@@ -12,7 +12,7 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       type: null,
       hasLicense: false,
 
-      isMember: false,
+      membershipEndDate: null,
 
       types: [
         { name: 'Träning', noMembers: false },
@@ -55,6 +55,32 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       }
 
       return true
+    },
+
+    isActiveMember(state) {
+      if (state.membershipEndDate == null) {
+        return false
+      }
+
+      const currentDate = new Date()
+      const formattedCurrentDate =
+        '' +
+        currentDate.getUTCFullYear() +
+        (currentDate.getUTCMonth() + 1).toString().padStart(2, '0') +
+        currentDate.getUTCDate().toString().padStart(2, '0')
+
+      const endDate = new Date(state.membershipEndDate)
+      const formattedEndDate =
+        '' +
+        endDate.getUTCFullYear() +
+        (endDate.getUTCMonth() + 1).toString().padStart(2, '0') +
+        (endDate.getUTCDate() + 1).toString().padStart(2, '0')
+
+      if (formattedCurrentDate > formattedEndDate) {
+        return false
+      }
+
+      return true
     }
   },
   actions: {
@@ -84,9 +110,9 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       if (memberRes.data.status === 'success' && memberRes.data.length > 0) {
         this.firstName = memberRes.data.data[0].first_name
         this.lastName = memberRes.data.data[0].last_name
-        this.isMember = true
+        this.membershipEndDate = memberRes.data.data[0].end_date
       } else {
-        this.isMember = false
+        this.membershipEndDate = null
       }
 
       this.personNum = personNumToSubmit
@@ -158,7 +184,7 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       this.lastName = null
       this.type = null
       this.hasLicense = false
-      this.isMember = false
+      this.membershipEndDate = null
     }
   }
 })

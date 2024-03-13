@@ -46,7 +46,11 @@ export default {
         return
       }
 
-      if (this.addNarvaroStore.needLicense === false) {
+      const weekDayIndex = new Date().getDay()
+      if (
+        this.addNarvaroStore.needLicense === false ||
+        (weekDayIndex === 1 && this.addNarvaroStore.isActiveMember)
+      ) {
         this.$router.push({ name: 'narvaroThanks' })
         return
       }
