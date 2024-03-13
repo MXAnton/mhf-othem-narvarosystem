@@ -4,7 +4,7 @@ import { getAllNarvaroYear } from '@/services/narvaroService'
 export default {
   data() {
     return {
-      minYear: 2024,
+      minYear: 2023,
       maxYear: new Date().getFullYear(),
       year: new Date().getFullYear(),
       narvaroList: null
