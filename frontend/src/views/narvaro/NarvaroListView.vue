@@ -1,12 +1,12 @@
 <script>
-import { getAllNarvaroYear } from '@/services/narvaroService'
+import { getAllNarvaroDate } from '@/services/narvaroService'
 
 export default {
   data() {
     return {
-      minYear: 2023,
-      maxYear: new Date().getFullYear(),
-      year: new Date().getFullYear(),
+      minDate: '2023-01-01',
+      maxDate: '2023-12-31',
+      date: null,
       narvaroList: null
     }
   },
@@ -16,14 +16,19 @@ export default {
       return _personNum.substring(0, 8) + '-' + _personNum.substring(8)
     },
 
-    async changedYear() {
-      this.year = Math.max(this.minYear, Math.min(this.maxYear, this.year))
+    async changedDate() {
+      // Clamp myDate to the range [minDate, maxDate]
+      if (this.date < this.minDate) {
+        this.date = this.minDate
+      } else if (this.date > this.maxDate) {
+        this.date = this.maxDate
+      }
 
       await this.getNarvaro()
     },
 
     async getNarvaro() {
-      const res = await getAllNarvaroYear(this.year)
+      const res = await getAllNarvaroDate(this.date)
       if (res == null) {
         this.narvaroList = null
         return
@@ -34,6 +39,16 @@ export default {
   },
 
   async created() {
+    const currentDate = new Date()
+    this.maxDate =
+      currentDate.getUTCFullYear() +
+      '-' +
+      (currentDate.getUTCMonth() + 1).toString().padStart(2, '0') +
+      '-' +
+      currentDate.getUTCDate().toString().padStart(2, '0')
+
+    this.date = this.maxDate
+
     await this.getNarvaro()
   }
 }
@@ -45,18 +60,19 @@ export default {
   </header>
 
   <main>
-    <h1>Närvarolista {{ year }}</h1>
+    <h1>Närvarolista {{ date }}</h1>
 
-    <nav class="year-nav">
-      <label for="year-input">Välj år:</label>
+    <nav class="date-nav">
+      <label for="date-input">Välj datum:</label>
       <input
-        type="number"
-        name="year-input"
-        id="year-input"
-        :min="minYear"
-        :max="maxYear"
-        v-model="year"
-        @change="changedYear"
+        type="date"
+        name="date-input"
+        id="date-input"
+        required
+        :min="minDate"
+        :max="maxDate"
+        v-model="date"
+        @change="changedDate"
       />
     </nav>
 
@@ -100,7 +116,7 @@ header a {
   color: var(--color-text);
 }
 
-.year-nav {
+.date-nav {
   font-size: 1rem;
 
   margin-top: 0.4em;
@@ -110,10 +126,10 @@ header a {
   align-items: center;
   gap: 0.5em;
 }
-.year-nav label {
+.date-nav label {
   font-size: 1em;
 }
-.year-nav input {
+.date-nav input {
   font-size: 1em;
 }
 
