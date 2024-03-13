@@ -110,4 +110,13 @@ h2 {
 .btn--primary {
   font-size: 2.5rem;
 }
+
+@media (max-width: 600px) {
+  h2 {
+    font-size: 4rem;
+  }
+  #personnummer-input {
+    font-size: 3rem;
+  }
+}
 </style>

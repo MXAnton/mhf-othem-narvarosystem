@@ -22,6 +22,8 @@
 
   --color-btn-text: var(--c-white);
   --color-btn-bg: var(--c-black);
+
+  font-size: 16px;
 }
 
 *,
@@ -41,7 +43,6 @@ body {
 
   letter-spacing: 0.03em;
   font-family: 'Work Sans', sans-serif;
-  font-size: 16px;
 }
 
 #app {
@@ -49,4 +50,10 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+@media (max-width: 700px) {
+  :root {
+    font-size: 12px;
+  }
 }

@@ -102,4 +102,9 @@ export default {
   text-align: center;
   width: 8em;
 }
+@media (max-width: 600px) {
+  #personnummer-input {
+    font-size: 3rem;
+  }
+}
 </style>
