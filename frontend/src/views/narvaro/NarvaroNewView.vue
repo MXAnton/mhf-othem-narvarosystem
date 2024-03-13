@@ -35,7 +35,7 @@ export default {
     this.addNarvaroStore.clearInputs()
 
     const narvaroAmountRes = await getNarvaroAmountToday()
-    this.narvaroAmountToday = narvaroAmountRes.data?.length || 0
+    this.narvaroAmountToday = narvaroAmountRes?.data?.length || 0
   },
 
   mounted() {
