@@ -305,6 +305,8 @@ label {
 
 /* #region GENERAL LAYOUT */
 main {
+  flex-grow: 1;
+
   padding: 3rem 0.5rem 0;
 
   display: flex;

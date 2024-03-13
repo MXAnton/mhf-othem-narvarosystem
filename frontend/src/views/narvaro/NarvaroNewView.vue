@@ -90,7 +90,9 @@ export default {
       </form>
     </div>
 
-    <img class="mt--bigger" src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
+    <div class="img-wrapper mt--bigger">
+      <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
+    </div>
   </main>
 </template>
 
