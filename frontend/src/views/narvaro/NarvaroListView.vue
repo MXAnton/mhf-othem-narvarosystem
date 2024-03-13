@@ -79,7 +79,6 @@ export default {
     <table>
       <tr>
         <th>Id:</th>
-        <th>Datum:</th>
         <th>Personnummer:</th>
         <th>Förnamn:</th>
         <th>Efternamn:</th>
@@ -88,7 +87,6 @@ export default {
       </tr>
       <tr v-for="row in narvaroList" :key="row.id">
         <td>{{ row.id }}</td>
-        <td>{{ row.date }}</td>
         <td>{{ formattedPersonNum(row.personnummer) }}</td>
         <td>{{ row.first_name }}</td>
         <td>{{ row.last_name }}</td>
