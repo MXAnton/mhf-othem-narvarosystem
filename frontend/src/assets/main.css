@@ -240,8 +240,8 @@ label {
   --color-border: var(--c-red);
 }
 .checkbox--primary {
-  display: none;
-  visibility: hidden;
+  width: 0;
+  height: 0;
   opacity: 0;
 }
 
@@ -315,6 +315,10 @@ label {
 }
 .checkbox--primary__wrapper:has(.checkbox--primary:checked) label::after {
   background-color: var(--color-border);
+}
+/* FOCUS */
+.checkbox--primary__wrapper:has(.checkbox--primary:focus-visible) {
+  --color-border: var(--c-yellow);
 }
 
 /* ERROR TEXT */
