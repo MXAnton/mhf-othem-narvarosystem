@@ -133,6 +133,30 @@ exports.getAllNarvaroDate = (req, res, next) => {
   );
 };
 
+exports.getNarvaroAmountDate = (req, res, next) => {
+  if (!req.params.date) {
+    return next(new AppError("No date found", 404));
+  }
+  if (req.params.date.length < 10) {
+    return next(new AppError("Date not complete", 500));
+  }
+
+  const year = req.params.date.substring(0, 4);
+
+  conn.query(
+    `SELECT id FROM narvaro_${year} WHERE date=?`,
+    [req.params.date],
+    function (err, data, fields) {
+      if (err) return next(new AppError(err, 500));
+      res.status(200).json({
+        status: "success",
+        length: data?.length,
+        data: data,
+      });
+    }
+  );
+};
+
 exports.getNarvaroDate = (req, res, next) => {
   if (!req.params.personnummer) {
     return next(new AppError("No personnummer found", 404));

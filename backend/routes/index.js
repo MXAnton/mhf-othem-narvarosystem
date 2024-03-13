@@ -16,6 +16,9 @@ router.route("/narvaro").post(controllers.createNarvaro);
 router.route("/narvaro/year/:year").get(controllers.getAllNarvaroYear);
 router.route("/narvaro/date/:date").get(controllers.getAllNarvaroDate);
 router
+  .route("/narvaro/amount/date/:date")
+  .get(controllers.getNarvaroAmountDate);
+router
   .route("/narvaro/date/:date/:personnummer")
   .get(controllers.getNarvaroDate);
 
