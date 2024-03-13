@@ -58,11 +58,9 @@ export default {
       På {{ weekDays[weekDayIndex] }} gäller 50 kr träningsavgift.
     </p>
 
-    <img
-      v-if="weekDayIndex !== 1 || addNarvaroStore.isActiveMember !== true"
-      src="@/assets/images/MHF-Ungdom-logo.png"
-      alt="MHF Ungdom logga."
-    />
+    <div v-if="weekDayIndex !== 1 || addNarvaroStore.isActiveMember !== true" class="img-wrapper">
+      <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
+    </div>
 
     <RouterLink class="btn--primary mt--big" :to="{ name: 'narvaroThanks' }">Färdig</RouterLink>
   </main>
