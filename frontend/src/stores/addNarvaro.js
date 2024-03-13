@@ -22,6 +22,13 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
     }
   },
   getters: {
+    formattedPersonNum(state) {
+      if (state.isPersonNumValid() !== true) {
+        return null
+      }
+      return state.personNum.substring(0, 8) + '-' + state.personNum.substring(8)
+    },
+
     isNameValid(state) {
       if (state.firstName == null || state.firstName.trim().length === 0) {
         return 'Skriv in ditt förnamn.'

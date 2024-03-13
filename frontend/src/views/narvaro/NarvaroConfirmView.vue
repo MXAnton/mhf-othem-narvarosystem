@@ -82,7 +82,7 @@ export default {
         <ul>
           <li>
             <h3>Personnummer:</h3>
-            <p>{{ addNarvaroStore.personNum }}</p>
+            <p>{{ addNarvaroStore.formattedPersonNum }}</p>
           </li>
           <li>
             <h3>Förnamn:</h3>
