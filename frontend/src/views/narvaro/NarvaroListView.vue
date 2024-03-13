@@ -1,7 +1,10 @@
 <script>
 import { getAllNarvaroDate } from '@/services/narvaroService'
 
+import HeaderBackComp from '@/components/HeaderBackComp.vue'
+
 export default {
+  components: { HeaderBackComp },
   data() {
     return {
       minDate: '2023-01-01',
@@ -55,9 +58,7 @@ export default {
 </script>
 
 <template>
-  <header>
-    <RouterLink to="/">< Tillbaka</RouterLink>
-  </header>
+  <HeaderBackComp />
 
   <main>
     <h1>Närvarolista {{ date }}</h1>
@@ -101,17 +102,6 @@ export default {
 main {
   flex-grow: 1;
   justify-content: start;
-}
-
-header {
-  width: 100%;
-  padding: 1rem;
-}
-header a {
-  font-weight: 500;
-  text-decoration: none;
-  font-size: 1rem;
-  color: var(--color-text);
 }
 
 .date-nav {

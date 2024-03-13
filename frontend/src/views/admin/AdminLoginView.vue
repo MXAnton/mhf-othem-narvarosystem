@@ -3,7 +3,11 @@ import { RouterLink } from 'vue-router'
 
 import { useAdminStore } from '@/stores/admin'
 
+import HeaderBackComp from '@/components/HeaderBackComp.vue'
+
 export default {
+  components: { HeaderBackComp },
+
   data() {
     return {
       addAdminStore: null,
@@ -48,9 +52,7 @@ export default {
 </script>
 
 <template>
-  <header>
-    <RouterLink to="/" class="link--primary">< Tillbaka</RouterLink>
-  </header>
+  <HeaderBackComp />
 
   <main>
     <h1 class="mb--big">Admin</h1>

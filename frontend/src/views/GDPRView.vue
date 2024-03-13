@@ -1,11 +1,15 @@
 <script>
 import { RouterLink } from 'vue-router'
+
+import HeaderBackComp from '@/components/HeaderBackComp.vue'
+
+export default {
+  components: { HeaderBackComp }
+}
 </script>
 
 <template>
-  <header>
-    <RouterLink to="/">< Tillbaka</RouterLink>
-  </header>
+  <HeaderBackComp />
 
   <main>
     <h1 class="mb--big">Personuppgifter</h1>
@@ -27,17 +31,6 @@ import { RouterLink } from 'vue-router'
 </template>
 
 <style scoped>
-header {
-  width: 100%;
-  padding: 1rem;
-}
-header a {
-  font-weight: 500;
-  text-decoration: none;
-  font-size: 1rem;
-  color: var(--color-text);
-}
-
 p {
   margin-bottom: 1em;
 }
