@@ -2,11 +2,14 @@
 import { RouterLink } from 'vue-router'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
+import { getNarvaroAmountToday } from '@/services/narvaroService'
+
 export default {
   data() {
     return {
       addNarvaroStore: null,
-      errorText: null
+      errorText: null,
+      narvaroAmountToday: 0
     }
   },
 
@@ -27,9 +30,12 @@ export default {
     }
   },
 
-  created() {
+  async created() {
     this.addNarvaroStore = useAddNarvaroStore()
     this.addNarvaroStore.clearInputs()
+
+    const narvaroAmountRes = await getNarvaroAmountToday()
+    this.narvaroAmountToday = narvaroAmountRes.data?.length || 0
   },
 
   mounted() {
@@ -41,7 +47,9 @@ export default {
 
 <template>
   <main>
-    <h1 class="sub-header">Välkommen!</h1>
+    <h1 class="sub-header">
+      Välkommen! <span>{{ narvaroAmountToday }}st anmälda idag</span>
+    </h1>
     <h2 class="mb--big">Anmäl dig nedan</h2>
 
     <div class="content__wrapper">

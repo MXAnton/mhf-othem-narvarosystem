@@ -29,6 +29,27 @@ export async function getAllNarvaroDate(_date) {
   return response
 }
 
+export async function getNarvaroAmountToday() {
+  const currentDate = new Date()
+  const year = currentDate.getFullYear()
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0') // Adding 1 because months are zero-indexed
+  const day = currentDate.getDate().toString().padStart(2, '0')
+  // Construct the date string in the desired format
+  const formattedDate = `${year}-${month}-${day}`
+
+  let response = await axios
+    .get('narvaro/amount/date/' + formattedDate)
+    .then((res) => {
+      return res
+    })
+    .catch((err) => {
+      console.warn(err)
+      return null
+    })
+
+  return response
+}
+
 export async function getNarvaroDate(_date, _personnummer) {
   let response = await axios
     .get(`narvaro/date/${_date}/${_personnummer}`)
