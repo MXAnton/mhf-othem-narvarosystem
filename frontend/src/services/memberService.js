@@ -45,8 +45,7 @@ export async function createMember(_personnummer, _firstName, _lastName, _endDat
       return res
     })
     .catch((err) => {
-      console.warn(err)
-      return null
+      return err
     })
 
   return response

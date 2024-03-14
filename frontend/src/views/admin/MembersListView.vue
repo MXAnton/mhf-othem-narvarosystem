@@ -1,6 +1,7 @@
 <script>
 import HeaderBackComp from '@/components/HeaderBackComp.vue'
-import { deleteMember, getAllMembers } from '@/services/memberService'
+import { createMember, deleteMember, getAllMembers } from '@/services/memberService'
+import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
   components: { HeaderBackComp },
@@ -13,7 +14,15 @@ export default {
         ascending: true
       },
 
-      currentEditId: null
+      currentEditId: null,
+
+      newMember: {
+        personNum: null,
+        firstName: null,
+        lastName: null,
+        endDate: null
+      },
+      errorText: null
     }
   },
 
@@ -43,8 +52,8 @@ export default {
       this.membersList = res.data.data
 
       this.currentEditId = null
-      this.lastSortBy.column = ''
-      this.sortByColumn('firstName')
+      this.lastSortBy.column = 'id'
+      this.sortByColumn('id')
     },
 
     sortByColumn(_column) {
@@ -94,11 +103,125 @@ export default {
 
         this.getMembers()
       }
+    },
+
+    openAddNewMember() {
+      const modal = this.$refs.addNewMemberDialog
+      modal.showModal()
+    },
+    closeAddNewMember() {
+      const modal = this.$refs.addNewMemberDialog
+      modal.close()
+    },
+
+    async addNewMember() {
+      // Check personNum
+      const isPersunNumValidRes = useAddNarvaroStore().isPersonNumValid(this.newMember.personNum)
+      if (isPersunNumValidRes !== true) {
+        this.errorText = isPersunNumValidRes
+        return
+      }
+
+      // Check names
+      if (this.newMember.firstName == null || this.newMember.firstName.trim().length === 0) {
+        this.errorText = 'Skriv in förnamn.'
+        return
+      }
+      if (this.newMember.lastName == null || this.newMember.lastName.trim().length === 0) {
+        this.errorText = 'Skriv in efternamn.'
+        return
+      }
+      this.newMember.firstName = this.newMember.firstName.trim()
+      this.newMember.lastName = this.newMember.lastName.trim()
+
+      const createRes = await createMember(
+        this.newMember.personNum,
+        this.newMember.firstName,
+        this.newMember.lastName,
+        this.newMember.endDate
+      )
+      if (createRes == null) {
+        this.errorText = 'Oväntat fel'
+        return
+      }
+      if (createRes.data?.status !== 'success') {
+        this.errorText = createRes.response?.data?.message
+        return
+      }
+
+      this.resetNewMember()
+      this.getMembers()
+      this.closeAddNewMember()
+    },
+
+    resetNewMember() {
+      this.newMember = {
+        personNum: null,
+        firstName: null,
+        lastName: null,
+        endDate: null
+      }
+      this.errorText = null
     }
   },
 
   async created() {
     await this.getMembers()
+  },
+
+  mounted() {
+    const modal = this.$refs.addNewMemberDialog
+
+    modal.addEventListener('click', (_event) => {
+      if (_event.target.tagName !== 'DIALOG')
+        //This prevents issues with forms
+        return
+
+      const rect = _event.target.getBoundingClientRect()
+
+      const clickedInDialog =
+        rect.top <= _event.clientY &&
+        _event.clientY <= rect.top + rect.height &&
+        rect.left <= _event.clientX &&
+        _event.clientX <= rect.left + rect.width
+
+      if (clickedInDialog === false) {
+        this.closeAddNewMember()
+      }
+    })
+    modal.addEventListener('cancel', (event) => {
+      this.closeAddNewMember()
+    })
+    modal.addEventListener('close', (event) => {
+      this.closeAddNewMember()
+    })
+  },
+  beforeUnmount() {
+    const modal = this.$refs.addNewMemberDialog
+
+    modal.removeEventListener('click', (_event) => {
+      if (_event.target.tagName !== 'DIALOG')
+        //This prevents issues with forms
+        return
+
+      const rect = _event.target.getBoundingClientRect()
+
+      const clickedInDialog =
+        rect.top <= _event.clientY &&
+        _event.clientY <= rect.top + rect.height &&
+        rect.left <= _event.clientX &&
+        _event.clientX <= rect.left + rect.width
+
+      if (clickedInDialog === false) {
+        this.closeAddNewMember()
+      }
+    })
+    modal.removeEventListener('cancel', (event) => {
+      this.closeAddNewMember()
+    })
+    modal.removeEventListener('close', (event) => {
+      this.closeAddNewMember()
+    })
   }
 }
 </script>
@@ -108,6 +231,10 @@ export default {
 
   <main>
     <h1 class="mb--small">Medlemslista</h1>
+
+    <nav class="mb--small">
+      <button class="btn--primary" @click="openAddNewMember">Lägg till medlem</button>
+    </nav>
 
     <table>
       <tr>
@@ -168,12 +295,106 @@ export default {
       </tr>
     </table>
   </main>
+
+  <dialog ref="addNewMemberDialog">
+    <form class="new-member-form" @submit.prevent="addNewMember()" novalidate>
+      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+        <label for="personnummer-input">Personnummer:</label>
+        <input
+          class="input--primary"
+          type="text"
+          id="personnummer-input"
+          name="personnummer-input"
+          size="12"
+          minlength="12"
+          maxlength="12"
+          required
+          autofocus
+          pattern="[0-9]+"
+          title="12 siffror, ÅÅÅÅMMDDXXXX"
+          placeholder="ÅÅÅÅMMDDXXXX"
+          v-model="newMember.personNum"
+          @input="errorText = null"
+        />
+      </div>
+
+      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+        <label for="first-name-input">Förnamn:</label>
+        <input
+          class="input--primary"
+          type="text"
+          id="first-name-input"
+          name="first-name-input"
+          minlength="1"
+          maxlength="50"
+          required
+          title="Skriv förnamn..."
+          v-model="newMember.firstName"
+          @input="errorText = null"
+        />
+      </div>
+
+      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+        <label for="last-name-input">Efternamn:</label>
+        <input
+          class="input--primary"
+          type="text"
+          id="last-name-input"
+          name="last-name-input"
+          minlength="1"
+          maxlength="50"
+          required
+          title="Skriv efternamn..."
+          v-model="newMember.lastName"
+          @input="errorText = null"
+        />
+      </div>
+
+      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+        <label for="date-input">Medlem t.o.m:</label>
+        <input
+          class="input--primary"
+          type="date"
+          name="date-input"
+          id="date-input"
+          required
+          v-model="newMember.endDate"
+          @change="errorText = null"
+        />
+        <p class="error-text">{{ errorText }}</p>
+      </div>
+
+      <nav>
+        <input type="button" value="Avbryt" class="btn--secondary" @click="closeAddNewMember" />
+        <input
+          :disabled="
+            newMember.personNum == null ||
+            newMember.personNum.length == 0 ||
+            newMember.firstName == null ||
+            newMember.firstName.length == 0 ||
+            newMember.lastName == null ||
+            newMember.lastName.length == 0 ||
+            newMember.endDate == null ||
+            newMember.endDate.length == 0
+          "
+          type="submit"
+          value="Lägg till"
+          class="btn--primary"
+        />
+      </nav>
+    </form>
+  </dialog>
 </template>
 
 <style scoped>
 main {
   flex-grow: 1;
   justify-content: start;
+}
+
+#personnummer-input {
+  text-align: center;
+  width: 8.5em;
 }
 
 table {

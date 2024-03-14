@@ -115,46 +115,7 @@ export default {
 </template>
 
 <style scoped>
-/*   Closed state of the dialog   */
 dialog {
-  width: calc(min(40rem, 100%));
-
-  position: fixed;
-  left: 50%;
-  top: 50%;
-
-  padding: 2rem 2rem 3.5rem;
-
-  background-color: var(--color-bg);
   border: 3px solid var(--c-red);
-  border-radius: 0.2rem;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  text-align: center;
-
-  opacity: 0;
-  transform-origin: top left;
-  transform: scale(0) translateX(-50%) translateY(-50%);
-  transition:
-    opacity 0.1s ease-out,
-    transform 0.1s ease-out;
-}
-/* Transition the :backdrop when the dialog modal is promoted to the top layer */
-dialog::backdrop {
-  background-color: rgb(0 0 0 / 0%);
-  transition: background-color 0.7s;
-}
-
-/*   Open state of the dialog  */
-dialog[open] {
-  opacity: 1;
-  transform: scale(1) translateX(-50%) translateY(-50%);
-}
-dialog[open]::backdrop {
-  background-color: rgb(0 0 0 / 50%);
 }
 </style>
