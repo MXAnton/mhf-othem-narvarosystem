@@ -22,7 +22,11 @@ router
   .route("/narvaro/date/:date/:personnummer")
   .get(controllers.getNarvaroDate);
 
-router.route("/admin").post(controllers.createAdmin);
-router.route("/admin/:username/:password").get(controllers.login);
+router
+  .route("/admin")
+  .get(controllers.getLoggedInAdmin)
+  .post(controllers.createAdmin);
+router.route("/admin/login").post(controllers.login);
+router.route("/admin/logout").post(controllers.logout);
 
 module.exports = router;

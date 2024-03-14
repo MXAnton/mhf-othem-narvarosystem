@@ -1,8 +1,12 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://localhost:3000/'
+// Create an Axios instance with default headers
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_DOMAIN, // Set the base URL for all requests
+  withCredentials: true
+})
 
 export async function getAllNarvaroYear(_year) {
-  let response = await axios
+  let response = await axiosInstance
     .get('narvaro/year/' + _year)
     .then((res) => {
       return res
@@ -16,7 +20,7 @@ export async function getAllNarvaroYear(_year) {
 }
 
 export async function getAllNarvaroDate(_date) {
-  let response = await axios
+  let response = await axiosInstance
     .get('narvaro/date/' + _date)
     .then((res) => {
       return res
@@ -37,7 +41,7 @@ export async function getNarvaroAmountToday() {
   // Construct the date string in the desired format
   const formattedDate = `${year}-${month}-${day}`
 
-  let response = await axios
+  let response = await axiosInstance
     .get('narvaro/amount/date/' + formattedDate)
     .then((res) => {
       return res
@@ -51,7 +55,7 @@ export async function getNarvaroAmountToday() {
 }
 
 export async function getNarvaroDate(_date, _personnummer) {
-  let response = await axios
+  let response = await axiosInstance
     .get(`narvaro/date/${_date}/${_personnummer}`)
     .then((res) => {
       return res
@@ -65,7 +69,7 @@ export async function getNarvaroDate(_date, _personnummer) {
 }
 
 export async function createNarvaro(_personnummer, _firstName, _lastName, _type, _hasLicense) {
-  let response = await axios
+  let response = await axiosInstance
     .post('narvaro', {
       personnummer: _personnummer,
       first_name: _firstName,

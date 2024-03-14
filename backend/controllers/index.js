@@ -2,6 +2,7 @@ const AppError = require("../utils/appError");
 const conn = require("../services/db");
 
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 exports.getAllMembers = (req, res, next) => {
   conn.query("SELECT * FROM member", function (err, data, fields) {
@@ -259,22 +260,32 @@ exports.createAdmin = async (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  if (!req.params.username) {
+  if (!req.body.username) {
     return next(new AppError("No admin username found", 404));
   }
-  if (!req.params.password) {
+  if (!req.body.password) {
     return next(new AppError("No admin password found", 404));
   }
 
   conn.query(
     "SELECT * FROM admin WHERE BINARY username = ?",
-    [req.params.username],
+    [req.body.username],
     async function (err, data, fields) {
       if (err) return next(new AppError(err, 500));
 
       const user = data[0];
-      if (!user || !(await bcrypt.compare(req.params.password, user.password)))
+      if (!user || !(await bcrypt.compare(req.body.password, user.password)))
         return next(new AppError("Fel användarnamn eller lösenord", 401));
+
+      // Store JWT token to stay logged in
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 3 * 60 * 60 * 1000, // 3 hours
+        secure: true, // Only set this if you are using HTTPS
+        sameSite: "none",
+      });
 
       res.status(200).json({
         status: "success",
@@ -283,4 +294,35 @@ exports.login = (req, res, next) => {
       });
     }
   );
+};
+
+exports.getLoggedInAdmin = (req, res, next) => {
+  if (!req.cookies || !req.cookies["token"]) {
+    return next(new AppError("No admin token found", 404));
+  }
+  const cookie = req.cookies["token"];
+
+  // Verify JWT token to stay logged in
+  const claims = jwt.verify(cookie, process.env.JWT_SECRET_KEY);
+  if (!claims) {
+    return next(new AppError("Token unauthenticated", 401));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: claims.id,
+  });
+};
+
+exports.logout = (req, res, next) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    maxAge: 0,
+    secure: true,
+    sameSite: "none",
+  });
+
+  res.status(200).json({
+    status: "success",
+  });
 };

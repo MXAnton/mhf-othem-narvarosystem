@@ -1,6 +1,4 @@
 <script>
-import { RouterLink } from 'vue-router'
-
 import { useAdminStore } from '@/stores/admin'
 
 import HeaderBackComp from '@/components/HeaderBackComp.vue'
@@ -40,7 +38,7 @@ export default {
     }
   },
 
-  async created() {
+  created() {
     this.addAdminStore = useAdminStore()
   },
 

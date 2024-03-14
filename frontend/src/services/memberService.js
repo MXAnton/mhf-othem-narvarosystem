@@ -1,8 +1,12 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://localhost:3000/'
+// Create an Axios instance with default headers
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_DOMAIN, // Set the base URL for all requests
+  withCredentials: true
+})
 
 export async function getAllMembers() {
-  let response = await axios
+  let response = await axiosInstance
     .get('member')
     .then((res) => {
       return res
@@ -16,7 +20,7 @@ export async function getAllMembers() {
 }
 
 export async function getMember(_personnummer) {
-  let response = await axios
+  let response = await axiosInstance
     .get('member/' + _personnummer)
     .then((res) => {
       return res
@@ -30,7 +34,7 @@ export async function getMember(_personnummer) {
 }
 
 export async function createMember(_personnummer, _firstName, _lastName, _endDate) {
-  let response = await axios
+  let response = await axiosInstance
     .post('member', {
       personnummer: _personnummer,
       first_name: _firstName,
@@ -49,7 +53,7 @@ export async function createMember(_personnummer, _firstName, _lastName, _endDat
 }
 
 export async function updateMember(_id, _personnummer, _firstName, _lastName, _endDate) {
-  let response = await axios
+  let response = await axiosInstance
     .put('member/' + _id, {
       personnummer: _personnummer,
       first_name: _firstName,
@@ -68,7 +72,7 @@ export async function updateMember(_id, _personnummer, _firstName, _lastName, _e
 }
 
 export async function deleteMember(_id) {
-  let response = await axios
+  let response = await axiosInstance
     .delete('member/' + _id)
     .then((res) => {
       return res

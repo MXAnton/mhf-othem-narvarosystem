@@ -1,4 +1,4 @@
-import { login } from '@/services/adminService'
+import { getLoggedInAdmin, login, logout } from '@/services/adminService'
 import { defineStore } from 'pinia'
 
 export const useAdminStore = defineStore('admin', {
@@ -23,9 +23,28 @@ export const useAdminStore = defineStore('admin', {
       return loginRes
     },
 
-    logout() {
+    async getLoggedInAdmin() {
+      const loginRes = await getLoggedInAdmin()
+      if (loginRes.data?.status === 'success') {
+        this.userId = loginRes.data
+        this.loggedInTime = new Date().getTime()
+        return true
+      }
+
+      console.warn(loginRes)
       this.userId = null
       this.loggedInTime = null
+      return null
+    },
+
+    async logout() {
+      const logoutRes = await logout()
+      if (logoutRes.data?.status === 'success') {
+        this.userId = null
+        this.loggedInTime = null
+      }
+
+      return logoutRes
     }
   }
 })
