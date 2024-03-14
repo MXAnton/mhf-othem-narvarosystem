@@ -55,7 +55,7 @@ router.beforeEach(async (to, from, next) => {
 
   // If user stored is null and user refreshed or
   //    loaded page first time
-  if (adminStore.userId == null || from.name == null) {
+  if (adminStore.userId == null && from.name == null) {
     await adminStore.getLoggedInAdmin()
   }
 
