@@ -1,6 +1,6 @@
 <script>
 import HeaderBackComp from '@/components/HeaderBackComp.vue'
-import { getAllMembers } from '@/services/memberService'
+import { deleteMember, getAllMembers } from '@/services/memberService'
 
 export default {
   components: { HeaderBackComp },
@@ -41,7 +41,9 @@ export default {
       }
 
       this.membersList = res.data.data
+
       this.currentEditId = null
+      this.lastSortBy.column = ''
       this.sortByColumn('firstName')
     },
 
@@ -84,8 +86,14 @@ export default {
       this.currentEditId = null
     },
 
-    deleteMember(_id) {
-      this.currentEditId = null
+    async deleteMember(_personnummer) {
+      if (confirm('Är du säker du vill RADERA denna medlem PERMANENT?')) {
+        await deleteMember(_personnummer)
+
+        this.currentEditId = null
+
+        this.getMembers()
+      }
     }
   },
 
@@ -155,7 +163,7 @@ export default {
         </td>
         <td v-else class="column--editing">
           <button @click="saveMember(row.id)">Save</button>
-          <button @click="deleteMember(row.id)" class="btn--danger">Delete</button>
+          <button @click="deleteMember(row.personnummer)" class="btn--danger">Delete</button>
         </td>
       </tr>
     </table>

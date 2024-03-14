@@ -71,9 +71,9 @@ export async function updateMember(_id, _personnummer, _firstName, _lastName, _e
   return response
 }
 
-export async function deleteMember(_id) {
+export async function deleteMember(_personnummer) {
   let response = await axiosInstance
-    .delete('member/' + _id)
+    .delete('member/' + _personnummer)
     .then((res) => {
       return res
     })

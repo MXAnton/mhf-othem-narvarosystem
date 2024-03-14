@@ -79,15 +79,15 @@ exports.updateMember = (req, res, next) => {
 };
 
 exports.deleteMember = (req, res, next) => {
-  if (!req.params.id) {
-    return next(new AppError("No member id found", 404));
+  if (!req.params.personnummer) {
+    return next(new AppError("No member personnummer found", 404));
   }
   conn.query(
-    "DELETE FROM member WHERE id=?",
-    [req.params.id],
+    "DELETE FROM member WHERE personnummer=?",
+    [req.params.personnummer],
     function (err, fields) {
       if (err) return next(new AppError(err, 500));
-      res.status(201).json({
+      res.status(204).json({
         status: "success",
         message: "member deleted!",
       });
