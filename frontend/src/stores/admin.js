@@ -31,7 +31,6 @@ export const useAdminStore = defineStore('admin', {
         return true
       }
 
-      console.warn(loginRes)
       this.userId = null
       this.loggedInTime = null
       return null
