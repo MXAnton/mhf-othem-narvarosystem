@@ -21,6 +21,14 @@ const baseRoutes = [
       noAdmin: true
     }
   },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: () => import('../views/admin/AdminHomeView.vue'),
+    meta: {
+      onlyAdmin: true
+    }
+  },
 
   {
     path: '/:catchAll(.*)*',

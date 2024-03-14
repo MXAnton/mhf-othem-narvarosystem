@@ -34,7 +34,7 @@ export default {
 
       this.username = null
       this.password = null
-      alert('Du har loggat in')
+      this.$router.push({ name: 'admin' })
     }
   },
 

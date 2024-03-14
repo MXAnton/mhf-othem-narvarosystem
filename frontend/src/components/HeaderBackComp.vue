@@ -1,6 +1,21 @@
+<script>
+export default {
+  props: {
+    backToPath: {
+      type: String,
+      default: '/'
+    },
+    backToText: {
+      type: String,
+      default: '< Tillbaka'
+    }
+  }
+}
+</script>
+
 <template>
   <header>
-    <RouterLink to="/">< Tillbaka</RouterLink>
+    <RouterLink :to="backToPath">{{ backToText }}</RouterLink>
   </header>
 </template>
 

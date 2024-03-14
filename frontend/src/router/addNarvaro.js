@@ -4,7 +4,7 @@ const addNarvaroRoutes = [
   {
     path: '/narvarolista',
     name: 'narvaroList',
-    component: () => import('../views/narvaro/NarvaroListView.vue'),
+    component: () => import('../views/admin/NarvaroListView.vue'),
     meta: {
       onlyAdmin: true
     }

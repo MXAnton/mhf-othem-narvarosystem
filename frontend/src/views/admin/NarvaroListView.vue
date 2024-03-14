@@ -58,7 +58,7 @@ export default {
 </script>
 
 <template>
-  <HeaderBackComp />
+  <HeaderBackComp :backToPath="'/admin'" />
 
   <main>
     <h1>Närvarolista {{ date }}</h1>
