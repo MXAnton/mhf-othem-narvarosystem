@@ -282,7 +282,7 @@ exports.login = (req, res, next) => {
 
       res.cookie("token", token, {
         httpOnly: true,
-        maxAge: 3 * 60 * 60 * 1000, // 3 hours
+        maxAge: 1 * 60 * 60 * 1000, // 1 hour
         secure: true, // Only set this if you are using HTTPS
         sameSite: "none",
       });
