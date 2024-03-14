@@ -107,6 +107,10 @@ label {
   color: var(--color-btn-bg);
 }
 
+.btn--correct {
+  --color-btn-bg: var(--c-green);
+  --color-border: var(--c-green);
+}
 .btn--danger {
   --color-btn-bg: var(--c-red);
   --color-border: var(--c-red);

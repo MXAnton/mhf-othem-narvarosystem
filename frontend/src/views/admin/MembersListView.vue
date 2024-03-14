@@ -11,7 +11,9 @@ export default {
       lastSortBy: {
         column: '',
         ascending: true
-      }
+      },
+
+      currentEditId: null
     }
   },
 
@@ -39,6 +41,7 @@ export default {
       }
 
       this.membersList = res.data.data
+      this.currentEditId = null
       this.sortByColumn('firstName')
     },
 
@@ -75,6 +78,14 @@ export default {
       }
 
       this.lastSortBy.column = _column
+    },
+
+    saveMember(_id) {
+      this.currentEditId = null
+    },
+
+    deleteMember(_id) {
+      this.currentEditId = null
     }
   },
 
@@ -139,6 +150,13 @@ export default {
         <td>{{ row.first_name }}</td>
         <td>{{ row.last_name }}</td>
         <td>{{ formattedDate(row.end_date) }}</td>
+        <td v-if="currentEditId !== row.id" class="column--edit">
+          <button @click="currentEditId = row.id">Edit</button>
+        </td>
+        <td v-else class="column--editing">
+          <button @click="saveMember(row.id)">Save</button>
+          <button @click="deleteMember(row.id)" class="btn--danger">Delete</button>
+        </td>
       </tr>
     </table>
   </main>
@@ -209,5 +227,34 @@ th > button:hover {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+td.column--edit,
+td.column--editing {
+  background-color: var(--color-bg);
+
+  font-size: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+
+  min-width: 4em;
+
+  padding: 0.2em 0;
+  border: none;
+}
+td.column--editing {
+  padding: 0.6em 0;
+}
+td.column--edit > button,
+td.column--editing > button {
+  width: 100%;
+  font-size: 1em;
+  padding: 0.4em;
+
+  background-color: var(--color-btn-bg);
+  color: white;
+  border: none;
 }
 </style>
