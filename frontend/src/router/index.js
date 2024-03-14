@@ -29,6 +29,14 @@ const baseRoutes = [
       onlyAdmin: true
     }
   },
+  {
+    path: '/medlemslista',
+    name: 'membersList',
+    component: () => import('../views/admin/MembersListView.vue'),
+    meta: {
+      onlyAdmin: true
+    }
+  },
 
   {
     path: '/:catchAll(.*)*',
