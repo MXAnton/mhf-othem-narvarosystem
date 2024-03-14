@@ -124,7 +124,8 @@ main {
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  width: max-content;
+  max-width: 100%;
 }
 
 td,
