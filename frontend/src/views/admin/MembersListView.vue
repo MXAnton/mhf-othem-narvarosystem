@@ -6,7 +6,12 @@ export default {
   components: { HeaderBackComp },
   data() {
     return {
-      membersList: null
+      membersList: null,
+
+      lastSortBy: {
+        column: '',
+        ascending: true
+      }
     }
   },
 
@@ -34,6 +39,42 @@ export default {
       }
 
       this.membersList = res.data.data
+      this.sortByColumn('firstName')
+    },
+
+    sortByColumn(_column) {
+      if (this.lastSortBy.column === _column) {
+        this.lastSortBy.ascending = !this.lastSortBy.ascending
+      } else {
+        this.lastSortBy.ascending = true
+      }
+
+      switch (_column) {
+        case 'personNum':
+          this.membersList.sort((a, b) => a.personnummer.localeCompare(b.personnummer))
+          break
+        case 'firstName':
+          this.membersList.sort((a, b) => a.first_name.localeCompare(b.first_name))
+          break
+        case 'lastName':
+          this.membersList.sort((a, b) => a.last_name.localeCompare(b.last_name))
+          break
+        case 'endDate':
+          this.membersList.sort((a, b) => a.end_date.localeCompare(b.end_date))
+          break
+        default:
+          // Sort the array of objects by the 'id' property
+          this.membersList.sort((a, b) => {
+            return a.id - b.id
+          })
+          break
+      }
+
+      if (!this.lastSortBy.ascending) {
+        this.membersList.reverse()
+      }
+
+      this.lastSortBy.column = _column
     }
   },
 
@@ -51,11 +92,46 @@ export default {
 
     <table>
       <tr>
-        <th>Id:</th>
-        <th>Personnummer:</th>
-        <th>Förnamn:</th>
-        <th>Efternamn:</th>
-        <th>Medlem t.o.m:</th>
+        <th
+          :class="{
+            asc: lastSortBy.ascending && lastSortBy.column === 'id',
+            desc: !lastSortBy.ascending && lastSortBy.column === 'id'
+          }"
+        >
+          <button @click="sortByColumn('id')">Id:</button>
+        </th>
+        <th
+          :class="{
+            asc: lastSortBy.ascending && lastSortBy.column === 'personNum',
+            desc: !lastSortBy.ascending && lastSortBy.column === 'personNum'
+          }"
+        >
+          <button @click="sortByColumn('personNum')">Personnummer:</button>
+        </th>
+        <th
+          :class="{
+            asc: lastSortBy.ascending && lastSortBy.column === 'firstName',
+            desc: !lastSortBy.ascending && lastSortBy.column === 'firstName'
+          }"
+        >
+          <button @click="sortByColumn('firstName')">Förnamn:</button>
+        </th>
+        <th
+          :class="{
+            asc: lastSortBy.ascending && lastSortBy.column === 'lastName',
+            desc: !lastSortBy.ascending && lastSortBy.column === 'lastName'
+          }"
+        >
+          <button @click="sortByColumn('lastName')">Efternamn:</button>
+        </th>
+        <th
+          :class="{
+            asc: lastSortBy.ascending && lastSortBy.column === 'endDate',
+            desc: !lastSortBy.ascending && lastSortBy.column === 'endDate'
+          }"
+        >
+          <button @click="sortByColumn('endDate')">Medlem t.o.m:</button>
+        </th>
       </tr>
       <tr v-for="row in membersList" :key="row.id">
         <td>{{ row.id }}</td>
@@ -81,8 +157,7 @@ table {
   max-width: 100%;
 }
 
-td,
-th {
+td {
   font-size: 1rem;
   border-left: 1px solid #c8c8c8;
   border-right: 1px solid #c8c8c8;
@@ -92,7 +167,44 @@ th {
   padding: 0.5em;
 }
 th {
+  padding: 0;
+  border-left: 1px solid #c8c8c8;
+  border-right: 1px solid #c8c8c8;
+  border-top: 1px solid #727272;
+  border-bottom: 1px solid #727272;
+}
+th > button {
+  position: relative;
+
+  font-size: 1rem;
   font-weight: 600;
+  text-align: left;
+
+  border: none;
+  padding: 0.5em;
+  padding-right: 1.5em;
+
+  background: none;
+
+  transition: background-color 0.2s ease-in-out;
+}
+th > button::after {
+  content: '▶';
+
+  font-size: 1em;
+  position: absolute;
+  right: 0.5em;
+
+  transition: transform 0.1s ease-in-out;
+}
+th.desc > button::after {
+  transform: rotate(-90deg);
+}
+th.asc > button::after {
+  transform: rotate(90deg);
+}
+th > button:hover {
+  background-color: #dddddd;
 }
 
 tr:nth-child(even) {
