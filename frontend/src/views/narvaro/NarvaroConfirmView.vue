@@ -48,8 +48,9 @@ export default {
 
       const weekDayIndex = new Date().getDay()
       if (
-        this.addNarvaroStore.needLicense === false ||
-        (weekDayIndex === 1 && this.addNarvaroStore.isActiveMember)
+        this.addNarvaroStore.type === 'Ledare' ||
+        (weekDayIndex === 1 &&
+          (this.addNarvaroStore.needLicense === false || this.addNarvaroStore.isActiveMember))
       ) {
         this.$router.push({ name: 'narvaroThanks' })
         return
