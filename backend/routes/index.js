@@ -6,9 +6,9 @@ router
   .route("/member")
   .get(controllers.getAllMembers)
   .post(controllers.createMember);
+router.route("/member/:personnummer").get(controllers.getMember);
 router
-  .route("/member/:personnummer")
-  .get(controllers.getMember)
+  .route("/member/:id")
   .put(controllers.updateMember)
   .delete(controllers.deleteMember);
 

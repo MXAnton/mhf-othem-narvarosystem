@@ -63,16 +63,15 @@ export async function updateMember(_id, _personnummer, _firstName, _lastName, _e
       return res
     })
     .catch((err) => {
-      console.warn(err)
-      return null
+      return err
     })
 
   return response
 }
 
-export async function deleteMember(_personnummer) {
+export async function deleteMember(_id) {
   let response = await axiosInstance
-    .delete('member/' + _personnummer)
+    .delete('member/' + _id)
     .then((res) => {
       return res
     })

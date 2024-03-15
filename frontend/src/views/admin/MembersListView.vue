@@ -1,6 +1,6 @@
 <script>
 import HeaderBackComp from '@/components/HeaderBackComp.vue'
-import { createMember, deleteMember, getAllMembers } from '@/services/memberService'
+import { createMember, deleteMember, getAllMembers, updateMember } from '@/services/memberService'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 export default {
@@ -14,7 +14,14 @@ export default {
         ascending: true
       },
 
-      currentEditId: null,
+      editedMember: {
+        id: null,
+        personNum: null,
+        firstName: null,
+        lastName: null,
+        endDate: null
+      },
+      editedMemberErrorText: null,
 
       newMember: {
         personNum: null,
@@ -22,7 +29,7 @@ export default {
         lastName: null,
         endDate: null
       },
-      errorText: null
+      newMemberErrorText: null
     }
   },
 
@@ -51,8 +58,8 @@ export default {
 
       this.membersList = res.data.data
 
-      this.currentEditId = null
       this.lastSortBy.column = 'id'
+      this.lastSortBy.ascending = true
       this.sortByColumn('id')
     },
 
@@ -91,44 +98,202 @@ export default {
       this.lastSortBy.column = _column
     },
 
-    saveMember(_id) {
-      this.currentEditId = null
-    },
-
-    async deleteMember(_personnummer) {
+    async deleteMember(_id) {
       if (confirm('Är du säker du vill RADERA denna medlem PERMANENT?')) {
-        await deleteMember(_personnummer)
-
-        this.currentEditId = null
+        await deleteMember(_id)
 
         this.getMembers()
+
+        this.closeEditMember()
       }
+    },
+
+    openEditMember(_member) {
+      this.resetEditedMember()
+
+      this.editedMember.id = _member.id
+      this.editedMember.personNum = _member.personnummer
+      this.editedMember.firstName = _member.first_name
+      this.editedMember.lastName = _member.last_name
+      this.editedMember.endDate = this.formattedDate(_member.end_date)
+
+      const modal = this.$refs.editMemberDialog
+      modal.showModal()
+
+      modal.addEventListener('click', (_event) => {
+        if (_event.target.tagName !== 'DIALOG')
+          //This prevents issues with forms
+          return
+
+        const rect = _event.target.getBoundingClientRect()
+
+        const clickedInDialog =
+          rect.top <= _event.clientY &&
+          _event.clientY <= rect.top + rect.height &&
+          rect.left <= _event.clientX &&
+          _event.clientX <= rect.left + rect.width
+
+        if (clickedInDialog === false) {
+          this.closeEditMember()
+        }
+      })
+      modal.addEventListener('cancel', (event) => {
+        this.closeEditMember()
+      })
+      modal.addEventListener('close', (event) => {
+        this.closeEditMember()
+      })
+    },
+    closeEditMember() {
+      this.resetEditedMember()
+
+      const modal = this.$refs.editMemberDialog
+      modal.close()
+
+      modal.removeEventListener('click', (_event) => {
+        if (_event.target.tagName !== 'DIALOG')
+          //This prevents issues with forms
+          return
+
+        const rect = _event.target.getBoundingClientRect()
+
+        const clickedInDialog =
+          rect.top <= _event.clientY &&
+          _event.clientY <= rect.top + rect.height &&
+          rect.left <= _event.clientX &&
+          _event.clientX <= rect.left + rect.width
+
+        if (clickedInDialog === false) {
+          this.closeEditMember()
+        }
+      })
+      modal.removeEventListener('cancel', (event) => {
+        this.closeEditMember()
+      })
+      modal.removeEventListener('close', (event) => {
+        this.closeEditMember()
+      })
+    },
+    resetEditedMember() {
+      this.editedMember = {
+        id: null,
+        personNum: null,
+        firstName: null,
+        lastName: null,
+        endDate: null
+      }
+      this.editedMemberErrorText = null
+    },
+    async updateMember() {
+      // Check personNum
+      const isPersunNumValidRes = useAddNarvaroStore().isPersonNumValid(this.editedMember.personNum)
+      if (isPersunNumValidRes !== true) {
+        this.editedMemberErrorText = isPersunNumValidRes
+        return
+      }
+
+      // Check names
+      if (this.editedMember.firstName == null || this.editedMember.firstName.trim().length === 0) {
+        this.editedMemberErrorText = 'Skriv in förnamn.'
+        return
+      }
+      if (this.editedMember.lastName == null || this.editedMember.lastName.trim().length === 0) {
+        this.editedMemberErrorText = 'Skriv in efternamn.'
+        return
+      }
+      this.editedMember.firstName = this.editedMember.firstName.trim()
+      this.editedMember.lastName = this.editedMember.lastName.trim()
+
+      const createRes = await updateMember(
+        this.editedMember.id,
+        this.editedMember.personNum,
+        this.editedMember.firstName,
+        this.editedMember.lastName,
+        this.editedMember.endDate
+      )
+      if (createRes == null) {
+        this.editedMemberErrorText = 'Oväntat fel'
+        return
+      }
+      if (createRes.data?.status !== 'success') {
+        this.editedMemberErrorText = createRes.response?.data?.message
+        return
+      }
+
+      this.getMembers()
+      this.closeEditMember()
     },
 
     openAddNewMember() {
       const modal = this.$refs.addNewMemberDialog
       modal.showModal()
+      modal.addEventListener('click', (_event) => {
+        if (_event.target.tagName !== 'DIALOG')
+          //This prevents issues with forms
+          return
+
+        const rect = _event.target.getBoundingClientRect()
+
+        const clickedInDialog =
+          rect.top <= _event.clientY &&
+          _event.clientY <= rect.top + rect.height &&
+          rect.left <= _event.clientX &&
+          _event.clientX <= rect.left + rect.width
+
+        if (clickedInDialog === false) {
+          this.closeAddNewMember()
+        }
+      })
+      modal.addEventListener('cancel', (event) => {
+        this.closeAddNewMember()
+      })
+      modal.addEventListener('close', (event) => {
+        this.closeAddNewMember()
+      })
     },
     closeAddNewMember() {
       const modal = this.$refs.addNewMemberDialog
       modal.close()
+      modal.removeEventListener('click', (_event) => {
+        if (_event.target.tagName !== 'DIALOG')
+          //This prevents issues with forms
+          return
+
+        const rect = _event.target.getBoundingClientRect()
+
+        const clickedInDialog =
+          rect.top <= _event.clientY &&
+          _event.clientY <= rect.top + rect.height &&
+          rect.left <= _event.clientX &&
+          _event.clientX <= rect.left + rect.width
+
+        if (clickedInDialog === false) {
+          this.closeAddNewMember()
+        }
+      })
+      modal.removeEventListener('cancel', (event) => {
+        this.closeAddNewMember()
+      })
+      modal.removeEventListener('close', (event) => {
+        this.closeAddNewMember()
+      })
     },
 
     async addNewMember() {
       // Check personNum
       const isPersunNumValidRes = useAddNarvaroStore().isPersonNumValid(this.newMember.personNum)
       if (isPersunNumValidRes !== true) {
-        this.errorText = isPersunNumValidRes
+        this.newMemberErrorText = isPersunNumValidRes
         return
       }
 
       // Check names
       if (this.newMember.firstName == null || this.newMember.firstName.trim().length === 0) {
-        this.errorText = 'Skriv in förnamn.'
+        this.newMemberErrorText = 'Skriv in förnamn.'
         return
       }
       if (this.newMember.lastName == null || this.newMember.lastName.trim().length === 0) {
-        this.errorText = 'Skriv in efternamn.'
+        this.newMemberErrorText = 'Skriv in efternamn.'
         return
       }
       this.newMember.firstName = this.newMember.firstName.trim()
@@ -141,11 +306,11 @@ export default {
         this.newMember.endDate
       )
       if (createRes == null) {
-        this.errorText = 'Oväntat fel'
+        this.newMemberErrorText = 'Oväntat fel'
         return
       }
       if (createRes.data?.status !== 'success') {
-        this.errorText = createRes.response?.data?.message
+        this.newMemberErrorText = createRes.response?.data?.message
         return
       }
 
@@ -161,67 +326,12 @@ export default {
         lastName: null,
         endDate: null
       }
-      this.errorText = null
+      this.newMemberErrorText = null
     }
   },
 
   async created() {
     await this.getMembers()
-  },
-
-  mounted() {
-    const modal = this.$refs.addNewMemberDialog
-
-    modal.addEventListener('click', (_event) => {
-      if (_event.target.tagName !== 'DIALOG')
-        //This prevents issues with forms
-        return
-
-      const rect = _event.target.getBoundingClientRect()
-
-      const clickedInDialog =
-        rect.top <= _event.clientY &&
-        _event.clientY <= rect.top + rect.height &&
-        rect.left <= _event.clientX &&
-        _event.clientX <= rect.left + rect.width
-
-      if (clickedInDialog === false) {
-        this.closeAddNewMember()
-      }
-    })
-    modal.addEventListener('cancel', (event) => {
-      this.closeAddNewMember()
-    })
-    modal.addEventListener('close', (event) => {
-      this.closeAddNewMember()
-    })
-  },
-  beforeUnmount() {
-    const modal = this.$refs.addNewMemberDialog
-
-    modal.removeEventListener('click', (_event) => {
-      if (_event.target.tagName !== 'DIALOG')
-        //This prevents issues with forms
-        return
-
-      const rect = _event.target.getBoundingClientRect()
-
-      const clickedInDialog =
-        rect.top <= _event.clientY &&
-        _event.clientY <= rect.top + rect.height &&
-        rect.left <= _event.clientX &&
-        _event.clientX <= rect.left + rect.width
-
-      if (clickedInDialog === false) {
-        this.closeAddNewMember()
-      }
-    })
-    modal.removeEventListener('cancel', (event) => {
-      this.closeAddNewMember()
-    })
-    modal.removeEventListener('close', (event) => {
-      this.closeAddNewMember()
-    })
   }
 }
 </script>
@@ -285,20 +395,25 @@ export default {
         <td>{{ row.first_name }}</td>
         <td>{{ row.last_name }}</td>
         <td>{{ formattedDate(row.end_date) }}</td>
-        <td v-if="currentEditId !== row.id" class="column--edit">
-          <button @click="currentEditId = row.id">Edit</button>
+        <td class="column--edit">
+          <button @click="openEditMember(row)">✎</button>
         </td>
-        <td v-else class="column--editing">
+        <!-- <td v-else class="column--editing">
           <button @click="saveMember(row.id)">Save</button>
           <button @click="deleteMember(row.personnummer)" class="btn--danger">Delete</button>
-        </td>
+        </td> -->
       </tr>
     </table>
   </main>
 
   <dialog ref="addNewMemberDialog">
     <form class="new-member-form" @submit.prevent="addNewMember()" novalidate>
-      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
+      <h2 class="size--normal">Ny medlem</h2>
+
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: newMemberErrorText != null }"
+      >
         <label for="personnummer-input">Personnummer:</label>
         <input
           class="input--primary"
@@ -314,11 +429,14 @@ export default {
           title="12 siffror, ÅÅÅÅMMDDXXXX"
           placeholder="ÅÅÅÅMMDDXXXX"
           v-model="newMember.personNum"
-          @input="errorText = null"
+          @input="newMemberErrorText = null"
         />
       </div>
 
-      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: newMemberErrorText != null }"
+      >
         <label for="first-name-input">Förnamn:</label>
         <input
           class="input--primary"
@@ -330,11 +448,14 @@ export default {
           required
           title="Skriv förnamn..."
           v-model="newMember.firstName"
-          @input="errorText = null"
+          @input="newMemberErrorText = null"
         />
       </div>
 
-      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: newMemberErrorText != null }"
+      >
         <label for="last-name-input">Efternamn:</label>
         <input
           class="input--primary"
@@ -346,11 +467,14 @@ export default {
           required
           title="Skriv efternamn..."
           v-model="newMember.lastName"
-          @input="errorText = null"
+          @input="newMemberErrorText = null"
         />
       </div>
 
-      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: newMemberErrorText != null }"
+      >
         <label for="date-input">Medlem t.o.m:</label>
         <input
           class="input--primary"
@@ -359,10 +483,10 @@ export default {
           id="date-input"
           required
           v-model="newMember.endDate"
-          @change="errorText = null"
+          @change="newMemberErrorText = null"
         />
       </div>
-      <p class="error-text">{{ errorText }}</p>
+      <p class="error-text">{{ newMemberErrorText }}</p>
 
       <nav>
         <input
@@ -389,6 +513,118 @@ export default {
       </nav>
     </form>
   </dialog>
+
+  <dialog ref="editMemberDialog">
+    <form class="new-member-form" @submit.prevent="updateMember()" novalidate>
+      <nav>
+        <input type="button" value="Avbryt" class="link--primary" @click="closeEditMember" />
+      </nav>
+
+      <h2 class="size--normal">Redigera medlem</h2>
+
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: editedMemberErrorText != null }"
+      >
+        <label for="personnummer-input">Personnummer:</label>
+        <input
+          class="input--primary"
+          type="text"
+          id="personnummer-input"
+          name="personnummer-input"
+          size="12"
+          minlength="12"
+          maxlength="12"
+          required
+          autofocus
+          pattern="[0-9]+"
+          title="12 siffror, ÅÅÅÅMMDDXXXX"
+          placeholder="ÅÅÅÅMMDDXXXX"
+          v-model="editedMember.personNum"
+          @input="editedMemberErrorText = null"
+        />
+      </div>
+
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: editedMemberErrorText != null }"
+      >
+        <label for="first-name-input">Förnamn:</label>
+        <input
+          class="input--primary"
+          type="text"
+          id="first-name-input"
+          name="first-name-input"
+          minlength="1"
+          maxlength="50"
+          required
+          title="Skriv förnamn..."
+          v-model="editedMember.firstName"
+          @input="editedMemberErrorText = null"
+        />
+      </div>
+
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: editedMemberErrorText != null }"
+      >
+        <label for="last-name-input">Efternamn:</label>
+        <input
+          class="input--primary"
+          type="text"
+          id="last-name-input"
+          name="last-name-input"
+          minlength="1"
+          maxlength="50"
+          required
+          title="Skriv efternamn..."
+          v-model="editedMember.lastName"
+          @input="editedMemberErrorText = null"
+        />
+      </div>
+
+      <div
+        class="input--primary__wrapper size--small"
+        :class="{ error: editedMemberErrorText != null }"
+      >
+        <label for="date-input">Medlem t.o.m:</label>
+        <input
+          class="input--primary"
+          type="date"
+          name="date-input"
+          id="date-input"
+          required
+          v-model="editedMember.endDate"
+          @change="editedMemberErrorText = null"
+        />
+      </div>
+      <p class="error-text">{{ editedMemberErrorText }}</p>
+
+      <nav>
+        <input
+          type="button"
+          value="Radera"
+          class="btn--primary size--small btn--danger"
+          @click="deleteMember(editedMember.id)"
+        />
+        <input
+          :disabled="
+            editedMember.personNum == null ||
+            editedMember.personNum.length == 0 ||
+            editedMember.firstName == null ||
+            editedMember.firstName.length == 0 ||
+            editedMember.lastName == null ||
+            editedMember.lastName.length == 0 ||
+            editedMember.endDate == null ||
+            editedMember.endDate.length == 0
+          "
+          type="submit"
+          value="Spara"
+          class="btn--primary size--small"
+        />
+      </nav>
+    </form>
+  </dialog>
 </template>
 
 <style scoped>
@@ -406,6 +642,9 @@ dialog form {
 }
 dialog nav {
   justify-content: space-between;
+}
+dialog nav:first-child {
+  justify-content: end;
 }
 
 #personnummer-input {
@@ -484,7 +723,7 @@ td.column--editing {
   flex-direction: column;
   gap: 0.2em;
 
-  min-width: 4em;
+  min-width: 2em;
 
   padding: 0.2em 0;
   border: none;

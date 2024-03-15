@@ -58,6 +58,8 @@ label {
   text-decoration: underline;
   color: var(--color-text);
   font-weight: 700;
+  background: none;
+  border: none;
 }
 
 .btn--primary,
@@ -356,6 +358,9 @@ main {
 
 .size--small {
   font-size: 1.5rem;
+}
+.size--normal {
+  font-size: 2rem;
 }
 /* #endregion GENERAL LAYOUT */
 
