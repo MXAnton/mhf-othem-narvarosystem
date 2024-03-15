@@ -16,7 +16,6 @@ export default {
 
     <div class="content__wrapper">
       <p>Genom att fortsätta godkänner du att vi hanterar dina personuppgifter enligt GDPR.</p>
-      <p>Vi lagrar närvaron i en lokal databas, som inte går att komma åt utifrån.</p>
       <p>
         Vi använder dina personuppgifter för att rapportera in din närvaro hos oss till myndigheter
         för att kunna visa upp hur många som tar del av vår verksamhet och därmed få bidragen som
