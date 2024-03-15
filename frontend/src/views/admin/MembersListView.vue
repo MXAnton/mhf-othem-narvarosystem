@@ -526,12 +526,12 @@ export default {
         class="input--primary__wrapper size--small"
         :class="{ error: editedMemberErrorText != null }"
       >
-        <label for="personnummer-input">Personnummer:</label>
+        <label for="edit-personnummer-input">Personnummer:</label>
         <input
           class="input--primary"
           type="text"
-          id="personnummer-input"
-          name="personnummer-input"
+          id="edit-personnummer-input"
+          name="edit-personnummer-input"
           size="12"
           minlength="12"
           maxlength="12"
@@ -549,12 +549,12 @@ export default {
         class="input--primary__wrapper size--small"
         :class="{ error: editedMemberErrorText != null }"
       >
-        <label for="first-name-input">Förnamn:</label>
+        <label for="edit-first-name-input">Förnamn:</label>
         <input
           class="input--primary"
           type="text"
-          id="first-name-input"
-          name="first-name-input"
+          id="edit-first-name-input"
+          name="edit-first-name-input"
           minlength="1"
           maxlength="50"
           required
@@ -568,12 +568,12 @@ export default {
         class="input--primary__wrapper size--small"
         :class="{ error: editedMemberErrorText != null }"
       >
-        <label for="last-name-input">Efternamn:</label>
+        <label for="edit-last-name-input">Efternamn:</label>
         <input
           class="input--primary"
           type="text"
-          id="last-name-input"
-          name="last-name-input"
+          id="edit-last-name-input"
+          name="edit-last-name-input"
           minlength="1"
           maxlength="50"
           required
@@ -587,12 +587,12 @@ export default {
         class="input--primary__wrapper size--small"
         :class="{ error: editedMemberErrorText != null }"
       >
-        <label for="date-input">Medlem t.o.m:</label>
+        <label for="edit-date-input">Medlem t.o.m:</label>
         <input
           class="input--primary"
           type="date"
-          name="date-input"
-          id="date-input"
+          name="edit-date-input"
+          id="edit-date-input"
           required
           v-model="editedMember.endDate"
           @change="editedMemberErrorText = null"
