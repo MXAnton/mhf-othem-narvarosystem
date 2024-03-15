@@ -1,12 +1,13 @@
 <script>
 import HeaderBackComp from '@/components/HeaderBackComp.vue'
+import MemberFormDialog from '@/components/MemberFormDialog.vue'
 
 import { createMember, deleteMember, getAllMembers, updateMember } from '@/services/memberService'
 
 import { dateFormatted, personNumFormatted, isNamesValid, isPersonNumValid } from '@/helpers'
 
 export default {
-  components: { HeaderBackComp },
+  components: { HeaderBackComp, MemberFormDialog },
   data() {
     return {
       membersList: null,
@@ -94,85 +95,18 @@ export default {
 
         this.getMembers()
 
-        this.closeEditMember()
+        this.$refs.editMemberModal.closeModal()
       }
     },
 
     openEditMember(_member) {
-      this.resetEditedMember()
-
       this.editedMember.id = _member.id
       this.editedMember.personNum = _member.personnummer
       this.editedMember.firstName = _member.first_name
       this.editedMember.lastName = _member.last_name
       this.editedMember.endDate = dateFormatted(new Date(_member.end_date))
 
-      const modal = this.$refs.editMemberDialog
-      modal.showModal()
-
-      modal.addEventListener('click', (_event) => {
-        if (_event.target.tagName !== 'DIALOG')
-          //This prevents issues with forms
-          return
-
-        const rect = _event.target.getBoundingClientRect()
-
-        const clickedInDialog =
-          rect.top <= _event.clientY &&
-          _event.clientY <= rect.top + rect.height &&
-          rect.left <= _event.clientX &&
-          _event.clientX <= rect.left + rect.width
-
-        if (clickedInDialog === false) {
-          this.closeEditMember()
-        }
-      })
-      modal.addEventListener('cancel', (event) => {
-        this.closeEditMember()
-      })
-      modal.addEventListener('close', (event) => {
-        this.closeEditMember()
-      })
-    },
-    closeEditMember() {
-      this.resetEditedMember()
-
-      const modal = this.$refs.editMemberDialog
-      modal.close()
-
-      modal.removeEventListener('click', (_event) => {
-        if (_event.target.tagName !== 'DIALOG')
-          //This prevents issues with forms
-          return
-
-        const rect = _event.target.getBoundingClientRect()
-
-        const clickedInDialog =
-          rect.top <= _event.clientY &&
-          _event.clientY <= rect.top + rect.height &&
-          rect.left <= _event.clientX &&
-          _event.clientX <= rect.left + rect.width
-
-        if (clickedInDialog === false) {
-          this.closeEditMember()
-        }
-      })
-      modal.removeEventListener('cancel', (event) => {
-        this.closeEditMember()
-      })
-      modal.removeEventListener('close', (event) => {
-        this.closeEditMember()
-      })
-    },
-    resetEditedMember() {
-      this.editedMember = {
-        id: null,
-        personNum: null,
-        firstName: null,
-        lastName: null,
-        endDate: null
-      }
-      this.editedMemberErrorText = null
+      this.$refs.editMemberModal.openModal()
     },
     async updateMember() {
       // Check personNum
@@ -208,62 +142,7 @@ export default {
       }
 
       this.getMembers()
-      this.closeEditMember()
-    },
-
-    openAddNewMember() {
-      const modal = this.$refs.addNewMemberDialog
-      modal.showModal()
-      modal.addEventListener('click', (_event) => {
-        if (_event.target.tagName !== 'DIALOG')
-          //This prevents issues with forms
-          return
-
-        const rect = _event.target.getBoundingClientRect()
-
-        const clickedInDialog =
-          rect.top <= _event.clientY &&
-          _event.clientY <= rect.top + rect.height &&
-          rect.left <= _event.clientX &&
-          _event.clientX <= rect.left + rect.width
-
-        if (clickedInDialog === false) {
-          this.closeAddNewMember()
-        }
-      })
-      modal.addEventListener('cancel', (event) => {
-        this.closeAddNewMember()
-      })
-      modal.addEventListener('close', (event) => {
-        this.closeAddNewMember()
-      })
-    },
-    closeAddNewMember() {
-      const modal = this.$refs.addNewMemberDialog
-      modal.close()
-      modal.removeEventListener('click', (_event) => {
-        if (_event.target.tagName !== 'DIALOG')
-          //This prevents issues with forms
-          return
-
-        const rect = _event.target.getBoundingClientRect()
-
-        const clickedInDialog =
-          rect.top <= _event.clientY &&
-          _event.clientY <= rect.top + rect.height &&
-          rect.left <= _event.clientX &&
-          _event.clientX <= rect.left + rect.width
-
-        if (clickedInDialog === false) {
-          this.closeAddNewMember()
-        }
-      })
-      modal.removeEventListener('cancel', (event) => {
-        this.closeAddNewMember()
-      })
-      modal.removeEventListener('close', (event) => {
-        this.closeAddNewMember()
-      })
+      this.$refs.editMemberModal.closeModal()
     },
 
     async addNewMember() {
@@ -300,9 +179,8 @@ export default {
 
       this.resetNewMember()
       this.getMembers()
-      this.closeAddNewMember()
+      this.$refs.newMemberModal.closeModal()
     },
-
     resetNewMember() {
       this.newMember = {
         personNum: null,
@@ -327,7 +205,7 @@ export default {
     <h1 class="mb--small">Medlemslista</h1>
 
     <nav class="mb--small">
-      <button class="btn--primary" @click="openAddNewMember">Lägg till medlem</button>
+      <button class="btn--primary" @click="$refs.newMemberModal.openModal">Lägg till medlem</button>
     </nav>
 
     <table>
@@ -390,251 +268,44 @@ export default {
     </table>
   </main>
 
-  <dialog ref="addNewMemberDialog">
-    <form class="new-member-form" @submit.prevent="addNewMember()" novalidate>
-      <h2 class="size--normal">Ny medlem</h2>
+  <MemberFormDialog
+    ref="newMemberModal"
+    :idStart="'new'"
+    :header="'Ny medlem'"
+    :errorText="newMemberErrorText"
+    :member="newMember"
+    @submitForm="addNewMember()"
+    @changedInput="newMemberErrorText = null"
+  >
+    <input
+      type="button"
+      value="Avbryt"
+      class="btn--secondary size--small"
+      @click="$refs.newMemberModal.closeModal"
+    />
+  </MemberFormDialog>
 
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: newMemberErrorText != null }"
-      >
-        <label for="personnummer-input">Personnummer:</label>
-        <input
-          class="input--primary"
-          type="text"
-          id="personnummer-input"
-          name="personnummer-input"
-          size="12"
-          minlength="12"
-          maxlength="12"
-          required
-          autofocus
-          pattern="[0-9]+"
-          title="12 siffror, ÅÅÅÅMMDDXXXX"
-          placeholder="ÅÅÅÅMMDDXXXX"
-          v-model="newMember.personNum"
-          @input="newMemberErrorText = null"
-        />
-      </div>
-
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: newMemberErrorText != null }"
-      >
-        <label for="first-name-input">Förnamn:</label>
-        <input
-          class="input--primary"
-          type="text"
-          id="first-name-input"
-          name="first-name-input"
-          minlength="1"
-          maxlength="50"
-          required
-          title="Skriv förnamn..."
-          v-model="newMember.firstName"
-          @input="newMemberErrorText = null"
-        />
-      </div>
-
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: newMemberErrorText != null }"
-      >
-        <label for="last-name-input">Efternamn:</label>
-        <input
-          class="input--primary"
-          type="text"
-          id="last-name-input"
-          name="last-name-input"
-          minlength="1"
-          maxlength="50"
-          required
-          title="Skriv efternamn..."
-          v-model="newMember.lastName"
-          @input="newMemberErrorText = null"
-        />
-      </div>
-
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: newMemberErrorText != null }"
-      >
-        <label for="date-input">Medlem t.o.m:</label>
-        <input
-          class="input--primary"
-          type="date"
-          name="date-input"
-          id="date-input"
-          required
-          v-model="newMember.endDate"
-          @change="newMemberErrorText = null"
-        />
-      </div>
-      <p class="error-text">{{ newMemberErrorText }}</p>
-
-      <nav>
-        <input
-          type="button"
-          value="Avbryt"
-          class="btn--secondary size--small"
-          @click="closeAddNewMember"
-        />
-        <input
-          :disabled="
-            newMember.personNum == null ||
-            newMember.personNum.length == 0 ||
-            newMember.firstName == null ||
-            newMember.firstName.length == 0 ||
-            newMember.lastName == null ||
-            newMember.lastName.length == 0 ||
-            newMember.endDate == null ||
-            newMember.endDate.length == 0
-          "
-          type="submit"
-          value="Lägg till"
-          class="btn--primary size--small"
-        />
-      </nav>
-    </form>
-  </dialog>
-
-  <dialog ref="editMemberDialog">
-    <form class="new-member-form" @submit.prevent="updateMember()" novalidate>
-      <nav>
-        <input type="button" value="Avbryt" class="link--primary" @click="closeEditMember" />
-      </nav>
-
-      <h2 class="size--normal">Redigera medlem</h2>
-
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: editedMemberErrorText != null }"
-      >
-        <label for="edit-personnummer-input">Personnummer:</label>
-        <input
-          class="input--primary"
-          type="text"
-          id="edit-personnummer-input"
-          name="edit-personnummer-input"
-          size="12"
-          minlength="12"
-          maxlength="12"
-          required
-          autofocus
-          pattern="[0-9]+"
-          title="12 siffror, ÅÅÅÅMMDDXXXX"
-          placeholder="ÅÅÅÅMMDDXXXX"
-          v-model="editedMember.personNum"
-          @input="editedMemberErrorText = null"
-        />
-      </div>
-
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: editedMemberErrorText != null }"
-      >
-        <label for="edit-first-name-input">Förnamn:</label>
-        <input
-          class="input--primary"
-          type="text"
-          id="edit-first-name-input"
-          name="edit-first-name-input"
-          minlength="1"
-          maxlength="50"
-          required
-          title="Skriv förnamn..."
-          v-model="editedMember.firstName"
-          @input="editedMemberErrorText = null"
-        />
-      </div>
-
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: editedMemberErrorText != null }"
-      >
-        <label for="edit-last-name-input">Efternamn:</label>
-        <input
-          class="input--primary"
-          type="text"
-          id="edit-last-name-input"
-          name="edit-last-name-input"
-          minlength="1"
-          maxlength="50"
-          required
-          title="Skriv efternamn..."
-          v-model="editedMember.lastName"
-          @input="editedMemberErrorText = null"
-        />
-      </div>
-
-      <div
-        class="input--primary__wrapper size--small"
-        :class="{ error: editedMemberErrorText != null }"
-      >
-        <label for="edit-date-input">Medlem t.o.m:</label>
-        <input
-          class="input--primary"
-          type="date"
-          name="edit-date-input"
-          id="edit-date-input"
-          required
-          v-model="editedMember.endDate"
-          @change="editedMemberErrorText = null"
-        />
-      </div>
-      <p class="error-text">{{ editedMemberErrorText }}</p>
-
-      <nav>
-        <input
-          type="button"
-          value="Radera"
-          class="btn--primary size--small btn--danger"
-          @click="deleteMember(editedMember.id)"
-        />
-        <input
-          :disabled="
-            editedMember.personNum == null ||
-            editedMember.personNum.length == 0 ||
-            editedMember.firstName == null ||
-            editedMember.firstName.length == 0 ||
-            editedMember.lastName == null ||
-            editedMember.lastName.length == 0 ||
-            editedMember.endDate == null ||
-            editedMember.endDate.length == 0
-          "
-          type="submit"
-          value="Spara"
-          class="btn--primary size--small"
-        />
-      </nav>
-    </form>
-  </dialog>
+  <MemberFormDialog
+    ref="editMemberModal"
+    :idStart="'edit'"
+    :header="'Redigera medlem'"
+    :submitText="'Spara'"
+    :errorText="editedMemberErrorText"
+    :member="editedMember"
+    @submitForm="updateMember()"
+    @changedInput="editedMemberErrorText = null"
+    ><input
+      type="button"
+      value="Radera"
+      class="btn--primary size--small btn--danger"
+      @click="deleteMember(editedMember.id)"
+  /></MemberFormDialog>
 </template>
 
 <style scoped>
 main {
   flex-grow: 1;
   justify-content: start;
-}
-
-dialog {
-  width: calc(min(26rem, 100%));
-}
-dialog form {
-  align-items: start;
-  text-align: start;
-}
-dialog nav {
-  justify-content: space-between;
-}
-dialog nav:first-child {
-  justify-content: end;
-}
-
-#personnummer-input,
-#edit-personnummer-input {
-  text-align: center;
-  width: 8.5em;
 }
 
 table {

@@ -164,6 +164,11 @@ label {
   border-color: var(--c-red);
 }
 
+.personnummer-input {
+  text-align: center;
+  width: 8.5em;
+}
+
 .radio--primary__wrapper {
   font-size: 2.25rem;
 
