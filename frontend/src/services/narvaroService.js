@@ -5,6 +5,8 @@ const axiosInstance = axios.create({
   withCredentials: true
 })
 
+import { dateFormatted } from '@/helpers'
+
 export async function getAllNarvaroYear(_year) {
   let response = await axiosInstance
     .get('narvaro/year/' + _year)
@@ -34,15 +36,10 @@ export async function getAllNarvaroDate(_date) {
 }
 
 export async function getNarvaroAmountToday() {
-  const currentDate = new Date()
-  const year = currentDate.getFullYear()
-  const month = (currentDate.getMonth() + 1).toString().padStart(2, '0') // Adding 1 because months are zero-indexed
-  const day = currentDate.getDate().toString().padStart(2, '0')
-  // Construct the date string in the desired format
-  const formattedDate = `${year}-${month}-${day}`
+  const currentDateFormatted = dateFormatted(new Date())
 
   let response = await axiosInstance
-    .get('narvaro/amount/date/' + formattedDate)
+    .get('narvaro/amount/date/' + currentDateFormatted)
     .then((res) => {
       return res
     })

@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import { getMember } from '@/services/memberService'
 import { getNarvaroDate } from '@/services/narvaroService'
 
+import { dateFormatted, isPersonNumValid } from '@/helpers'
+
 export const useAddNarvaroStore = defineStore('addNarvaro', {
   state: () => {
     return {
@@ -22,29 +24,8 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
     }
   },
   getters: {
-    formattedPersonNum(state) {
-      if (state.isPersonNumValid() !== true) {
-        return null
-      }
-      return state.personNum.substring(0, 8) + '-' + state.personNum.substring(8)
-    },
-
-    isNameValid(state) {
-      if (state.firstName == null || state.firstName.trim().length === 0) {
-        return 'Skriv in ditt förnamn.'
-      }
-      if (state.lastName == null || state.lastName.trim().length === 0) {
-        return 'Skriv in ditt efternamn.'
-      }
-
-      state.firstName = state.firstName.trim()
-      state.lastName = state.lastName.trim()
-
-      return true
-    },
-
     needLicense(state) {
-      if (state.isPersonNumValid() !== true) {
+      if (isPersonNumValid(state.personNum) !== true) {
         return true
       }
 
@@ -87,21 +68,16 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
     async submitPersonNum(_personNum) {
       const personNumToSubmit = _personNum || this.personNum
 
-      const personNumRes = this.isPersonNumValid(personNumToSubmit)
+      const personNumRes = isPersonNumValid(personNumToSubmit)
       if (personNumRes !== true) {
         // Error
         return personNumRes
       }
 
       // Get current date
-      const currentDate = new Date()
-      const year = currentDate.getFullYear()
-      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0') // Adding 1 because months are zero-indexed
-      const day = currentDate.getDate().toString().padStart(2, '0')
-      // Construct the date string in the desired format
-      const formattedDate = `${year}-${month}-${day}`
+      const formattedCurrentDate = dateFormatted(new Date())
 
-      const narvaroDateRes = await getNarvaroDate(formattedDate, personNumToSubmit)
+      const narvaroDateRes = await getNarvaroDate(formattedCurrentDate, personNumToSubmit)
       if (narvaroDateRes.data?.length > 0) {
         return 'Personnummret är redan anmält idag.'
       }
@@ -116,65 +92,6 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       }
 
       this.personNum = personNumToSubmit
-      return true
-    },
-
-    isPersonNumValid(_personNum) {
-      const personNumToCheck = _personNum || this.personNum
-
-      if (personNumToCheck == null) {
-        return 'Måste ange personnummer.'
-      }
-
-      if (/\D/.test(personNumToCheck) === true) {
-        return 'Personnumret får bara innehålla siffror.'
-      }
-
-      if (personNumToCheck.length != 12) {
-        return 'Personnummret måste vara 12 siffror.'
-      }
-
-      const currentYear = new Date().getFullYear()
-      if (personNumToCheck < (currentYear - 150) * Math.pow(10, 8)) {
-        // Person too old to exist, birthdate more than 150 years from now
-        return `Du kan inte vara född för ${currentYear - personNumToCheck.substring(0, 4)} år sen.`
-      }
-      if (personNumToCheck > currentYear * Math.pow(10, 8)) {
-        // Person too young to exist, birthdate after currentYear
-        return 'Du kan inte vara född i framtiden.'
-      }
-
-      const month = parseInt(personNumToCheck.substring(4, 6))
-      if (month < 1 || month > 12) {
-        return 'Skriv in en giltig månad.'
-      }
-
-      const day = parseInt(personNumToCheck.substring(6, 8))
-      if (day < 1 || day > 31) {
-        return 'Skriv in en giltig dag.'
-      }
-
-      // Check with mathematical function if personNum could be legit
-      const smallPersonNumArray = personNumToCheck.substring(2).split('')
-      let checkSum = 0
-      for (let _i = 0; _i < smallPersonNumArray.length; _i++) {
-        let num = parseInt(smallPersonNumArray[_i])
-        if (_i % 2 === 0) {
-          // If even number
-          num *= 2
-        }
-
-        num
-          .toString()
-          .split('')
-          .forEach((_digit) => {
-            checkSum += parseInt(_digit)
-          })
-      }
-      if (checkSum % 10 !== 0) {
-        return 'Personnummret är inte giltigt.'
-      }
-
       return true
     },
 

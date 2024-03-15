@@ -1,8 +1,11 @@
 <script>
+import { RouterLink } from 'vue-router'
+
 import HeaderComp from '@/components/HeaderComp.vue'
 import InactivityComp from '@/components/InactivityComp.vue'
+
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
-import { RouterLink } from 'vue-router'
+import { needsToPay } from '@/helpers'
 
 export default {
   components: {
@@ -31,7 +34,13 @@ export default {
 
     this.weekDayIndex = new Date().getDay()
 
-    if (this.addNarvaroStore.needLicense === false) {
+    if (
+      !needsToPay(
+        this.addNarvaroStore.type,
+        this.addNarvaroStore.isActiveMember,
+        this.addNarvaroStore.needLicense
+      )
+    ) {
       this.$router.push({ name: 'narvaroThanks' })
       return
     }

@@ -1,7 +1,9 @@
 <script>
 import HeaderComp from '@/components/HeaderComp.vue'
 import InactivityComp from '@/components/InactivityComp.vue'
+
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
+import { isNamesValid, isPersonNumValid } from '@/helpers'
 
 export default {
   components: {
@@ -27,10 +29,10 @@ export default {
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
 
-    if (this.addNarvaroStore.isPersonNumValid() !== true) {
+    if (isPersonNumValid(this.addNarvaroStore.personNum) !== true) {
       this.$router.push({ name: 'narvaroNew' })
     }
-    if (this.addNarvaroStore.isNameValid !== true) {
+    if (isNamesValid(this.addNarvaroStore.firstName, this.addNarvaroStore.lastName) !== true) {
       this.$router.push({ name: 'narvaroName' })
     }
     if (this.addNarvaroStore.type == null) {

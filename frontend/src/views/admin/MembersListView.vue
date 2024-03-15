@@ -1,7 +1,9 @@
 <script>
 import HeaderBackComp from '@/components/HeaderBackComp.vue'
+
 import { createMember, deleteMember, getAllMembers, updateMember } from '@/services/memberService'
-import { useAddNarvaroStore } from '@/stores/addNarvaro'
+
+import { dateFormatted, personNumFormatted, isNamesValid, isPersonNumValid } from '@/helpers'
 
 export default {
   components: { HeaderBackComp },
@@ -34,20 +36,8 @@ export default {
   },
 
   methods: {
-    formattedPersonNum(_personNum) {
-      return _personNum.substring(0, 8) + '-' + _personNum.substring(8)
-    },
-
-    formattedDate(_date) {
-      const date = new Date(_date)
-      return (
-        date.getUTCFullYear() +
-        '-' +
-        (date.getUTCMonth() + 1).toString().padStart(2, '0') +
-        '-' +
-        (date.getUTCDate() + 1).toString().padStart(2, '0')
-      )
-    },
+    dateFormatted,
+    personNumFormatted,
 
     async getMembers() {
       const res = await getAllMembers()
@@ -115,7 +105,7 @@ export default {
       this.editedMember.personNum = _member.personnummer
       this.editedMember.firstName = _member.first_name
       this.editedMember.lastName = _member.last_name
-      this.editedMember.endDate = this.formattedDate(_member.end_date)
+      this.editedMember.endDate = dateFormatted(new Date(_member.end_date))
 
       const modal = this.$refs.editMemberDialog
       modal.showModal()
@@ -186,19 +176,16 @@ export default {
     },
     async updateMember() {
       // Check personNum
-      const isPersunNumValidRes = useAddNarvaroStore().isPersonNumValid(this.editedMember.personNum)
+      const isPersunNumValidRes = isPersonNumValid(this.editedMember.personNum)
       if (isPersunNumValidRes !== true) {
         this.editedMemberErrorText = isPersunNumValidRes
         return
       }
 
       // Check names
-      if (this.editedMember.firstName == null || this.editedMember.firstName.trim().length === 0) {
-        this.editedMemberErrorText = 'Skriv in förnamn.'
-        return
-      }
-      if (this.editedMember.lastName == null || this.editedMember.lastName.trim().length === 0) {
-        this.editedMemberErrorText = 'Skriv in efternamn.'
+      const isNamesValidRes = isNamesValid(this.editedMember.firstName, this.editedMember.lastName)
+      if (isNamesValidRes !== true) {
+        this.editedMemberErrorText = isNamesValidRes
         return
       }
       this.editedMember.firstName = this.editedMember.firstName.trim()
@@ -281,19 +268,16 @@ export default {
 
     async addNewMember() {
       // Check personNum
-      const isPersunNumValidRes = useAddNarvaroStore().isPersonNumValid(this.newMember.personNum)
+      const isPersunNumValidRes = isPersonNumValid(this.newMember.personNum)
       if (isPersunNumValidRes !== true) {
         this.newMemberErrorText = isPersunNumValidRes
         return
       }
 
       // Check names
-      if (this.newMember.firstName == null || this.newMember.firstName.trim().length === 0) {
-        this.newMemberErrorText = 'Skriv in förnamn.'
-        return
-      }
-      if (this.newMember.lastName == null || this.newMember.lastName.trim().length === 0) {
-        this.newMemberErrorText = 'Skriv in efternamn.'
+      const isNamesValidRes = isNamesValid(this.newMember.firstName, this.newMember.lastName)
+      if (isNamesValidRes !== true) {
+        this.newMemberErrorText = isNamesValidRes
         return
       }
       this.newMember.firstName = this.newMember.firstName.trim()
@@ -391,10 +375,10 @@ export default {
       </tr>
       <tr v-for="row in membersList" :key="row.id">
         <td>{{ row.id }}</td>
-        <td>{{ formattedPersonNum(row.personnummer) }}</td>
+        <td>{{ personNumFormatted(row.personnummer) }}</td>
         <td>{{ row.first_name }}</td>
         <td>{{ row.last_name }}</td>
-        <td>{{ formattedDate(row.end_date) }}</td>
+        <td>{{ dateFormatted(new Date(row.end_date)) }}</td>
         <td class="column--edit">
           <button @click="openEditMember(row)">✎</button>
         </td>
@@ -634,7 +618,7 @@ main {
 }
 
 dialog {
-  width: auto;
+  width: calc(min(26rem, 100%));
 }
 dialog form {
   align-items: start;
@@ -647,7 +631,8 @@ dialog nav:first-child {
   justify-content: end;
 }
 
-#personnummer-input {
+#personnummer-input,
+#edit-personnummer-input {
   text-align: center;
   width: 8.5em;
 }

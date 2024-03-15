@@ -5,6 +5,7 @@ import InactivityComp from '@/components/InactivityComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 import { createNarvaro } from '@/services/narvaroService'
+import { personNumFormatted, isNamesValid, isPersonNumValid, needsToPay } from '@/helpers'
 
 export default {
   components: {
@@ -19,6 +20,8 @@ export default {
   },
 
   methods: {
+    personNumFormatted,
+
     goBack() {
       if (this.addNarvaroStore.needLicense) {
         this.$router.push({ name: 'narvaroLicense' })
@@ -46,11 +49,12 @@ export default {
         return
       }
 
-      const weekDayIndex = new Date().getDay()
       if (
-        this.addNarvaroStore.type === 'Ledare' ||
-        (weekDayIndex === 1 &&
-          (this.addNarvaroStore.needLicense === false || this.addNarvaroStore.isActiveMember))
+        !needsToPay(
+          this.addNarvaroStore.type,
+          this.addNarvaroStore.isActiveMember,
+          this.addNarvaroStore.needLicense
+        )
       ) {
         this.$router.push({ name: 'narvaroThanks' })
         return
@@ -62,10 +66,10 @@ export default {
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
 
-    if (this.addNarvaroStore.isPersonNumValid() !== true) {
+    if (isPersonNumValid(this.addNarvaroStore.personNum) !== true) {
       this.$router.push({ name: 'narvaroNew' })
     }
-    if (this.addNarvaroStore.isNameValid !== true) {
+    if (isNamesValid(this.addNarvaroStore.firstName, this.addNarvaroStore.lastName) !== true) {
       this.$router.push({ name: 'narvaroName' })
     }
     if (this.addNarvaroStore.type == null) {
@@ -87,7 +91,7 @@ export default {
         <ul>
           <li>
             <h3>Personnummer:</h3>
-            <p>{{ addNarvaroStore.formattedPersonNum }}</p>
+            <p>{{ personNumFormatted(addNarvaroStore.personNum) }}</p>
           </li>
           <li>
             <h3>Förnamn:</h3>

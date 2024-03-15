@@ -1,7 +1,9 @@
 <script>
+import HeaderBackComp from '@/components/HeaderBackComp.vue'
+
 import { getAllNarvaroDate } from '@/services/narvaroService'
 
-import HeaderBackComp from '@/components/HeaderBackComp.vue'
+import { dateFormatted, personNumFormatted } from '@/helpers'
 
 export default {
   components: { HeaderBackComp },
@@ -15,9 +17,7 @@ export default {
   },
 
   methods: {
-    formattedPersonNum(_personNum) {
-      return _personNum.substring(0, 8) + '-' + _personNum.substring(8)
-    },
+    personNumFormatted,
 
     async changedDate() {
       // Clamp myDate to the range [minDate, maxDate]
@@ -43,12 +43,7 @@ export default {
 
   async created() {
     const currentDate = new Date()
-    this.maxDate =
-      currentDate.getUTCFullYear() +
-      '-' +
-      (currentDate.getUTCMonth() + 1).toString().padStart(2, '0') +
-      '-' +
-      currentDate.getUTCDate().toString().padStart(2, '0')
+    this.maxDate = dateFormatted(currentDate)
 
     this.date = this.maxDate
 
@@ -88,7 +83,7 @@ export default {
       </tr>
       <tr v-for="row in narvaroList" :key="row.id">
         <td>{{ row.id }}</td>
-        <td>{{ formattedPersonNum(row.personnummer) }}</td>
+        <td>{{ personNumFormatted(row.personnummer) }}</td>
         <td>{{ row.first_name }}</td>
         <td>{{ row.last_name }}</td>
         <td>{{ row.type }}</td>

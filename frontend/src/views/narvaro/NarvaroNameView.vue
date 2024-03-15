@@ -4,6 +4,7 @@ import InactivityComp from '@/components/InactivityComp.vue'
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
 import { getMember } from '@/services/memberService'
+import { isNamesValid, isPersonNumValid } from '@/helpers'
 
 export default {
   components: {
@@ -23,10 +24,9 @@ export default {
       this.$router.push({ name: 'narvaroEditPersonNum' })
     },
     onSubmit(_event) {
-      const nameRes = this.addNarvaroStore.isNameValid
+      const nameRes = isNamesValid(this.addNarvaroStore.firstName, this.addNarvaroStore.lastName)
       if (nameRes !== true) {
         // Error
-        console.warn(nameRes)
         this.errorText = nameRes
         return
       }
@@ -38,7 +38,7 @@ export default {
   async created() {
     this.addNarvaroStore = useAddNarvaroStore()
 
-    if (this.addNarvaroStore.isPersonNumValid() !== true) {
+    if (isPersonNumValid(this.addNarvaroStore.personNum) !== true) {
       this.$router.push({ name: 'narvaroNew' })
     }
 

@@ -392,6 +392,7 @@ form > nav {
 /*   Closed state of the dialog   */
 dialog {
   width: calc(min(40rem, 100%));
+  max-width: 100%;
 
   position: absolute;
   left: 50%;
