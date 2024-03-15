@@ -104,7 +104,7 @@ h2 {
 #personnummer-input {
   font-size: 4rem;
   text-align: center;
-  width: 8em;
+  width: 8.2em;
 }
 
 .btn--primary {

@@ -100,7 +100,7 @@ export default {
 #personnummer-input {
   font-size: 4rem;
   text-align: center;
-  width: 8em;
+  width: 8.2em;
 }
 @media (max-width: 600px) {
   #personnummer-input {
