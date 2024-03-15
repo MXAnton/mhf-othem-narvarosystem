@@ -44,6 +44,9 @@ export default {
       this.$router.push({ name: 'narvaroThanks' })
       return
     }
+
+    // Inputs not needed anymore, clear them so noone can access them later
+    this.addNarvaroStore.clearInputs()
   }
 }
 </script>
@@ -53,21 +56,14 @@ export default {
 
   <main>
     <h1 class="sub-header">En sista grej...</h1>
-    <h2 v-if="weekDayIndex === 1 && addNarvaroStore.isActiveMember" class="mb--big">Betalning</h2>
-    <h2 v-else class="mb--big">Betala</h2>
+    <h2 class="mb--big">Betala</h2>
 
-    <div class="price-text" v-if="weekDayIndex === 1 && addNarvaroStore.isActiveMember">
-      <p>På måndagar är det gratis för dig, eftersom du är medlem :)</p>
-    </div>
-    <div class="price-text" v-else-if="weekDayIndex === 1">
-      <p>På måndagar gäller 50 kr träningsavgift.</p>
-      <p><i>TIPS: MHF-medlemmar tränar gratis på måndagar ;)</i></p>
-    </div>
-    <p class="price-text" v-else-if="weekDayIndex != null">
+    <div class="price-text">
       På {{ weekDays[weekDayIndex] }} gäller 50 kr träningsavgift.
-    </p>
+      <p v-if="weekDayIndex === 1"><i>TIPS: MHF-medlemmar tränar gratis på måndagar ;)</i></p>
+    </div>
 
-    <div v-if="weekDayIndex !== 1 || addNarvaroStore.isActiveMember !== true" class="img-wrapper">
+    <div class="img-wrapper">
       <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
     </div>
 
@@ -84,6 +80,7 @@ export default {
 
   margin-bottom: 1em;
 }
+
 .price-text p {
   line-height: 1.2;
 }

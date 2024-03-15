@@ -31,7 +31,6 @@ export default {
     },
     async onSubmit(_event) {
       // Add narvaro to database
-      // alert('Du är nu anmäld')
       const res = await createNarvaro(
         this.addNarvaroStore.personNum,
         this.addNarvaroStore.firstName,
@@ -49,6 +48,7 @@ export default {
         return
       }
 
+      // Push to next route
       if (
         !needsToPay(
           this.addNarvaroStore.type,
@@ -56,6 +56,7 @@ export default {
           this.addNarvaroStore.needLicense
         )
       ) {
+        this.addNarvaroStore.clearInputs()
         this.$router.push({ name: 'narvaroThanks' })
         return
       }
@@ -137,6 +138,7 @@ li > h3 {
   font-size: 1.5rem;
   font-weight: 600;
 }
+
 li > p {
   font-size: 2.25rem;
   line-height: 1.1;
