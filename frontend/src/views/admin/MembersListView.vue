@@ -298,7 +298,7 @@ export default {
 
   <dialog ref="addNewMemberDialog">
     <form class="new-member-form" @submit.prevent="addNewMember()" novalidate>
-      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
         <label for="personnummer-input">Personnummer:</label>
         <input
           class="input--primary"
@@ -318,7 +318,7 @@ export default {
         />
       </div>
 
-      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
         <label for="first-name-input">Förnamn:</label>
         <input
           class="input--primary"
@@ -334,7 +334,7 @@ export default {
         />
       </div>
 
-      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
         <label for="last-name-input">Efternamn:</label>
         <input
           class="input--primary"
@@ -350,7 +350,7 @@ export default {
         />
       </div>
 
-      <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
         <label for="date-input">Medlem t.o.m:</label>
         <input
           class="input--primary"
@@ -361,11 +361,16 @@ export default {
           v-model="newMember.endDate"
           @change="errorText = null"
         />
-        <p class="error-text">{{ errorText }}</p>
       </div>
+      <p class="error-text">{{ errorText }}</p>
 
       <nav>
-        <input type="button" value="Avbryt" class="btn--secondary" @click="closeAddNewMember" />
+        <input
+          type="button"
+          value="Avbryt"
+          class="btn--secondary size--small"
+          @click="closeAddNewMember"
+        />
         <input
           :disabled="
             newMember.personNum == null ||
@@ -379,7 +384,7 @@ export default {
           "
           type="submit"
           value="Lägg till"
-          class="btn--primary"
+          class="btn--primary size--small"
         />
       </nav>
     </form>
@@ -390,6 +395,17 @@ export default {
 main {
   flex-grow: 1;
   justify-content: start;
+}
+
+dialog {
+  width: auto;
+}
+dialog form {
+  align-items: start;
+  text-align: start;
+}
+dialog nav {
+  justify-content: space-between;
 }
 
 #personnummer-input {
