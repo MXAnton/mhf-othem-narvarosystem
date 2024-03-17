@@ -1,9 +1,4 @@
-import axios from 'axios'
-// Create an Axios instance with default headers
-const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_DOMAIN, // Set the base URL for all requests
-  withCredentials: true
-})
+import axiosInstance from './index'
 
 export async function login(_username, _password) {
   let response = await axiosInstance
