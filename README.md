@@ -1,5 +1,17 @@
 # MHF Othem Närvarosystem
 
+## Features
+### Non admin
+- Report närvaro with personnummer.
+- See how many people are reported today.
+  
+### Admin
+- See complete närvarolista for each day.
+- See all members.
+- Add members.
+- Edit/remove members.
+- Add new admin users.
+
 ## Frontend
 - Vue 3 (frontend framework)
 - Vue router (handles the routes)
