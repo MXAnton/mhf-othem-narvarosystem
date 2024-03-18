@@ -53,7 +53,7 @@ export default {
   <HeaderBackComp />
 
   <main>
-    <h1 class="mb--big">Admin</h1>
+    <h1 class="mb--big">Logga in som admin</h1>
 
     <div class="content__wrapper">
       <form @submit.prevent="onSubmit" novalidate>
