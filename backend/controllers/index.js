@@ -241,6 +241,8 @@ exports.createAdmin = async (req, res, next) => {
     return next(new AppError("No form username found", 404));
   if (!req.body.password)
     return next(new AppError("No form password found", 404));
+  if (req.body.password.length < 8)
+    return next(new AppError("Lösenordet måste vara minst 8 tecken.", 403));
 
   // hash password
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -249,7 +251,12 @@ exports.createAdmin = async (req, res, next) => {
     "INSERT INTO admin (username, password) VALUES(?, ?)",
     [req.body.username, hashedPassword],
     function (err, data, fields) {
-      if (err) return next(new AppError(err, 500));
+      if (err) {
+        if (err.sqlMessage?.includes("Duplicate entry")) {
+          return next(new AppError("Namnet är upptaget.", 409));
+        }
+        return next(new AppError(err, 500));
+      }
 
       res.status(201).json({
         status: "success",

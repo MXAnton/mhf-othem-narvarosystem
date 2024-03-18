@@ -18,10 +18,13 @@ export default {
     <nav>
       <ul>
         <li>
-          <RouterLink to="/narvarolista" class="btn--primary">Närvarolista</RouterLink>
+          <RouterLink to="/admin/narvarolista" class="btn--primary">Närvarolista</RouterLink>
         </li>
         <li>
-          <RouterLink to="/medlemslista" class="btn--primary">Medlemslista</RouterLink>
+          <RouterLink to="/admin/medlemslista" class="btn--primary">Medlemslista</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/admin/ny" class="btn--primary">Lägg till admin</RouterLink>
         </li>
       </ul>
     </nav>

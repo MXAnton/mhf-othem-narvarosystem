@@ -38,3 +38,16 @@ export async function logout() {
 
   return response
 }
+
+export async function createAdmin(_username, _password) {
+  let response = await axiosInstance
+    .post('admin', { username: _username, password: _password })
+    .then((res) => {
+      return res
+    })
+    .catch((err) => {
+      return err
+    })
+
+  return response
+}

@@ -30,7 +30,15 @@ const baseRoutes = [
     }
   },
   {
-    path: '/medlemslista',
+    path: '/admin/ny',
+    name: 'adminNew',
+    component: () => import('../views/admin/AdminNewView.vue'),
+    meta: {
+      onlyAdmin: true
+    }
+  },
+  {
+    path: '/admin/medlemslista',
     name: 'membersList',
     component: () => import('../views/admin/MembersListView.vue'),
     meta: {

@@ -2,7 +2,7 @@ import NarvaroNewView from '../views/narvaro/NarvaroNewView.vue'
 
 const addNarvaroRoutes = [
   {
-    path: '/narvarolista',
+    path: '/admin/narvarolista',
     name: 'narvaroList',
     component: () => import('../views/admin/NarvaroListView.vue'),
     meta: {
