@@ -24,7 +24,7 @@ router
   .route("/narvaro/amount/date/:date")
   .get(controllers.getNarvaroAmountDate);
 router
-  .route("/narvaro/date/:date/:personnummer")
+  .route("/narvaro/date/:date/personnummer/:personnummer")
   .get(controllers.getNarvaroDate);
 
 router

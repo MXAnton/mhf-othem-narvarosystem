@@ -43,7 +43,7 @@ export default {
     }
 
     const memberRes = await getMember(this.addNarvaroStore.personNum)
-    if (memberRes.data.status === 'success' && memberRes.data.length > 0) {
+    if (memberRes.data?.status === 'success' && memberRes.data?.length > 0) {
       if (memberRes.data.data[0].first_name?.length === 0) {
         this.addNarvaroStore.firstName = memberRes.data.data[0].first_name
       }
@@ -51,6 +51,9 @@ export default {
         this.addNarvaroStore.lastName = memberRes.data.data[0].last_name
       }
       this.addNarvaroStore.membershipEndDate = memberRes.data.data[0].end_date
+    } else if (memberRes.name === 'AxiosError') {
+      this.addNarvaroStore.membershipEndDate = null
+      this.$router.push({ name: 'narvaroNew' })
     } else {
       this.addNarvaroStore.membershipEndDate = null
     }

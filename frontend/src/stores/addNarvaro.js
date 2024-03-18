@@ -81,12 +81,18 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       if (narvaroDateRes.data?.length > 0) {
         return 'Personnummret är redan anmält idag.'
       }
+      if (narvaroDateRes.name === 'AxiosError') {
+        return narvaroDateRes.response?.data?.message
+      }
 
       const memberRes = await getMember(personNumToSubmit)
-      if (memberRes.data.status === 'success' && memberRes.data.length > 0) {
+      if (memberRes.data?.status === 'success' && memberRes.data?.length > 0) {
         this.firstName = memberRes.data.data[0].first_name
         this.lastName = memberRes.data.data[0].last_name
         this.membershipEndDate = memberRes.data.data[0].end_date
+      } else if (memberRes.name === 'AxiosError') {
+        this.membershipEndDate = null
+        return memberRes.response?.data?.message
       } else {
         this.membershipEndDate = null
       }

@@ -21,8 +21,7 @@ export async function getMember(_personnummer) {
       return res
     })
     .catch((err) => {
-      console.warn(err)
-      return null
+      return err
     })
 
   return response

@@ -1,4 +1,8 @@
 export function personNumFormatted(_personNum) {
+  if (_personNum == null) {
+    return null
+  }
+
   if (isPersonNumValid(_personNum) !== true) {
     return null
   }
@@ -7,6 +11,10 @@ export function personNumFormatted(_personNum) {
 }
 
 export function dateFormatted(_date) {
+  if (_date == null) {
+    return null
+  }
+
   const year = _date.getFullYear()
   // Adding 1 because months are zero-indexed
   // padStarts makes sure there is always 2 characters in month and date

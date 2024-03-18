@@ -4,6 +4,8 @@ const conn = require("../services/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const { isPersonNumValid, isNamesValid } = require("../helpers");
+
 exports.getAllMembers = (req, res, next) => {
   conn.query("SELECT * FROM member", function (err, data, fields) {
     if (err) return next(new AppError(err));
@@ -16,9 +18,11 @@ exports.getAllMembers = (req, res, next) => {
 };
 
 exports.getMember = (req, res, next) => {
-  if (!req.params.personnummer) {
-    return next(new AppError("No member personnummer found", 404));
+  const personNumRes = isPersonNumValid(req.params.personnummer);
+  if (personNumRes !== true) {
+    return next(new AppError(personNumRes, 400));
   }
+
   conn.query(
     "SELECT * FROM member WHERE personnummer = ?",
     [req.params.personnummer],
@@ -35,6 +39,14 @@ exports.getMember = (req, res, next) => {
 
 exports.createMember = (req, res, next) => {
   if (!req.body) return next(new AppError("No form data found", 404));
+  const personNumRes = isPersonNumValid(req.body.personnummer);
+  if (personNumRes !== true) {
+    return next(new AppError(personNumRes, 400));
+  }
+  const namesRes = isNamesValid(req.body.first_name, req.body.last_name);
+  if (namesRes !== true) {
+    return next(new AppError(namesRes, 400));
+  }
 
   conn.query(
     "INSERT INTO member (personnummer, first_name, last_name, end_date) VALUES(?, ?, ?, ?)",
@@ -45,7 +57,13 @@ exports.createMember = (req, res, next) => {
       req.body.end_date,
     ],
     function (err, data, fields) {
-      if (err) return next(new AppError(err, 500));
+      if (err) {
+        if (err.sqlMessage?.includes("Duplicate entry")) {
+          return next(new AppError("Personnummret är redan medlem.", 409));
+        }
+        return next(new AppError(err, 500));
+      }
+
       res.status(201).json({
         status: "success",
         message: "member created!",
@@ -58,6 +76,14 @@ exports.updateMember = (req, res, next) => {
   if (!req.params.id) {
     return next(new AppError("No member id found", 404));
   }
+  const personNumRes = isPersonNumValid(req.body.personnummer);
+  if (personNumRes !== true) {
+    return next(new AppError(personNumRes, 400));
+  }
+  const namesRes = isNamesValid(req.body.first_name, req.body.last_name);
+  if (namesRes !== true) {
+    return next(new AppError(namesRes, 400));
+  }
 
   conn.query(
     "UPDATE member SET personnummer=?, first_name=?, last_name=?, end_date=? WHERE id=?",
@@ -69,7 +95,13 @@ exports.updateMember = (req, res, next) => {
       req.params.id,
     ],
     function (err, data, fields) {
-      if (err) return next(new AppError(err, 500));
+      if (err) {
+        if (err.sqlMessage?.includes("Duplicate entry")) {
+          return next(new AppError("Personnummret är redan medlem.", 409));
+        }
+        return next(new AppError(err, 500));
+      }
+
       res.status(201).json({
         status: "success",
         message: "member updated!",
@@ -161,8 +193,9 @@ exports.getNarvaroAmountDate = (req, res, next) => {
 };
 
 exports.getNarvaroDate = (req, res, next) => {
-  if (!req.params.personnummer) {
-    return next(new AppError("No personnummer found", 404));
+  const personNumRes = isPersonNumValid(req.params.personnummer);
+  if (personNumRes !== true) {
+    return next(new AppError(personNumRes, 400));
   }
   if (!req.params.date) {
     return next(new AppError("No date found", 404));
@@ -189,6 +222,20 @@ exports.getNarvaroDate = (req, res, next) => {
 
 exports.createNarvaro = (req, res, next) => {
   if (!req.body) return next(new AppError("No form data found", 404));
+  const personNumRes = isPersonNumValid(req.body.personnummer);
+  if (personNumRes !== true) {
+    return next(new AppError(personNumRes, 400));
+  }
+  const namesRes = isNamesValid(req.body.first_name, req.body.last_name);
+  if (namesRes !== true) {
+    return next(new AppError(namesRes, 400));
+  }
+  // if (!req.body.personnummer)
+  //   return next(new AppError("No personnummer found", 404));
+  // if (!req.body.first_name)
+  //   return next(new AppError("No first name found", 404));
+  // if (!req.body.last_name) return next(new AppError("No last name found", 404));
+  if (!req.body.type) return next(new AppError("No type found", 404));
 
   const currentYear = new Date().getFullYear();
 

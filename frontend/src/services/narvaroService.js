@@ -48,12 +48,11 @@ export async function getNarvaroAmountToday() {
 
 export async function getNarvaroDate(_date, _personnummer) {
   let response = await axiosInstance
-    .get(`narvaro/date/${_date}/${_personnummer}`)
+    .get(`narvaro/date/${_date}/personnummer/${_personnummer}`)
     .then((res) => {
       return res
     })
     .catch((err) => {
-      console.warn(err)
       return err
     })
 

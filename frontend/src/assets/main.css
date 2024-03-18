@@ -143,6 +143,7 @@ label {
   width: 100%;
   padding: 0.3em;
   border-radius: 0.25em;
+  margin: 0 auto;
 
   transition: border-color 0.2s ease-in-out;
 }
