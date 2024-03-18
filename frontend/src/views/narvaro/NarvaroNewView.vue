@@ -54,7 +54,10 @@ export default {
 
     <div class="content__wrapper">
       <form @submit.prevent="onSubmit" novalidate>
-        <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+        <div
+          class="input--primary__wrapper personnummer-input"
+          :class="{ error: errorText != null }"
+        >
           <label for="personnummer-input">Personnummer:</label>
           <input
             class="input--primary"
@@ -101,10 +104,8 @@ h2 {
   font-size: 5rem;
 }
 
-#personnummer-input {
+.personnummer-input {
   font-size: 4rem;
-  text-align: center;
-  width: 8.2em;
 }
 
 .btn--primary {
@@ -115,7 +116,7 @@ h2 {
   h2 {
     font-size: 4rem;
   }
-  #personnummer-input {
+  .personnummer-input {
     font-size: 3rem;
   }
 }

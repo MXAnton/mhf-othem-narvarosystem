@@ -80,10 +80,13 @@ export default {
 
       <h2 class="size--normal">{{ header }}</h2>
 
-      <div class="input--primary__wrapper size--small" :class="{ error: errorText != null }">
+      <div
+        class="input--primary__wrapper personnummer-input size--small"
+        :class="{ error: errorText != null }"
+      >
         <label :for="idStart + '-personnummer-input'">Personnummer:</label>
         <input
-          class="input--primary personnummer-input"
+          class="input--primary"
           type="text"
           :id="idStart + '-personnummer-input'"
           :name="idStart + '-personnummer-input'"

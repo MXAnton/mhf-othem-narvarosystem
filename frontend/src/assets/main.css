@@ -126,7 +126,7 @@ label {
 }
 .input--primary__wrapper label {
   margin-bottom: 0.1em;
-  font-size: 0.6em;
+  font-size: 0.4em;
 }
 
 .input--primary {
@@ -165,7 +165,7 @@ label {
   border-color: var(--c-red);
 }
 
-.personnummer-input {
+.personnummer-input input {
   text-align: center;
   width: 8.5em;
 }

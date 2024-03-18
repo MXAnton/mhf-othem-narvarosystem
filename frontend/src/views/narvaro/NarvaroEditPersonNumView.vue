@@ -61,7 +61,10 @@ export default {
 
     <div class="content__wrapper">
       <form @submit.prevent="onSubmit" novalidate>
-        <div class="input--primary__wrapper" :class="{ error: errorText != null }">
+        <div
+          class="input--primary__wrapper personnummer-input"
+          :class="{ error: errorText != null }"
+        >
           <label for="personnummer-input">Personnummer:</label>
           <input
             class="input--primary"
@@ -99,13 +102,11 @@ export default {
 </template>
 
 <style scoped>
-#personnummer-input {
+.personnummer-input {
   font-size: 4rem;
-  text-align: center;
-  width: 8.2em;
 }
 @media (max-width: 600px) {
-  #personnummer-input {
+  .personnummer-input {
     font-size: 3rem;
   }
 }
