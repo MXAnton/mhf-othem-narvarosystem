@@ -108,9 +108,9 @@ updateMemberlistFromDropbox() {
 }
 
 #### RUN FUNCTIONS
-# uploadDatabaseBackup
-# uploadFormattedNarvaro
-# uploadFormattedMemberlistBackup
+uploadDatabaseBackup
+uploadFormattedNarvaro
+uploadFormattedMemberlistBackup
 updateMemberlistFromDropbox
 
 #### CLEAN UP
