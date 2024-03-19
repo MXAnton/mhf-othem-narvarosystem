@@ -25,8 +25,14 @@
 - bcryptjs (cryptates the passwords)
 - jsonwebtoken (stores admin login token to stay logged in)
 - MySQL (database)
+- Dropbox-Uploader (submodule, handles connection with Dropbox App)
 
-## Automatic Backups
+## Backups
+Backups och medlemslista lagras på en Dropbox App: `https://www.dropbox.com/developers/apps/info/qynylmh8glqxe05`.
+För att använda Dropbox App används submodulen Dropbox-Uploader.
+02.00 varje måndag körs ett cron job på närvarosystemet. Då skapas här en backup på databasen, en csv-formatterad fil med all närvaro för nuvarande år och en csv-formatterad fil som backup på medlemslistan. Efter det hämtar närvarosystemet den nya medlemslistan härifrån och laddar upp den i databasen.
+Varje gång medlemslistan ändras genom närvarosystemet skapas en ny backup och den aktiva medlemslistan här i Dropbox uppdateras.
+### Automatic Backups
 Open cron editor:
 `crontab -e`
 
