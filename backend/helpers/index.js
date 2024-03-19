@@ -1,3 +1,5 @@
+const shell = require("shelljs");
+
 module.exports = {
   isPersonNumValid(_personNum) {
     if (_personNum == null) {
@@ -67,5 +69,9 @@ module.exports = {
     }
 
     return true;
+  },
+
+  uploadMemberlist() {
+    shell.exec("./scripts/uploadMemberlist.sh");
   },
 };

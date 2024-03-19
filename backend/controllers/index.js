@@ -4,7 +4,11 @@ const conn = require("../services/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const { isPersonNumValid, isNamesValid } = require("../helpers");
+const {
+  isPersonNumValid,
+  isNamesValid,
+  uploadMemberlist,
+} = require("../helpers");
 
 exports.getAllMembers = (req, res, next) => {
   conn.query("SELECT * FROM member", function (err, data, fields) {
@@ -64,6 +68,8 @@ exports.createMember = (req, res, next) => {
         return next(new AppError(err, 500));
       }
 
+      uploadMemberlist();
+
       res.status(201).json({
         status: "success",
         message: "member created!",
@@ -102,6 +108,8 @@ exports.updateMember = (req, res, next) => {
         return next(new AppError(err, 500));
       }
 
+      uploadMemberlist();
+
       res.status(201).json({
         status: "success",
         message: "member updated!",
@@ -119,6 +127,9 @@ exports.deleteMember = (req, res, next) => {
     [req.params.id],
     function (err, fields) {
       if (err) return next(new AppError(err, 500));
+
+      uploadMemberlist();
+
       res.status(204).json({
         status: "success",
         message: "member deleted!",
