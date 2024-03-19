@@ -31,4 +31,4 @@ Open cron editor:
 `crontab -e`
 
 Run this to setup cronjob each monday 02.00:
-`0 2 * * 1 /path/to/backup.sh`
+`0 2 * * 1 autoBackup.sh`
