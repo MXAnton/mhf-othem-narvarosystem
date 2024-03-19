@@ -5,9 +5,9 @@
 # Adjust the path if your .env file is located elsewhere
 source .env
 
-# Destination directory for backups
+# Temp destination directory for backups
 backup_dir="tempBackups"
-# Create the backup directory if it doesn't exist
+# Create the temp backup directory if it doesn't exist
 mkdir -p "$backup_dir"
 
 #### DEFINE FUNCTIONS
