@@ -1,3 +1,3 @@
-[submodule "Dropbox-Uploader"]
-	path = Dropbox-Uploader
+[submodule "backend/Dropbox-Uploader"]
+	path = backend/Dropbox-Uploader
 	url = https://github.com/andreafabrizi/Dropbox-Uploader.git
