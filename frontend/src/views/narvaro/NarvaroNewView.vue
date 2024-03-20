@@ -48,7 +48,10 @@ export default {
 <template>
   <main>
     <h1 class="sub-header">
-      Välkommen! <span>{{ narvaroAmountToday }}st anmälda idag</span>
+      Välkommen!
+      <span
+        >{{ narvaroAmountToday }}st {{ narvaroAmountToday === 1 ? 'anmäld' : 'anmälda' }} idag</span
+      >
     </h1>
     <h2 class="mb--big">Anmäl dig nedan</h2>
 
