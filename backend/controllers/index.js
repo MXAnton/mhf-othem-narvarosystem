@@ -79,12 +79,8 @@ exports.createMember = (req, res, next) => {
 };
 
 exports.updateMember = (req, res, next) => {
-  if (!req.params.id) {
-    return next(new AppError("No member id found", 404));
-  }
-  const personNumRes = isPersonNumValid(req.body.personnummer);
-  if (personNumRes !== true) {
-    return next(new AppError(personNumRes, 400));
+  if (!req.params.personnummer) {
+    return next(new AppError("No member personnummer found", 404));
   }
   const namesRes = isNamesValid(req.body.first_name, req.body.last_name);
   if (namesRes !== true) {
@@ -92,13 +88,12 @@ exports.updateMember = (req, res, next) => {
   }
 
   conn.query(
-    "UPDATE member SET personnummer=?, first_name=?, last_name=?, end_date=? WHERE id=?",
+    "UPDATE member SET first_name=?, last_name=?, end_date=? WHERE personnummer=?",
     [
-      req.body.personnummer,
       req.body.first_name,
       req.body.last_name,
       req.body.end_date,
-      req.params.id,
+      req.params.personnummer,
     ],
     function (err, data, fields) {
       if (err) {
@@ -119,12 +114,12 @@ exports.updateMember = (req, res, next) => {
 };
 
 exports.deleteMember = (req, res, next) => {
-  if (!req.params.id) {
-    return next(new AppError("No member id found", 404));
+  if (!req.params.personnummer) {
+    return next(new AppError("No member personnummer found", 404));
   }
   conn.query(
-    "DELETE FROM member WHERE id=?",
-    [req.params.id],
+    "DELETE FROM member WHERE personnummer=?",
+    [req.params.personnummer],
     function (err, fields) {
       if (err) return next(new AppError(err, 500));
 

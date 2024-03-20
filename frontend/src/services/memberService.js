@@ -45,10 +45,9 @@ export async function createMember(_personnummer, _firstName, _lastName, _endDat
   return response
 }
 
-export async function updateMember(_id, _personnummer, _firstName, _lastName, _endDate) {
+export async function updateMember(_personnummer, _firstName, _lastName, _endDate) {
   let response = await axiosInstance
-    .put('member/' + _id, {
-      personnummer: _personnummer,
+    .put('member/' + _personnummer, {
       first_name: _firstName,
       last_name: _lastName,
       end_date: _endDate
@@ -63,9 +62,9 @@ export async function updateMember(_id, _personnummer, _firstName, _lastName, _e
   return response
 }
 
-export async function deleteMember(_id) {
+export async function deleteMember(_personnummer) {
   let response = await axiosInstance
-    .delete('member/' + _id)
+    .delete('member/' + _personnummer)
     .then((res) => {
       return res
     })

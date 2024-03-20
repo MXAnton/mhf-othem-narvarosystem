@@ -7,9 +7,9 @@ router
   .route("/member")
   .get(middleware.authorize, controllers.getAllMembers)
   .post(middleware.authorize, controllers.createMember);
-router.route("/member/:personnummer").get(controllers.getMember);
 router
-  .route("/member/:id")
+  .route("/member/:personnummer")
+  .get(controllers.getMember)
   .put(middleware.authorize, controllers.updateMember)
   .delete(middleware.authorize, controllers.deleteMember);
 

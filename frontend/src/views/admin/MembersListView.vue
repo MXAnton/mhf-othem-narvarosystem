@@ -49,9 +49,9 @@ export default {
 
       this.membersList = res.data.data
 
-      this.lastSortBy.column = 'id'
+      this.lastSortBy.column = 'personNum'
       this.lastSortBy.ascending = true
-      this.sortByColumn('id')
+      this.sortByColumn('personNum')
     },
 
     sortByColumn(_column) {
@@ -62,9 +62,6 @@ export default {
       }
 
       switch (_column) {
-        case 'personNum':
-          this.membersList.sort((a, b) => a.personnummer.localeCompare(b.personnummer))
-          break
         case 'firstName':
           this.membersList.sort((a, b) => a.first_name.localeCompare(b.first_name))
           break
@@ -75,10 +72,8 @@ export default {
           this.membersList.sort((a, b) => a.end_date.localeCompare(b.end_date))
           break
         default:
-          // Sort the array of objects by the 'id' property
-          this.membersList.sort((a, b) => {
-            return a.id - b.id
-          })
+          // Sort the array of objects by the 'personNum' property
+          this.membersList.sort((a, b) => a.personnummer.localeCompare(b.personnummer))
           break
       }
 
@@ -89,9 +84,9 @@ export default {
       this.lastSortBy.column = _column
     },
 
-    async deleteMember(_id) {
+    async deleteMember(_personnummer) {
       if (confirm('Är du säker du vill RADERA denna medlem PERMANENT?')) {
-        await deleteMember(_id)
+        await deleteMember(_personnummer)
 
         this.getMembers()
 
@@ -126,7 +121,6 @@ export default {
       this.editedMember.lastName = this.editedMember.lastName.trim()
 
       const createRes = await updateMember(
-        this.editedMember.id,
         this.editedMember.personNum,
         this.editedMember.firstName,
         this.editedMember.lastName,
@@ -212,14 +206,6 @@ export default {
       <tr>
         <th
           :class="{
-            asc: lastSortBy.ascending && lastSortBy.column === 'id',
-            desc: !lastSortBy.ascending && lastSortBy.column === 'id'
-          }"
-        >
-          <button @click="sortByColumn('id')">Id:</button>
-        </th>
-        <th
-          :class="{
             asc: lastSortBy.ascending && lastSortBy.column === 'personNum',
             desc: !lastSortBy.ascending && lastSortBy.column === 'personNum'
           }"
@@ -251,8 +237,7 @@ export default {
           <button @click="sortByColumn('endDate')">Medlem t.o.m:</button>
         </th>
       </tr>
-      <tr v-for="row in membersList" :key="row.id">
-        <td>{{ row.id }}</td>
+      <tr v-for="row in membersList" :key="row.personnummer">
         <td>{{ personNumFormatted(row.personnummer) }}</td>
         <td>{{ row.first_name }}</td>
         <td>{{ row.last_name }}</td>
@@ -260,10 +245,6 @@ export default {
         <td class="column--edit">
           <button @click="openEditMember(row)">✎</button>
         </td>
-        <!-- <td v-else class="column--editing">
-          <button @click="saveMember(row.id)">Save</button>
-          <button @click="deleteMember(row.personnummer)" class="btn--danger">Delete</button>
-        </td> -->
       </tr>
     </table>
   </main>
@@ -298,7 +279,7 @@ export default {
       type="button"
       value="Radera"
       class="btn--primary size--small btn--danger"
-      @click="deleteMember(editedMember.id)"
+      @click="deleteMember(editedMember.personNum)"
   /></MemberFormDialog>
 </template>
 
