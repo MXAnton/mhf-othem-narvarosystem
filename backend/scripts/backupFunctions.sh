@@ -80,6 +80,32 @@ uploadFormattedNarvaro() {
 
   echo "Finished uploading formatted narvaro of current year."
 }
+uploadFormattedNarvaroToDb() {
+  echo "Start update database narvaro."
+
+  year=$1
+  input_file="$backup_dir/GOOD_oldFormattedNarvaro_$year.csv"
+  temporary_table="temp_narvaro_$year"
+
+  # MySQL query to update the member table
+  SQL_UPDATE="CREATE TABLE IF NOT EXISTS narvaro_$year LIKE narvaro_2024;
+    CREATE TEMPORARY TABLE $temporary_table LIKE narvaro_2024;
+    LOAD DATA LOCAL INFILE '$input_file'
+    IGNORE
+    INTO TABLE $temporary_table
+    FIELDS TERMINATED BY ','
+    LINES TERMINATED BY '\n'
+    IGNORE 1 LINES
+    (date, personnummer, first_name, last_name, type, has_license);
+    -- Insert or update rows in narvaro table based on temp_narvaro_year
+    INSERT INTO narvaro_$year (date, personnummer, first_name, last_name, type, has_license)
+    SELECT date, personnummer, first_name, last_name, type, has_license FROM $temporary_table;"
+
+  # Execute MySQL query to update member table
+  mysql --local_infile=1 -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" -D "$DB_NAME" -e "$SQL_UPDATE"
+
+  echo "Finished updating database narvaro."
+}
 
 uploadFormattedMemberlist() {
   output_file=$1

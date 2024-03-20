@@ -9,7 +9,7 @@ export default {
   components: { HeaderBackComp },
   data() {
     return {
-      minDate: '2023-01-01',
+      minDate: '2020-01-01',
       maxDate: '2023-12-31',
       date: null,
       narvaroList: null
