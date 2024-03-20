@@ -91,6 +91,15 @@ export function isNamesValid(_firstName, _lastName) {
     return 'Skriv in ditt efternamn.'
   }
 
+  // Define a blacklist of characters to check
+  const blacklist = /[{}\[\]\(\)=,.*^%$#@!~`<>0-9]/
+  if (blacklist.test(_firstName)) {
+    return 'Ogiltiga tecken i förnamn.'
+  }
+  if (blacklist.test(_lastName)) {
+    return 'Ogiltiga tecken i efternamn.'
+  }
+
   return true
 }
 
