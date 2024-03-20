@@ -80,7 +80,14 @@ export default {
 
       <h2 class="size--normal">{{ header }}</h2>
 
+      <div v-if="idStart === 'edit'" class="input--primary__wrapper personnummer-input size--small">
+        <h3 class="label">Personnummer:</h3>
+        <p>
+          {{ member.personNum }}
+        </p>
+      </div>
       <div
+        v-else
         class="input--primary__wrapper personnummer-input size--small"
         :class="{ error: errorText != null }"
       >
