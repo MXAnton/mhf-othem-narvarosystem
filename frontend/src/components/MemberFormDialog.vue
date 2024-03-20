@@ -19,12 +19,39 @@ export default {
       firstName: null,
       lastName: null,
       endDate: null
+    },
+
+    sending: {
+      type: Boolean,
+      default: false
     }
   },
 
   data() {
     return {
-      modal: null
+      modal: null,
+
+      sendingAnimIntervalId: null,
+      sendingAnimState: 0
+    }
+  },
+
+  watch: {
+    sending(_newValue) {
+      if (_newValue === true) {
+        this.sendingAnimState = 0
+
+        this.sendingAnimIntervalId = setInterval(() => {
+          if (this.sendingAnimState + 1 > 3) {
+            this.sendingAnimState = 0
+          } else {
+            this.sendingAnimState++
+          }
+        }, 200)
+      } else {
+        clearInterval(this.sendingAnimIntervalId)
+        this.sendingAnimIntervalId = null
+      }
     }
   },
 
@@ -73,7 +100,10 @@ export default {
 
 <template>
   <dialog ref="memberModal">
-    <form @submit.prevent="$emit('submitForm')" novalidate>
+    <div v-if="sending === true" class="sending">
+      <h2>Skickar{{ '.'.repeat(sendingAnimState) }}</h2>
+    </div>
+    <form v-else @submit.prevent="$emit('submitForm')" novalidate>
       <nav>
         <input type="button" value="Stäng" class="link--primary" @click="closeModal" />
       </nav>
@@ -191,5 +221,13 @@ dialog nav {
 }
 dialog nav:first-child {
   justify-content: end;
+}
+
+.sending {
+  min-height: 26rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -32,7 +32,9 @@ export default {
         lastName: null,
         endDate: null
       },
-      newMemberErrorText: null
+      newMemberErrorText: null,
+
+      sending: false
     }
   },
 
@@ -86,11 +88,15 @@ export default {
 
     async deleteMember(_personnummer) {
       if (confirm('Är du säker du vill RADERA denna medlem PERMANENT?')) {
+        this.sending = true
+
         await deleteMember(_personnummer)
 
         this.getMembers()
 
         this.$refs.editMemberModal.closeModal()
+
+        this.sending = false
       }
     },
 
@@ -104,10 +110,13 @@ export default {
       this.$refs.editMemberModal.openModal()
     },
     async updateMember() {
+      this.sending = true
+
       // Check personNum
       const isPersunNumValidRes = isPersonNumValid(this.editedMember.personNum)
       if (isPersunNumValidRes !== true) {
         this.editedMemberErrorText = isPersunNumValidRes
+        this.sending = false
         return
       }
 
@@ -115,6 +124,7 @@ export default {
       const isNamesValidRes = isNamesValid(this.editedMember.firstName, this.editedMember.lastName)
       if (isNamesValidRes !== true) {
         this.editedMemberErrorText = isNamesValidRes
+        this.sending = false
         return
       }
       this.editedMember.firstName = this.editedMember.firstName.trim()
@@ -128,22 +138,29 @@ export default {
       )
       if (createRes == null) {
         this.editedMemberErrorText = 'Oväntat fel'
+        this.sending = false
         return
       }
       if (createRes.data?.status !== 'success') {
         this.editedMemberErrorText = createRes.response?.data?.message
+        this.sending = false
         return
       }
 
       this.getMembers()
       this.$refs.editMemberModal.closeModal()
+
+      this.sending = false
     },
 
     async addNewMember() {
+      this.sending = true
+
       // Check personNum
       const isPersunNumValidRes = isPersonNumValid(this.newMember.personNum)
       if (isPersunNumValidRes !== true) {
         this.newMemberErrorText = isPersunNumValidRes
+        this.sending = false
         return
       }
 
@@ -151,6 +168,7 @@ export default {
       const isNamesValidRes = isNamesValid(this.newMember.firstName, this.newMember.lastName)
       if (isNamesValidRes !== true) {
         this.newMemberErrorText = isNamesValidRes
+        this.sending = false
         return
       }
       this.newMember.firstName = this.newMember.firstName.trim()
@@ -164,16 +182,20 @@ export default {
       )
       if (createRes == null) {
         this.newMemberErrorText = 'Oväntat fel'
+        this.sending = false
         return
       }
       if (createRes.data?.status !== 'success') {
         this.newMemberErrorText = createRes.response?.data?.message
+        this.sending = false
         return
       }
 
       this.resetNewMember()
       this.getMembers()
       this.$refs.newMemberModal.closeModal()
+
+      this.sending = false
     },
     resetNewMember() {
       this.newMember = {
@@ -257,6 +279,7 @@ export default {
     :member="newMember"
     @submitForm="addNewMember()"
     @changedInput="newMemberErrorText = null"
+    :sending="sending"
   >
     <input
       type="button"
@@ -275,6 +298,7 @@ export default {
     :member="editedMember"
     @submitForm="updateMember()"
     @changedInput="editedMemberErrorText = null"
+    :sending="sending"
     ><input
       type="button"
       value="Radera"
