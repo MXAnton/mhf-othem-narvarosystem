@@ -63,8 +63,8 @@ export default {
       <p v-if="weekDayIndex === 1"><i>TIPS: MHF-medlemmar tränar gratis på måndagar ;)</i></p>
     </div>
 
-    <div class="img-wrapper">
-      <img src="@/assets/images/MHF-Ungdom-logo.png" alt="MHF Ungdom logga." />
+    <div class="img-wrapper swish-qr">
+      <img src="@/assets/images/swish-qr-code.png" alt="Swish QR-kod." />
     </div>
 
     <RouterLink class="btn--primary mt--big" :to="{ name: 'narvaroThanks' }">Färdig</RouterLink>
@@ -90,5 +90,9 @@ export default {
 .price-text i {
   font-style: italic;
   font-weight: 300;
+}
+
+.swish-qr {
+  max-width: calc(max(50svh, 20rem));
 }
 </style>
