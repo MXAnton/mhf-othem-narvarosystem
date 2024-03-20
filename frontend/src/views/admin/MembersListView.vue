@@ -34,7 +34,9 @@ export default {
       },
       newMemberErrorText: null,
 
-      sending: false
+      sending: false,
+      sendingAnimIntervalId: null,
+      sendingAnimState: 0
     }
   },
 
@@ -88,7 +90,7 @@ export default {
 
     async deleteMember(_personnummer) {
       if (confirm('Är du säker du vill RADERA denna medlem PERMANENT?')) {
-        this.sending = true
+        this.startSending()
 
         await deleteMember(_personnummer)
 
@@ -96,7 +98,7 @@ export default {
 
         this.$refs.editMemberModal.closeModal()
 
-        this.sending = false
+        this.stopSending()
       }
     },
 
@@ -110,21 +112,19 @@ export default {
       this.$refs.editMemberModal.openModal()
     },
     async updateMember() {
-      this.sending = true
+      this.startSending()
 
       // Check personNum
       const isPersunNumValidRes = isPersonNumValid(this.editedMember.personNum)
       if (isPersunNumValidRes !== true) {
-        this.editedMemberErrorText = isPersunNumValidRes
-        this.sending = false
+        this.setEditedMemberError(isPersunNumValidRes)
         return
       }
 
       // Check names
       const isNamesValidRes = isNamesValid(this.editedMember.firstName, this.editedMember.lastName)
       if (isNamesValidRes !== true) {
-        this.editedMemberErrorText = isNamesValidRes
-        this.sending = false
+        this.setEditedMemberError(isNamesValidRes)
         return
       }
       this.editedMember.firstName = this.editedMember.firstName.trim()
@@ -137,38 +137,38 @@ export default {
         this.editedMember.endDate
       )
       if (createRes == null) {
-        this.editedMemberErrorText = 'Oväntat fel'
-        this.sending = false
+        this.setEditedMemberError('Oväntat fel')
         return
       }
       if (createRes.data?.status !== 'success') {
-        this.editedMemberErrorText = createRes.response?.data?.message
-        this.sending = false
+        this.setEditedMemberError(createRes.response?.data?.message)
         return
       }
 
       this.getMembers()
       this.$refs.editMemberModal.closeModal()
 
-      this.sending = false
+      this.stopSending()
+    },
+    setEditedMemberError(_error) {
+      this.editedMemberErrorText = _error
+      this.stopSending()
     },
 
     async addNewMember() {
-      this.sending = true
+      this.startSending()
 
       // Check personNum
       const isPersunNumValidRes = isPersonNumValid(this.newMember.personNum)
       if (isPersunNumValidRes !== true) {
-        this.newMemberErrorText = isPersunNumValidRes
-        this.sending = false
+        this.setNewMemberError(isPersunNumValidRes)
         return
       }
 
       // Check names
       const isNamesValidRes = isNamesValid(this.newMember.firstName, this.newMember.lastName)
       if (isNamesValidRes !== true) {
-        this.newMemberErrorText = isNamesValidRes
-        this.sending = false
+        this.setNewMemberError(isNamesValidRes)
         return
       }
       this.newMember.firstName = this.newMember.firstName.trim()
@@ -181,13 +181,11 @@ export default {
         this.newMember.endDate
       )
       if (createRes == null) {
-        this.newMemberErrorText = 'Oväntat fel'
-        this.sending = false
+        this.setNewMemberError('Oväntat fel')
         return
       }
       if (createRes.data?.status !== 'success') {
-        this.newMemberErrorText = createRes.response?.data?.message
-        this.sending = false
+        this.setNewMemberError(createRes.response?.data?.message)
         return
       }
 
@@ -195,7 +193,7 @@ export default {
       this.getMembers()
       this.$refs.newMemberModal.closeModal()
 
-      this.sending = false
+      this.stopSending()
     },
     resetNewMember() {
       this.newMember = {
@@ -205,6 +203,30 @@ export default {
         endDate: null
       }
       this.newMemberErrorText = null
+    },
+    setNewMemberError(_error) {
+      this.newMemberErrorText = _error
+      this.stopSending()
+    },
+
+    startSending() {
+      this.sending = true
+
+      this.sendingAnimState = 0
+
+      this.sendingAnimIntervalId = setInterval(() => {
+        if (this.sendingAnimState + 1 > 3) {
+          this.sendingAnimState = 0
+        } else {
+          this.sendingAnimState++
+        }
+      }, 200)
+    },
+    stopSending() {
+      this.sending = false
+
+      clearInterval(this.sendingAnimIntervalId)
+      this.sendingAnimIntervalId = null
     }
   },
 
@@ -259,7 +281,12 @@ export default {
           <button @click="sortByColumn('endDate')">Medlem t.o.m:</button>
         </th>
       </tr>
-      <tr v-for="row in membersList" :key="row.personnummer">
+      <tr v-if="sending === true" class="sending">
+        <td colspan="4">
+          <p>Laddar{{ '.'.repeat(sendingAnimState) }}</p>
+        </td>
+      </tr>
+      <tr v-else v-for="row in membersList" :key="row.personnummer">
         <td>{{ personNumFormatted(row.personnummer) }}</td>
         <td>{{ row.first_name }}</td>
         <td>{{ row.last_name }}</td>
@@ -401,5 +428,10 @@ td.column--editing > button {
   background-color: var(--color-btn-bg);
   color: white;
   border: none;
+}
+
+.sending p {
+  text-align: center;
+  font-size: 2em;
 }
 </style>
