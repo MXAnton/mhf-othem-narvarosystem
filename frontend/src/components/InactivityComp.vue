@@ -1,6 +1,4 @@
 <script>
-import { RouterLink } from 'vue-router'
-
 export default {
   props: {
     goToUrl: {
@@ -16,7 +14,7 @@ export default {
   data() {
     return {
       inactivityTimer: this.waitSeconds,
-      propmtTimer: this.waitSeconds,
+      promptTImer: this.waitSeconds,
       timerId: null,
 
       modal: null
@@ -44,13 +42,13 @@ export default {
           clearInterval(this.timerId)
           this.modal.showModal()
 
-          this.propmtTimer = this.waitSeconds
+          this.promptTImer = this.waitSeconds
           this.timerId = setInterval(() => {
             // Decrease the time by 1 second
-            this.propmtTimer--
+            this.promptTImer--
 
             // Check if time has reached 0
-            if (this.propmtTimer <= 0) {
+            if (this.promptTImer <= 0) {
               // Clear the interval if time has reached 0
               clearInterval(this.timerId)
               this.$router.push(this.goToUrl)
@@ -109,7 +107,7 @@ export default {
 <template>
   <dialog ref="timeoutModal">
     <h2>Varning!</h2>
-    <p class="mb--small">P.g.a inaktivitet avbryts närvaroanmälan om {{ propmtTimer }} sekunder!</p>
+    <p class="mb--small">P.g.a inaktivitet avbryts närvaroanmälan om {{ promptTImer }} sekunder!</p>
     <button class="btn--primary" @click="onStay()">Stanna</button>
   </dialog>
 </template>
