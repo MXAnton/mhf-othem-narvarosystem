@@ -18,6 +18,10 @@
 - Axios (handles API requests to backend)
 - Pinia (store that can be accessed globally)
 
+### Enviroment vars
+ - VITE_BACKEND_DOMAIN="" (example: "http://localhost:3000/")
+ - NODE_ENV="development"/"production"
+
 ## Backend
 - Node.js (server)
 - Express.js (handles incoming requests from frontend)
@@ -26,6 +30,17 @@
 - jsonwebtoken (stores admin login token to stay logged in)
 - MySQL (database)
 - Dropbox-Uploader (submodule, handles connection with Dropbox App)
+
+### Enviroment vars
+ - DB_HOST=""
+ - DB_USER=""
+ - DB_PASSWORD=""
+ - DB_NAME="mhf_narvaro"
+ - DB_BACKUPS_USER=""
+ - DB_BACKUPS_PASSWORD=""
+ - JWT_SECRET_KEY=""
+ - WHITELISTED_ORIGIN= (example: "http://localhost:5173")
+ - NODE_ENV="development"/"production"
 
 ## Backups
 Backups och medlemslista lagras på en Dropbox App: `https://www.dropbox.com/developers/apps/info/qynylmh8glqxe05`.
