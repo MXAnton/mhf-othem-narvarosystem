@@ -60,7 +60,9 @@ export default {
       this.modal.showModal()
     },
     closeModal() {
-      this.modal.close()
+      if (this.modal != null && this.modal.tagName === 'DIALOG') {
+        this.modal.close()
+      }
     },
 
     onClick(_event) {
@@ -83,23 +85,20 @@ export default {
   },
 
   mounted() {
-    this.modal = this.$refs.memberModal
+    const modalId = this.idStart + '-modal'
+    this.modal = document.getElementById(modalId)
 
-    this.modal.addEventListener('click', this.onClick)
-    this.modal.addEventListener('cancel', this.closeModal())
-    this.modal.addEventListener('close', this.closeModal())
-  },
-
-  beforeUnmount() {
-    this.modal.removeEventListener('click', this.onClick)
-    this.modal.removeEventListener('cancel', this.closeModal())
-    this.modal.removeEventListener('close', this.closeModal())
+    if (this.modal != null) {
+      this.modal.addEventListener('click', this.onClick)
+      this.modal.addEventListener('cancel', this.closeModal())
+      this.modal.addEventListener('close', this.closeModal())
+    }
   }
 }
 </script>
 
 <template>
-  <dialog ref="memberModal">
+  <dialog :id="idStart + '-modal'">
     <div v-if="sending === true" class="sending">
       <h2>Skickar{{ '.'.repeat(sendingAnimState) }}</h2>
     </div>
