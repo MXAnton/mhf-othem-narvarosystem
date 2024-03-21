@@ -8,7 +8,7 @@ cd "$SCRIPT_DIR" || exit
 
 # Load environment variables from .env file
 # Adjust the path if your .env file is located elsewhere
-source ".env"
+source "../.env"
 
 DROPBOX_UPLOADER="../Dropbox-Uploader/dropbox_uploader.sh"
 
@@ -29,7 +29,7 @@ uploadDatabaseBackup() {
   echo "Start upload database backup: $output_file"
 
   # Backup the MySQL database
-  mysqldump -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" >"$temp_output_file"
+  mysqldump -h "$DB_HOST" -u "$DB_BACKUPS_USER" -p"$DB_BACKUPS_PASSWORD" "$DB_NAME" >"$temp_output_file"
 
   # Upload temp file to dropbox
   $DROPBOX_UPLOADER upload "$temp_output_file" database/"$output_file"
@@ -70,7 +70,7 @@ uploadFormattedNarvaro() {
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;" |
-    mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" "$DB_NAME" | tr '\t' ',' | tr '_' '-' >"$temp_output_file"
+    mysql -h "$DB_HOST" -u "$DB_BACKUPS_USER" -p"$DB_BACKUPS_PASSWORD" "$DB_NAME" | tr '\t' ',' | tr '_' '-' >"$temp_output_file"
 
   # Upload temp file to dropbox
   $DROPBOX_UPLOADER upload "$temp_output_file" narvaro/"$output_file"
@@ -102,7 +102,7 @@ uploadFormattedNarvaroToDb() {
     SELECT date, personnummer, first_name, last_name, type, has_license FROM $temporary_table;"
 
   # Execute MySQL query to update member table
-  mysql --local_infile=1 -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" -D "$DB_NAME" -e "$SQL_UPDATE"
+  mysql --local_infile=1 -h "$DB_HOST" -u "$DB_BACKUPS_USER" -p"$DB_BACKUPS_PASSWORD" -D "$DB_NAME" -e "$SQL_UPDATE"
 
   echo "Finished updating database narvaro."
 }
@@ -118,7 +118,7 @@ uploadFormattedMemberlist() {
   SQL_QUERY="SELECT personnummer, first_name AS förnamn, last_name AS efternamn, end_date AS 'medlem t.o.m' FROM member;"
 
   # Execute MySQL query and save the result into a CSV file
-  mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" -D "$DB_NAME" -e "$SQL_QUERY" | tr '\t' ',' >"$temp_output_file"
+  mysql -h "$DB_HOST" -u "$DB_BACKUPS_USER" -p"$DB_BACKUPS_PASSWORD" -D "$DB_NAME" -e "$SQL_QUERY" | tr '\t' ',' >"$temp_output_file"
 
   # Upload temp file to dropbox
   $DROPBOX_UPLOADER upload "$temp_output_file" medlemslista/"$output_folder""$output_file"
@@ -172,7 +172,7 @@ updateMemberlistFromDropbox() {
     end_date = VALUES(end_date);"
 
   # Execute MySQL query to update member table
-  mysql --local_infile=1 -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" -D "$DB_NAME" -e "$SQL_UPDATE"
+  mysql --local_infile=1 -h "$DB_HOST" -u "$DB_BACKUPS_USER" -p"$DB_BACKUPS_PASSWORD" -D "$DB_NAME" -e "$SQL_UPDATE"
 
   # Remove temp file
   rm $temp_input_file
