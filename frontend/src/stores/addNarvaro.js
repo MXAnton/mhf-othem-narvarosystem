@@ -62,6 +62,14 @@ export const useAddNarvaroStore = defineStore('addNarvaro', {
       }
 
       return true
+    },
+
+    isOldMember(state) {
+      if (state.membershipEndDate == null || state.isActiveMember === true) {
+        return false
+      }
+
+      return true
     }
   },
   actions: {

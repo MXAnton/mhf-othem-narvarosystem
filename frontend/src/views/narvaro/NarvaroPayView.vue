@@ -25,12 +25,15 @@ export default {
         'torsdagar',
         'fredagar',
         'lördagar'
-      ]
+      ],
+      isOldMember: null
     }
   },
 
   created() {
     this.addNarvaroStore = useAddNarvaroStore()
+
+    this.isOldMember = this.addNarvaroStore.isOldMember
 
     this.weekDayIndex = new Date().getDay()
 
@@ -41,7 +44,10 @@ export default {
         this.addNarvaroStore.needLicense
       )
     ) {
-      this.$router.push({ name: 'narvaroThanks' })
+      this.$router.push({
+        name: 'narvaroThanks',
+        query: { isOldMember: this.isOldMember }
+      })
       return
     }
 
@@ -67,7 +73,11 @@ export default {
       <img src="@/assets/images/swish-qr-code.png" alt="Swish QR-kod." />
     </div>
 
-    <RouterLink class="btn--primary mt--big" :to="{ name: 'narvaroThanks' }">Färdig</RouterLink>
+    <RouterLink
+      class="btn--primary mt--big"
+      :to="{ name: 'narvaroThanks', query: { isOldMember: isOldMember } }"
+      >Färdig</RouterLink
+    >
   </main>
 
   <InactivityComp />

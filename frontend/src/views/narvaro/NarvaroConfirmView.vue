@@ -56,8 +56,12 @@ export default {
           this.addNarvaroStore.needLicense
         )
       ) {
+        const isOldMember = this.addNarvaroStore.isOldMember
         this.addNarvaroStore.clearInputs()
-        this.$router.push({ name: 'narvaroThanks' })
+        this.$router.push({
+          name: 'narvaroThanks',
+          query: { isOldMember: isOldMember }
+        })
         return
       }
       this.$router.push({ name: 'narvaroPay' })

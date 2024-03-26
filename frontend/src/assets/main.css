@@ -457,6 +457,9 @@ dialog[open]::backdrop {
   margin-bottom: 4rem;
 }
 
+.mt--small {
+  margin-top: 1rem;
+}
 .mt--big {
   margin-top: 3rem;
 }

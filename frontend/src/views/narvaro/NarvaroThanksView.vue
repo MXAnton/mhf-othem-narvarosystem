@@ -11,9 +11,13 @@ export default {
 
 <template>
   <main>
-    <h1 class="mb--big">Kör försiktigt!</h1>
+    <h1>Kör försiktigt!</h1>
+    <p class="mt--small" v-if="$route.query.isOldMember === 'true'">
+      Ditt medlemskap har utgått <br />
+      <span>(det kan ta ett tag innan det uppdateras i detta system)</span>
+    </p>
 
-    <RouterLink class="btn--primary mb--bigger" :to="{ name: 'narvaroNew' }">Ny anmälan</RouterLink>
+    <RouterLink class="btn--primary mt--big" :to="{ name: 'narvaroNew' }">Ny anmälan</RouterLink>
   </main>
 
   <InactivityComp />
@@ -22,5 +26,15 @@ export default {
 <style scoped>
 main {
   min-height: 80svh;
+}
+p {
+  font-size: 1.5rem;
+  line-height: 0.9;
+  font-style: italic;
+  color: var(--c-red);
+  text-align: center;
+}
+p > span {
+  font-size: 0.8em;
 }
 </style>
