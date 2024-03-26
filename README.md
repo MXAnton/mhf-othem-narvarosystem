@@ -41,6 +41,7 @@
  - JWT_SECRET_KEY=""
  - WHITELISTED_ORIGIN= (example: "http://localhost:5173")
  - NODE_ENV="development"/"production"
+ - PORT=4000
 
 ## Backups
 Backups och medlemslista lagras på en Dropbox App: `https://www.dropbox.com/developers/apps/info/qynylmh8glqxe05`.
