@@ -343,8 +343,8 @@ exports.login = (req, res, next) => {
       res.cookie("token", token, {
         httpOnly: true,
         maxAge: 1 * 60 * 60 * 1000, // 1 hour
-        secure: true, // Only set this if you are using HTTPS
-        sameSite: "none",
+        // secure: true, // Only set this if you are using HTTPS
+        sameSite: "strict",
       });
 
       res.status(200).json({
@@ -378,8 +378,8 @@ exports.logout = (req, res, next) => {
   res.cookie("token", "", {
     httpOnly: true,
     maxAge: 0,
-    secure: true,
-    sameSite: "none",
+    // secure: true,
+    sameSite: "strict",
   });
 
   res.status(200).json({
