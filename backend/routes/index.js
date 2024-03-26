@@ -23,6 +23,7 @@ router
 router
   .route("/narvaro/amount/date/:date")
   .get(controllers.getNarvaroAmountDate);
+router.route("/narvaro/amount/type/test/:personnummer").get(controllers.getTypeTestAmount);
 router
   .route("/narvaro/date/:date/personnummer/:personnummer")
   .get(controllers.getNarvaroDate);

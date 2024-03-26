@@ -4,7 +4,7 @@ import InactivityComp from '@/components/InactivityComp.vue'
 
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 
-import { createNarvaro } from '@/services/narvaroService'
+import { createNarvaro, getTypeTestAmount } from '@/services/narvaroService'
 import { personNumFormatted, isNamesValid, isPersonNumValid, needsToPay } from '@/helpers'
 
 export default {
@@ -57,10 +57,11 @@ export default {
         )
       ) {
         const isOldMember = this.addNarvaroStore.isOldMember
+        const testAmount = await getTypeTestAmount(this.addNarvaroStore.personNum)
         this.addNarvaroStore.clearInputs()
         this.$router.push({
           name: 'narvaroThanks',
-          query: { isOldMember: isOldMember }
+          query: { isOldMember: isOldMember, testAmount: testAmount }
         })
         return
       }

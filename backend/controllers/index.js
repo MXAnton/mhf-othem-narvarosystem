@@ -226,6 +226,29 @@ exports.getNarvaroDate = (req, res, next) => {
   );
 };
 
+exports.getTypeTestAmount = (req, res, next) => {
+  const personNumRes = isPersonNumValid(req.params.personnummer);
+  if (personNumRes !== true) {
+    return next(new AppError(personNumRes, 400));
+  }
+
+  const currentYear = new Date().getFullYear();
+
+  conn.query(
+    `SELECT * FROM narvaro_${currentYear} WHERE type='Prova på' AND personnummer=?`,
+    [req.params.personnummer],
+    function (err, data, fields) {
+      if (err) return next(new AppError(err, 500));
+
+      res.status(200).json({
+        status: "success",
+        length: data?.length,
+        data: data,
+      });
+    }
+  );
+};
+
 exports.createNarvaro = (req, res, next) => {
   if (!req.body) return next(new AppError("No form data found", 404));
   const personNumRes = isPersonNumValid(req.body.personnummer);

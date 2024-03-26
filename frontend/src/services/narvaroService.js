@@ -59,6 +59,20 @@ export async function getNarvaroDate(_date, _personnummer) {
   return response
 }
 
+export async function getTypeTestAmount(_personnummer) {
+  let response = await axiosInstance
+    .get(`narvaro/amount/type/test/${_personnummer}`)
+    .then((res) => {
+      return res.data?.length || 0
+    })
+    .catch((err) => {
+      console.warn(err)
+      return 0
+    })
+
+  return response
+}
+
 export async function createNarvaro(_personnummer, _firstName, _lastName, _type, _hasLicense) {
   let response = await axiosInstance
     .post('narvaro', {

@@ -6,6 +6,7 @@ import InactivityComp from '@/components/InactivityComp.vue'
 
 import { useAddNarvaroStore } from '@/stores/addNarvaro'
 import { needsToPay } from '@/helpers'
+import { getTypeTestAmount } from '@/services/narvaroService'
 
 export default {
   components: {
@@ -26,14 +27,16 @@ export default {
         'fredagar',
         'lördagar'
       ],
-      isOldMember: null
+      isOldMember: null,
+      testAmount: null
     }
   },
 
-  created() {
+  async created() {
     this.addNarvaroStore = useAddNarvaroStore()
 
     this.isOldMember = this.addNarvaroStore.isOldMember
+    this.testAmount = await getTypeTestAmount(this.addNarvaroStore.personNum)
 
     this.weekDayIndex = new Date().getDay()
 
@@ -46,7 +49,7 @@ export default {
     ) {
       this.$router.push({
         name: 'narvaroThanks',
-        query: { isOldMember: this.isOldMember }
+        query: { isOldMember: this.isOldMember, testAmount: this.testAmount }
       })
       return
     }
@@ -75,7 +78,7 @@ export default {
 
     <RouterLink
       class="btn--primary mt--big"
-      :to="{ name: 'narvaroThanks', query: { isOldMember: isOldMember } }"
+      :to="{ name: 'narvaroThanks', query: { isOldMember: isOldMember, testAmount: testAmount } }"
       >Färdig</RouterLink
     >
   </main>
