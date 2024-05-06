@@ -2,7 +2,13 @@
 import HeaderBackComp from '@/components/HeaderBackComp.vue'
 import MemberFormDialog from '@/components/MemberFormDialog.vue'
 
-import { createMember, deleteMember, getAllMembers, updateMember } from '@/services/memberService'
+import {
+  createMember,
+  deleteMember,
+  downloadMemberlistFromDropbox,
+  getAllMembers,
+  updateMember
+} from '@/services/memberService'
 
 import { dateFormatted, personNumFormatted, isNamesValid, isPersonNumValid } from '@/helpers'
 
@@ -10,6 +16,8 @@ export default {
   components: { HeaderBackComp, MemberFormDialog },
   data() {
     return {
+      downloadingFromDropbox: false,
+
       membersList: null,
 
       lastSortBy: {
@@ -43,6 +51,16 @@ export default {
   methods: {
     dateFormatted,
     personNumFormatted,
+
+    async downloadFromDropbox() {
+      this.downloadingFromDropbox = true
+
+      await downloadMemberlistFromDropbox()
+
+      await this.getMembers()
+
+      this.downloadingFromDropbox = false
+    },
 
     async getMembers() {
       const res = await getAllMembers()
@@ -239,10 +257,15 @@ export default {
 <template>
   <HeaderBackComp :backToPath="'/admin'" />
 
-  <main>
+  <main v-if="downloadingFromDropbox" class="downloading-from-dropbox">
+    <h1 class="mb--small">Laddar medlemslista från Dropbox</h1>
+    <img src="@/assets/images/loading-anim.gif" alt="Loading animation" />
+  </main>
+  <main v-else>
     <h1 class="mb--small">Medlemslista</h1>
 
     <nav class="mb--small">
+      <button class="btn--primary" @click="downloadFromDropbox">Ladda från Dropbox</button>
       <button class="btn--primary" @click="$refs.newMemberModal.openModal">Lägg till medlem</button>
     </nav>
 
@@ -338,6 +361,22 @@ export default {
 main {
   flex-grow: 1;
   justify-content: start;
+}
+
+/* downloading-from-dropbox MAIN */
+.downloading-from-dropbox h1 {
+  font-size: 2rem;
+}
+.downloading-from-dropbox > img {
+  width: 8rem;
+}
+
+/* MEMBER LIST MAIN */
+main > nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 table {

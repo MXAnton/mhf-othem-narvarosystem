@@ -1,5 +1,19 @@
 import axiosInstance from './index'
 
+export async function downloadMemberlistFromDropbox() {
+  let response = await axiosInstance
+    .get('download-memberlist')
+    .then((res) => {
+      return res
+    })
+    .catch((err) => {
+      console.warn(err)
+      return null
+    })
+
+  return response
+}
+
 export async function getAllMembers() {
   let response = await axiosInstance
     .get('member')
