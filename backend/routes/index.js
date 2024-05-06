@@ -4,6 +4,9 @@ const middleware = require("../middleware");
 const router = express.Router();
 
 router
+  .route("/download-memberlist")
+  .get(middleware.authorize, controllers.downloadMemberlistFromDropbox);
+router
   .route("/member")
   .get(middleware.authorize, controllers.getAllMembers)
   .post(middleware.authorize, controllers.createMember);
@@ -23,7 +26,9 @@ router
 router
   .route("/narvaro/amount/date/:date")
   .get(controllers.getNarvaroAmountDate);
-router.route("/narvaro/amount/type/test/:personnummer").get(controllers.getTypeTestAmount);
+router
+  .route("/narvaro/amount/type/test/:personnummer")
+  .get(controllers.getTypeTestAmount);
 router
   .route("/narvaro/date/:date/personnummer/:personnummer")
   .get(controllers.getNarvaroDate);

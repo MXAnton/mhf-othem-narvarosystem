@@ -8,7 +8,16 @@ const {
   isPersonNumValid,
   isNamesValid,
   uploadMemberlist,
+  downloadMemberlist,
 } = require("../helpers");
+
+exports.downloadMemberlistFromDropbox = (req, res, next) => {
+  downloadMemberlist();
+
+  res.status(200).json({
+    status: "success",
+  });
+};
 
 exports.getAllMembers = (req, res, next) => {
   conn.query("SELECT * FROM member", function (err, data, fields) {

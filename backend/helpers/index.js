@@ -83,4 +83,7 @@ module.exports = {
   uploadMemberlist() {
     shell.exec("./scripts/uploadMemberlist.sh");
   },
+  downloadMemberlist() {
+    shell.exec("./scripts/downloadMemberlist.sh");
+  },
 };
