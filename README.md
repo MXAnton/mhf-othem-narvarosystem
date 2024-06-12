@@ -13,6 +13,7 @@
 - Add members.
 - Edit/remove members.
 - Add new admin users.
+- Retrieve närvarolista and edit memberlist from anywhere using Dropbox.
 
 ## Frontend
 - Vue 3 (frontend framework)
