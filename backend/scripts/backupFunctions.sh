@@ -26,6 +26,7 @@ uploadDatabaseBackup() {
   output_file="$DB_NAME-$timestamp.sql"
   temp_output_file="$backup_dir/$output_file"
 
+  echo "----------------------------------------------------------------------------"
   echo "Start upload database backup: $output_file"
 
   # Backup the MySQL database
@@ -33,14 +34,21 @@ uploadDatabaseBackup() {
 
   # Upload temp file to dropbox
   $DROPBOX_UPLOADER upload "$temp_output_file" database/"$output_file"
+  # Check if any errors occurred during the upload
+  if [ $? -ne 0 ]; then
+    response="ERROR! Failed to upload database backup."
+  else
+    response="Finished uploading database backup."
+  fi
 
   # Remove temp file
   rm $temp_output_file
 
-  echo "Finished uploading database backup."
+  echo $response
 }
 
 uploadFormattedNarvaro() {
+  echo "----------------------------------------------------------------------------"
   echo "Start upload formatted narvaro of current year."
 
   current_year=$(date +'%Y')
@@ -74,13 +82,20 @@ uploadFormattedNarvaro() {
 
   # Upload temp file to dropbox
   $DROPBOX_UPLOADER upload "$temp_output_file" narvaro/"$output_file"
+  # Check if any errors occurred during the upload
+  if [ $? -ne 0 ]; then
+    response="ERROR! Failed to upload formatted narvaro of current year."
+  else
+    response="Finished uploading formatted narvaro of current year."
+  fi
 
   # Remove temp file
   rm $temp_output_file
 
-  echo "Finished uploading formatted narvaro of current year."
+  echo $response
 }
 uploadFormattedNarvaroToDb() {
+  echo "----------------------------------------------------------------------------"
   echo "Start update database narvaro."
 
   year=$1
@@ -112,6 +127,7 @@ uploadFormattedMemberlist() {
   output_folder=$2
   temp_output_file="$backup_dir/$output_file"
 
+  echo "----------------------------------------------------------------------------"
   echo "Start upload formatted memberlist: $output_file"
 
   # MySQL query to select all rows from the member table
@@ -122,11 +138,17 @@ uploadFormattedMemberlist() {
 
   # Upload temp file to dropbox
   $DROPBOX_UPLOADER upload "$temp_output_file" medlemslista/"$output_folder""$output_file"
+  # Check if any errors occurred during the upload
+  if [ $? -ne 0 ]; then
+    response="ERROR! Failed to upload formatted memberlist."
+  else
+    response="Finished uploading formatted memberlist."
+  fi
 
   # Remove temp file
   rm $temp_output_file
 
-  echo "Finished uploading formatted memberlist."
+  echo $response
 }
 uploadFormattedMemberlistBackup() {
   # Timestamp for the backup file
@@ -137,6 +159,7 @@ uploadFormattedMemberlistBackup() {
 }
 
 updateMemberlistFromDropbox() {
+  echo "----------------------------------------------------------------------------"
   echo "Start download memberlist and update database memberlist."
 
   dropbox_input_file="medlemslista.csv"
@@ -146,7 +169,7 @@ updateMemberlistFromDropbox() {
   $DROPBOX_UPLOADER download medlemslista/"$dropbox_input_file" "$temp_input_file"
   # Check if any errors occurred during the download
   if [ $? -ne 0 ]; then
-    echo "Error! Stopped downloading memberlist and updating database memberlist."
+    echo "ERROR! Failed to fetch memberlist from Dropbox App."
     return 1
   fi
 
@@ -173,9 +196,66 @@ updateMemberlistFromDropbox() {
 
   # Execute MySQL query to update member table
   mysql --local_infile=1 -h "$DB_HOST" -u "$DB_BACKUPS_USER" -p"$DB_BACKUPS_PASSWORD" -D "$DB_NAME" -e "$SQL_UPDATE"
+  # Check if any errors occurred during the upload
+  if [ $? -ne 0 ]; then
+    response="ERROR! Failed to update memberlist in database from Dropbox file."
+  else
+    response="Finished downloading memberlist and updating database memberlist."
+  fi
 
   # Remove temp file
-  rm $temp_input_file
+  rm $temp_output_file
 
-  echo "Finished downloading memberlist and updating database memberlist."
+  echo $response
+}
+
+uploadLogsToDropbox() {
+  output_file="lastMonth.log"
+  output_folder=logs/
+  temp_output_file="$backup_dir/$output_file"
+
+  # Upload temp file to dropbox
+  $DROPBOX_UPLOADER upload "$temp_output_file" "$output_folder""$output_file"
+  # Check if any errors occurred during the upload
+  if [ $? -ne 0 ]; then
+    echo "ERROR! Failed to upload logs to Dropbox."
+  else
+    # Remove temp file
+    rm $temp_output_file
+  fi
+}
+
+removeOldLogs() {
+  local log_file="$1"     # Log file path passed as argument
+  local threshold_days=30 # Threshold in days (1 month)
+
+  # Get the current time in seconds since epoch
+  current_time=$(date +%s)
+
+  # Create a temporary file to store valid log lines
+  temp_file=$(mktemp)
+
+  while IFS= read -r line; do
+    # Extract the timestamp from the log line (first 19 characters)
+    log_date=$(echo "$line" | cut -d '|' -f1 | xargs)
+
+    # Convert the log timestamp to seconds since epoch
+    log_time=$(date -d "$log_date" +%s 2>/dev/null)
+
+    # If date parsing succeeds, check the difference
+    if [[ -n "$log_time" ]]; then
+      time_diff=$(((current_time - log_time) / (60 * 60 * 24)))
+
+      # If the log is within the threshold (less than or equal to 30 days), keep it
+      if [[ "$time_diff" -le "$threshold_days" ]]; then
+        echo "$line" >>"$temp_file"
+      fi
+    else
+      # If the log line doesn't have a valid timestamp, keep it (optional)
+      echo "$line" >>"$temp_file"
+    fi
+  done <"$log_file"
+
+  # Replace the original log file with the filtered content
+  mv "$temp_file" "$log_file"
 }
