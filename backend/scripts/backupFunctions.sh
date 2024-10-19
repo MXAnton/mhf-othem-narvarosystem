@@ -61,7 +61,11 @@ uploadFormattedNarvaro() {
   # Add column for each date existing in table.
   # If group has row with date of column set true, otherwise set false.
   # Output into comma separated file and replace "_" with "-" for the date columns.
-  echo "SET @sql = NULL;
+  echo "
+  -- Increase group_concat_max_len to avoid truncation of long GROUP_CONCAT() results
+  SET SESSION group_concat_max_len = 1000000;
+  
+  SET @sql = NULL;
     SELECT
       GROUP_CONCAT(DISTINCT
         CONCAT(
@@ -73,6 +77,7 @@ uploadFormattedNarvaro() {
       ) INTO @sql
     FROM "$narvaro_table";
 
+    -- Now, generate the full SQL by appending the SELECT and FROM clauses
     SET @sql = CONCAT('SELECT personnummer, first_name AS förnamn, last_name AS efternamn, ', @sql, ' FROM "$narvaro_table" GROUP BY personnummer, first_name, last_name');
 
     PREPARE stmt FROM @sql;
