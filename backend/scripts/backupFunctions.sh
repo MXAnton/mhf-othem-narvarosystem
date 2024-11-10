@@ -217,10 +217,10 @@ updateMemberlistFromDropbox() {
 uploadLogsToDropbox() {
   output_file="lastMonth.log"
   output_folder=logs/
-  temp_output_file="$backup_dir/$output_file"
+  file_to_upload="$output_file"
 
   # Upload temp file to dropbox
-  $DROPBOX_UPLOADER upload "$temp_output_file" "$output_folder""$output_file"
+  $DROPBOX_UPLOADER upload "$file_to_upload" "$output_folder""$output_file"
   # Check if any errors occurred during the upload
   if [ $? -ne 0 ]; then
     echo "ERROR! Failed to upload logs to Dropbox."
