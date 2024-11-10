@@ -209,7 +209,7 @@ updateMemberlistFromDropbox() {
   fi
 
   # Remove temp file
-  rm $temp_output_file
+  rm $temp_input_file
 
   echo $response
 }
@@ -224,9 +224,6 @@ uploadLogsToDropbox() {
   # Check if any errors occurred during the upload
   if [ $? -ne 0 ]; then
     echo "ERROR! Failed to upload logs to Dropbox."
-  else
-    # Remove temp file
-    rm $temp_output_file
   fi
 }
 
