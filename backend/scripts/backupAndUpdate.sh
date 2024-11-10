@@ -4,7 +4,7 @@
 source ./backupFunctions.sh
 
 #### CLEAR AND SET UP LOGS
-logFile=output.log
+logFile=lastMonth.log
 removeOldLogs $logFile
 # Redirect stdout (1) and stderr (2) to a log file with timestamp
 exec > >(awk '{ print strftime("%Y-%m-%d %H:%M:%S |"), $0; fflush(); }' | tee -a $logFile) 2>&1
