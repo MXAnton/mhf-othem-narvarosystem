@@ -21,10 +21,10 @@ mkdir -p "$backup_dir"
 #### DEFINE FUNCTIONS
 uploadDatabaseBackup() {
   # Timestamp for the backup file
-  timestamp=$(date +%Y-%m-%d)
+  local timestamp=$(date +%Y-%m-%d)
 
-  output_file="$DB_NAME-$timestamp.sql"
-  temp_output_file="$backup_dir/$output_file"
+  local output_file="$DB_NAME-$timestamp.sql"
+  local temp_output_file="$backup_dir/$output_file"
 
   echo "----------------------------------------------------------------------------"
   echo "Start upload database backup: $output_file"
@@ -51,11 +51,11 @@ uploadFormattedNarvaro() {
   echo "----------------------------------------------------------------------------"
   echo "Start upload formatted narvaro of current year."
 
-  current_year=$(date +'%Y')
-  narvaro_table="narvaro_$current_year"
+  local current_year=$(date +'%Y')
+  local narvaro_table="narvaro_$current_year"
 
-  output_file="formattedNarvaro_$current_year.csv"
-  temp_output_file="$backup_dir/$output_file"
+  local output_file="formattedNarvaro_$current_year.csv"
+  local temp_output_file="$backup_dir/$output_file"
 
   # Run SQL query to fetch data grouped by personnummer, first_name and last_name.
   # Add column for each date existing in table.
@@ -103,12 +103,12 @@ uploadFormattedNarvaroToDb() {
   echo "----------------------------------------------------------------------------"
   echo "Start update database narvaro."
 
-  year=$1
-  input_file="$backup_dir/GOOD_oldFormattedNarvaro_$year.csv"
-  temporary_table="temp_narvaro_$year"
+  local year=$1
+  local input_file="$backup_dir/GOOD_oldFormattedNarvaro_$year.csv"
+  local temporary_table="temp_narvaro_$year"
 
   # MySQL query to update the member table
-  SQL_UPDATE="CREATE TABLE IF NOT EXISTS narvaro_$year LIKE narvaro_2024;
+  local SQL_UPDATE="CREATE TABLE IF NOT EXISTS narvaro_$year LIKE narvaro_2024;
     CREATE TEMPORARY TABLE $temporary_table LIKE narvaro_2024;
     LOAD DATA LOCAL INFILE '$input_file'
     IGNORE
@@ -128,15 +128,15 @@ uploadFormattedNarvaroToDb() {
 }
 
 uploadFormattedMemberlist() {
-  output_file=$1
-  output_folder=$2
-  temp_output_file="$backup_dir/$output_file"
+  local output_file=$1
+  local output_folder=$2
+  local temp_output_file="$backup_dir/$output_file"
 
   echo "----------------------------------------------------------------------------"
   echo "Start upload formatted memberlist: $output_file"
 
   # MySQL query to select all rows from the member table
-  SQL_QUERY="SELECT personnummer, first_name AS förnamn, last_name AS efternamn, end_date AS 'medlem t.o.m' FROM member;"
+  local SQL_QUERY="SELECT personnummer, first_name AS förnamn, last_name AS efternamn, end_date AS 'medlem t.o.m' FROM member;"
 
   # Execute MySQL query and save the result into a CSV file
   mysql -h "$DB_HOST" -u "$DB_BACKUPS_USER" -p"$DB_BACKUPS_PASSWORD" -D "$DB_NAME" -e "$SQL_QUERY" | tr '\t' ',' >"$temp_output_file"
@@ -157,8 +157,8 @@ uploadFormattedMemberlist() {
 }
 uploadFormattedMemberlistBackup() {
   # Timestamp for the backup file
-  timestamp=$(date +%Y-%m-%d)
-  output_file="medlemslistaBackup_$timestamp.csv"
+  local timestamp=$(date +%Y-%m-%d)
+  local output_file="medlemslistaBackup_$timestamp.csv"
 
   uploadFormattedMemberlist "$output_file" backups/
 }
@@ -167,8 +167,8 @@ updateMemberlistFromDropbox() {
   echo "----------------------------------------------------------------------------"
   echo "Start download memberlist and update database memberlist."
 
-  dropbox_input_file="medlemslista.csv"
-  temp_input_file="$backup_dir/temp_memberlist.csv"
+  local dropbox_input_file="medlemslista.csv"
+  local temp_input_file="$backup_dir/temp_memberlist.csv"
 
   # Download file from Dropbox
   $DROPBOX_UPLOADER download medlemslista/"$dropbox_input_file" "$temp_input_file"
@@ -179,7 +179,7 @@ updateMemberlistFromDropbox() {
   fi
 
   # MySQL query to update the member table
-  SQL_UPDATE="CREATE TEMPORARY TABLE temp_member LIKE member;
+  local SQL_UPDATE="CREATE TEMPORARY TABLE temp_member LIKE member;
     LOAD DATA LOCAL INFILE '$temp_input_file'
     IGNORE
     INTO TABLE temp_member
@@ -215,9 +215,9 @@ updateMemberlistFromDropbox() {
 }
 
 uploadLogsToDropbox() {
-  output_file="lastMonth.log"
-  output_folder=logs/
-  file_to_upload="$output_file"
+  local output_file="lastMonth.log"
+  local output_folder=logs/
+  local file_to_upload="$output_file"
 
   # Upload temp file to dropbox
   $DROPBOX_UPLOADER upload "$file_to_upload" "$output_folder""$output_file"
@@ -235,21 +235,21 @@ removeOldLogs() {
   local threshold_days=30 # Threshold in days (1 month)
 
   # Get the current time in seconds since epoch
-  current_time=$(date +%s)
+  local current_time=$(date +%s)
 
   # Create a temporary file to store valid log lines
-  temp_file=$(mktemp)
+  local temp_file=$(mktemp)
 
   while IFS= read -r line; do
     # Extract the timestamp from the log line (first 19 characters)
-    log_date=$(echo "$line" | cut -d '|' -f1 | xargs)
+    local log_date=$(echo "$line" | cut -d '|' -f1 | xargs)
 
     # Convert the log timestamp to seconds since epoch
-    log_time=$(date -d "$log_date" +%s 2>/dev/null)
+    local log_time=$(date -d "$log_date" +%s 2>/dev/null)
 
     # If date parsing succeeds, check the difference
     if [[ -n "$log_time" ]]; then
-      time_diff=$(((current_time - log_time) / (60 * 60 * 24)))
+      local time_diff=$(((current_time - log_time) / (60 * 60 * 24)))
 
       # If the log is within the threshold (less than or equal to 30 days), keep it
       if [[ "$time_diff" -le "$threshold_days" ]]; then
